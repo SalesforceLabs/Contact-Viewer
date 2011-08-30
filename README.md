@@ -41,5 +41,5 @@ Contact Viewer makes use of a number of third-party components:
 - [jQuery](http://jquery.com), the javascript library to make it easy to write javascript.
 - [iScroll-4](http://cubiq.org/iscroll-4) for all the scrolling parts of the app.
 - [add2home](http://cubiq.org/add-to-home-screen) shows a nice popup suggesting the addition of this webapp to home screen
-- [jQuery-dateFormat](https://github.com/stig/json-framework/), a modified version of original dateformat plugin to handle all dates and times.
-- [jQuery-TopZIndex](http://inappsettingskit.com/) for setting/getting the right Z-Index of DOM elements.
+- [jQuery-dateFormat](https://github.com/phstc/jquery-dateFormat), a modified version of original dateformat plugin to handle all dates and times.
+- [jQuery-TopZIndex](http://topzindex.googlecode.com/) for setting/getting the right Z-Index of DOM elements.
