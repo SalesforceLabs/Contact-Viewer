@@ -92,28 +92,10 @@
         <type>DateTime</type>
     </fields>
     <fields>
-        <fullName>OrganizationID__c</fullName>
-        <externalId>false</externalId>
-        <label>Organization ID</label>
-        <length>18</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Token_ID__c</fullName>
         <externalId>true</externalId>
         <label>Token ID</label>
         <length>255</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>UserID__c</fullName>
-        <externalId>false</externalId>
-        <label>User ID</label>
-        <length>18</length>
         <required>false</required>
         <type>Text</type>
         <unique>false</unique>
