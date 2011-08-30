@@ -1,0 +1,3 @@
+<apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactsAppOAuthController" action="{!loadPage}" contenttype="application/json">
+{"success":{!isSuccess},"clientId":"{!clientId}","refreshToken":"{!URLENCODE(encryptedRefreshToken)}","username":"{!username}","displayName":"{!displayName}","instanceUrl":"{!instanceUrl}","eula":{!eulaAccepted},"error":"{!errorMsg}","errorCode":"{!errorCode}"}
+</apex:page>

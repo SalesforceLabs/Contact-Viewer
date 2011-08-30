@@ -1,0 +1,31 @@
+<apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactDetailsController" action="{!fetchContactDetails}">
+
+<apex:repeat value="{!sections}" var="section">
+    <apex:variable var="cols" value="{!section.columns}" />
+    
+    <div style="font-weight: bold; font-size: 16px; margin: 20px 0 10px 25px;">{!section.heading}</div>
+    <div style=" height: 1px; padding-left: 25px; border: 1px solid rgb(220, 220, 220); width: 100%;"><div style="width: 105px;  background-color: #1797C0; height: 1px;"></div></div>
+    
+    <table cellspacing="0" style="width: 100%; margin: 5px 0 0 25px; font-size: 12px;">
+	  <apex:repeat value="{!section.dataRows}" var="item">
+	    <apex:outputText rendered="{!cols == section.columns}" value="<tr>" escape="false"/>
+	      <td width="{!IF(section.columns == 2, '50%', '100%')}">
+	          <div class="fieldLbl">{!item.label}</div>
+	          <div class="fieldVal {!item.dataType}">
+	              <apex:outputPanel rendered="{!item.dataType == 'phone'}"><a href="tel:{!JSINHTMLENCODE(item.value)}">{!HTMLENCODE(item.value)}</a></apex:outputPanel>
+	              <apex:outputPanel rendered="{!item.dataType == 'email'}"><a href="mailto:{!JSINHTMLENCODE(item.value)}">{!HTMLENCODE(item.value)}</a></apex:outputPanel>
+	              <apex:outputPanel rendered="{!item.dataType == 'url'}"><a href="{!JSINHTMLENCODE(item.value)}">{!HTMLENCODE(item.value)}</a></apex:outputPanel>
+	              <apex:outputPanel rendered="{!item.dataType == 'boolean' && item.value == 'true'}"><input type="checkbox" checked="true" readonly="true" disabled="true"/></apex:outputPanel>
+	              <apex:outputPanel rendered="{!item.dataType == 'boolean' && item.value != 'true'}"><input type="checkbox" unchecked="true" readonly="true" disabled="true"/></apex:outputPanel>
+	              <apex:outputText rendered="{!item.isText}" value="{!item.value}"/>
+	          </div>
+	      </td>
+	     <apex:outputText rendered="{!cols == 0}" value="</tr>" escape="false"/>
+	     <apex:variable var="cols" value="{!cols - 1}" rendered="{!cols > 0}"/>
+	     <apex:variable var="cols" value="{!section.columns}" rendered="{!cols == 0}"/>
+	  </apex:repeat>
+	</table>
+    
+</apex:repeat>
+
+</apex:page>

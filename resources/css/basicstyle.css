@@ -1,0 +1,382 @@
+/*
+ * Copyright (c) 2011, salesforce.com <http://salesforce.com> , inc.
+ * Author: Akhilesh Gupta
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided 
+ * that the following conditions are met:
+ * 
+ *    Redistributions of source code must retain the above copyright notice, this list of conditions and the 
+ *    following disclaimer.
+ *  
+ *    Redistributions in binary form must reproduce the above copyright notice, this list of conditions and 
+ *    the following disclaimer in the documentation and/or other materials provided with the distribution. 
+ *    
+ *    Neither the name of salesforce.com <http://salesforce.com> , inc. nor the names of its contributors may be used to endorse or 
+ *    promote products derived from this software without specific prior written permission.
+ *  
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED 
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A 
+ * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR 
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED 
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+body,ul,li {
+	padding:0;
+	margin:0;
+	border:0;
+}
+
+body {
+	font-size:15px;
+	color: rgb(42, 42, 42);
+	-webkit-user-select:none;
+    -webkit-text-size-adjust:none;
+	font-family:Helvetica Neue;
+	overflow:hidden;
+}
+
+body a {
+	text-decoration:none;
+	color: #1797C0;
+}
+
+#footer {
+	position:absolute; 
+	bottom:0; left:0; padding:0;
+	width:100%; height:52px;
+	border-top: 1px solid rgba(225, 225, 225, 0.2);
+	-webkit-box-shadow: 0px -10px 40px rgba(25, 25, 25, 0.7);
+}
+
+.contentpage {
+/*	position:absolute; z-index:1;
+	top:45px; 
+	bottom:0px; 48px;
+	left:0;
+	width:100%;*/
+/*	overflow:auto; */
+    position:relative;
+	background-color: white;
+	-webkit-user-select:text;
+}
+
+#rightsection {
+	height:100%;
+	border-left:1px solid rgba(225, 225, 225, 0.2);
+}
+
+#detailpage #detail #summary #call_contact a>div { float: left; -webkit-border-radius: 5px; border: 1px solid silver; padding: 5px 0px; width: 80px; text-align: center; margin-right: 10px; }
+
+#listpage #footer>div#home { background-position: 0 0; width: 35px; height: 35px; }
+#listpage #footer>div#gear { background-position: -40px 0; width: 33px; height: 33px; }
+
+
+.detailpane {
+	position: absolute; left: 0; right: 0; top:0; bottom: 0;
+	width:100%; height: 100%;
+	overflow:hidden;
+	color: rgb(42, 42, 42);
+	-webkit-box-shadow:-10px -20px 20px rgba(25, 25, 25, 0.7);
+}
+
+.transitionSettings {
+	-webkit-backface-visibility: hidden;
+	-webkit-transition-duration: 300ms;
+	-webkit-transition-timing-function: ease-out;
+}
+
+.header {
+/*	position:absolute; z-index:2;
+	top:0;*/
+	width:100%;
+	height:45px;
+	line-height:45px;
+	background-image:-webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent));
+/*	background-color:#1797C0; */
+	padding:0;
+	color:white;
+	font-size:18px; font-weight: bold;
+	text-align:center;
+	background-color: #1797C0;
+/*	-webkit-border-radius: 10px 0px 0px 0px;
+	-moz-border-radius: 5px;*/
+}
+
+#listpage {
+	/*position:relative; z-index:1;
+	top:0px; bottom:0px; left:0;*/
+	position: absolute; left: 0; right: 0; top:0; bottom: 0;
+	width:100%; height:100%;
+/*	overflow:hidden; */
+	float:left;
+	border-right:1px solid rgba(0,0,0,0.5);
+}
+
+#listpage #header {
+	position:absolute; /*z-index:2;*/
+	top:0; left:0;
+	width:100%;
+/*	height:150px; */
+	text-align:left;
+	padding:0;
+	color:white;
+}
+
+#listpage #header #titlebar {
+    height: 22px;
+    line-height: 22px;
+    padding: 10px 15px;
+    font-size: 16px; font-weight: bold;
+    margin-right: 45px;
+}
+
+#listpage #header #listselect {
+    position:relative; top: 0; height:auto;
+    text-align:center; 
+	overflow-y:hidden;
+	background-color: #191919; 
+	-webkit-transition: -webkit-transform 300ms ease-out;
+}
+
+#listpage #header #listselect>button {
+    width:90%; height:40px;  
+    font-weight:bold; font-size:14px;
+    -webkit-border-radius:10px;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(white), to(#888));
+    margin-bottom: 10px;
+}
+
+#listpage #listscroller {
+	position:absolute; 
+	z-index:0;
+	top:80px;
+	bottom:0; /*48px; */
+	left:0;
+	width:100%;
+	/*overflow:auto;*/
+}
+
+#listpage #listscroller #scroller {
+/*	position:absolute; z-index:1;*/
+/*	-webkit-touch-callout:none;*/
+/*	-webkit-tap-highlight-color:rgba(0,0,0,0);*/
+	width:100%;
+	padding:0;
+	color: #eee;
+}
+
+#listpage #listscroller #scroller>ul {
+	list-style:none;
+	padding:0;
+	margin:0;
+	width:100%;
+	text-align:left;
+}
+
+#listpage #listscroller #scroller li {
+	padding-left: 20px;
+	height:40px;
+	line-height:40px;
+	font-size:14px; overflow: hidden;
+	border-top: 1px solid rgba(225, 225, 225, 0.2);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+#listpage #listscroller #scroller li.listseparater {
+	padding-left: 20px;
+	height:22px;
+	line-height:22px;
+	color: #1797C0;
+	background-color:#333;
+	font-weight:bold;
+	border: none;
+}
+
+#listpage #listscroller #scroller #recordCount {
+	border-top: 1px solid rgba(225, 225, 225, 0.2);
+}
+
+.contentpage .detailscroller {
+	position: absolute; 
+	bottom: 0px; top: 135px; right: 0; left: 0; 
+	overflow-x: hidden; overflow-y: hidden; 
+}
+
+#app_settings {
+	width: 100%; height:100%; font-size: 16px; 
+	position:absolute; 
+	background-color: #E2E4E9; 
+	text-align: center;
+}
+
+#app_settings .settings_body {
+	width: 100%; font-size: 16px; 
+	color: #2A2A2A; line-height: 30px;  
+	overflow:hidden;
+	position: absolute; top: 45px; bottom: 0;
+}
+
+#app_settings .settings_body .page {
+	position: absolute; left: 0px; right: 0px; top: 0; bottom: 0;
+	margin: 0;
+}
+
+#app_settings .settings_body .page .content {
+	padding: 10px 0; margin: 0 10px;
+	text-align: left;
+}
+
+#app_settings .settings_body #eula_buttons {
+	position: absolute; bottom: 0;  text-align: center; padding: 0 20px; 
+	background-color: none; right: 0; left: 0; 
+	border-top: 1px solid silver; display:none; color: #1797C0;
+}
+
+#app_settings .settings_body #faq .question {
+	font-size: 16px; color: #646464;
+	margin: 10px 0;
+}
+
+#app_settings .settings_body #faq .answer {
+	font-size: 14px;
+	padding-bottom: 5px;
+}
+
+input[type="search"] { -webkit-appearance:none; }
+
+#searchbar>form {
+    position:absolute;
+    top:0px;
+    left:10px;
+    right:10px;
+    height:28px;
+    border-width:0 17px 0 17px;
+    -webkit-box-sizing:border-box;
+}
+#searchbar>form>div,#searchbar>form>input {
+    position:absolute;
+    top:6px;
+    height:20px;
+    padding:0;
+    margin:0;
+    font-size:14px;
+    font-family:Helvetica;
+}
+#searchbar>form>div {
+    left:-7px;
+    right:13px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    background-repeat:no-repeat;
+    background-position:0 1px;
+/*    padding-left:20px; */
+    color: silver;
+}
+
+#searchbar>form>input {
+    left:12px; right:14px; top:5px;
+    border:none;
+    -webkit-border-radius:0;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    background-color:white;
+    opacity:0;
+    color: black;
+}
+#searchbar>form>input:focus {
+    opacity:1;
+}
+#searchbar>form #closebutton {
+	position:absolute; 
+	width: 19px; height: 19px;
+	background-position: 0 0;
+	background-color: transparent;
+	border: 0 none transparent;
+	top: 5px; right: -12px;
+	padding: 0px;
+	display:none;
+}
+
+#searchbar>form>div.search-bg { background-position: 0px 0px; width: 14px; height: 15px; }
+#searchbar>form #closebutton.search-bg { background-position: -15px 0px; width: 19px; height: 19px; }
+
+/**
+ *
+ * Pull down styles
+ *
+ */
+#pullDown {
+	height:40px;
+	line-height:40px;
+	padding:5px 10px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+	font-weight:bold;
+	font-size:14px;
+	color:white;
+}
+#pullDown .pullDownIcon {
+	display:block; float:left;
+	width:25px; height:35px; margin: 2px 5px;
+	-webkit-background-size:23px; background-size:23px;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:250ms;
+	-webkit-transform:rotate(0deg) translateZ(0);
+	background-position: 0px -40px;
+}
+ 
+#pullDown.flip .pullDownIcon {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullDown .pullDownLabel {
+	margin-left: 5px;
+}
+
+.back-arrow { background-position: 0px -29px; width: 12px; height: 29px; float: left; margin-top: 7px;}
+.arrow-next { background-position: 0px 0px; width: 9px; height: 13px; float: right; margin: 15px 0 0 10px;}
+.appleui.check { background-position: 0px -14px; width: 14px; height: 14px; float: right; margin: 15px 0 0 10px; }
+
+.header_button {
+	white-space: nowrap;
+	-webkit-border-radius: 5px;
+	background-color: #147AAD;
+	color: white; font-size: 12px; font-weight: bold;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.3)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent));
+	line-height: 26px;
+	position: absolute; top: 7px;
+	border: 1px solid #206A82;
+	padding: 0 10px;
+	border-top: 2px solid #206A82;
+}
+
+#detail #summary .fieldLbl {
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+#detail #summary .fieldVal {
+	font-weight: bold;
+	font-size: 17px;
+	white-space: nowrap;
+}
+
+#detail #info table td {
+	text-align:left; padding: 5px 0;
+}
+
+#detail #info table td.fieldLbl {
+    width: 40%; vertical-align: top;
+    color:rgb(143, 152, 155); 
+    font-size: 12px; font-weight: bold;
+}
+
+#detail #info table td.fieldVal {
+    width: 60%; vertical-align: top;
+    padding-bottom: 8px; padding-top: 3px;
+    font-size: 14px; color: rgb(42, 42, 42);
+}

@@ -1,0 +1,56 @@
+<apex:page showHeader="false" standardStylesheets="false" contentType="text/cache-manifest" cache="false" controller="ContactsAppController">CACHE MANIFEST
+
+NETWORK:
+/services/proxy
+{!$Site.CurrentSiteUrl}ContactsAppOAuth
+{!$Site.CurrentSiteUrl}ContactsAppService
+*
+#css
+{!URLFOR($Resource.ContactAppRsrcs, 'css/add2home.css')}
+
+#js
+{!URLFOR($Resource.ContactAppRsrcs, 'js/add2home.js')}
+
+
+CACHE:
+#css
+{!$Site.CurrentSiteUrl}ContactsAppAddCSS
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'css/basicstyle-ipad.css'), "")}
+{!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'css/basicstyle.css'), "")}
+{!URLFOR($Resource.ContactAppRsrcs, 'css/passcodemanager.css')}
+
+#js
+{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.6.1.min.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/applib.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/passcodemanager.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/appSettings.js')}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp-ipad.js'), "")}
+{!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.js'), "")}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/feedRenderer.js')}
+
+#images
+{!URLFOR($Resource.ContactAppRsrcs, 'images/bg.png')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/loading.gif')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/leftgradient.png')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/userPicwBorder.png')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/search/border.png')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/search/search-mg-close.png')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/titlebar_bk.png')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/CellSelection.png')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/extra-sprites.png')}
+{!URLFOR($Resource.ContactAppRsrcs, 'images/flask.png')}
+{!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'images/gear-small.png'), "")}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'images/home_gear.png'), "")}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'images/ds-icons.png'), "")}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'images/action-icons.png'), "")}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'images/corners.png'), "")}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'images/highlights-gradient.png'), "")}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'images/loading-black.gif'), "")}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'images/popover_border.png'), "")}
+</apex:page>

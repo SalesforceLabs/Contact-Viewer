@@ -1,0 +1,41 @@
+<apex:component >
+
+<div id="passcode" style="display:none;z-index:10; color:white;">
+    <table>
+        <tr id="passcode_header"><td colspan="3">
+            <div id="passcode_title"></div>
+            <p id="passcode_message" style="font-size:15px; margin:10px 5px 0px 5px; display:none;"></p>
+        </td></tr>
+        <tr id="passcode_input" style="height:75px;"><td colspan="3">
+            <input id="p1" type="password" size="1" maxlength="1" readonly="readonly"/>
+            <input id="p2" type="password" size="1" maxlength="1" readonly="readonly"/>
+            <input id="p3" type="password" size="1" maxlength="1" readonly="readonly"/>
+            <input id="p4" type="password" size="1" maxlength="1" readonly="readonly"/>
+        </td></tr>
+        <tr>
+            <td class="passcode_button">1</td>
+            <td class="passcode_button" style="border-left: 1px solid #000; border-right: 1px solid #000;">2</td>
+            <td class="passcode_button">3</td>
+        </tr>
+        <tr>
+            <td class="passcode_button">4</td>
+            <td class="passcode_button" style="border-left: 1px solid #000; border-right: 1px solid #000;">5</td>
+            <td class="passcode_button">6</td>
+        </tr>
+        <tr>
+            <td class="passcode_button">7</td>
+            <td class="passcode_button" style="border-left: 1px solid #000; border-right: 1px solid #000;">8</td>
+            <td class="passcode_button">9</td>
+        </tr>
+        <tr>
+            <td id="cancel" class="passcode_button" style="font-size:16px;">Logout</td>
+            <td class="passcode_button" style="border-left: 1px solid #000; border-right: 1px solid #000;">0</td>
+            <td class="passcode_button" style="font-size:16px;">Delete</td>
+        </tr>
+    </table>
+</div>
+
+<link rel="stylesheet" href="{!URLFOR($Resource.ContactAppRsrcs, 'css/passcodemanager.css')}" />
+<apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/passcodemanager.js')}"/>
+            
+</apex:component>

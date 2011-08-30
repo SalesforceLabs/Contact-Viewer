@@ -1,0 +1,92 @@
+<apex:page showHeader="false"  standardStylesheets="false" cache="false">
+
+<!-- 
+ * Copyright (c) 2011, salesforce.com <http://salesforce.com> , inc.
+ * Author: Akhilesh Gupta
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided 
+ * that the following conditions are met:
+ * 
+ *    Redistributions of source code must retain the above copyright notice, this list of conditions and the 
+ *    following disclaimer.
+ *  
+ *    Redistributions in binary form must reproduce the above copyright notice, this list of conditions and 
+ *    the following disclaimer in the documentation and/or other materials provided with the distribution. 
+ *    
+ *    Neither the name of salesforce.com <http://salesforce.com> , inc. nor the names of its contributors may be used to endorse or 
+ *    promote products derived from this software without specific prior written permission.
+ *  
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED 
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A 
+ * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR 
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED 
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * POSSIBILITY OF SUCH DAMAGE.
+-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    
+    <link rel="stylesheet" href="/contacts/ContactsAppAddCSS" />
+    <link rel="apple-touch-icon" href="{!URLFOR($Resource.ContactAppRsrcs, 'images/contacts-icon.png')}"/>
+            
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no"/>
+    
+    <body style="background-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/bg.png')}'); width:100%; height:100%">
+        <apex:insert name="body"/>
+        <c:PasscodeManager />
+        <div id="cache_update" style="position:absolute; bottom:0; width:100%; height:40px; line-height:40px; color:white; font-size:14px; font-weight:bold; text-align:center; background-color:rgb(180,0,0); display:none;">
+        </div>
+    </body>
+    
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.6.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.wipetouch.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/applib.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/appSettings.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/modernizr.custom.55761.js')}"/>
+    
+    <script>
+        function cacheRefresh() {
+            if(window.applicationCache) { //if we are online, check to see if the cache is updated
+                if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                    window.applicationCache.update();
+                    window.applicationCache.swapCache();
+                    /*var cacheUpdateDiv = document.getElementById('cache_update');
+                    cacheUpdateDiv.innerHTML = 'Download complete. Please relaunch the app to use the latest version.';
+                    cacheUpdateDiv.style.display = 'block';
+                    setTimeout(function() { cacheUpdateDiv.style.display = 'none';}, 20000);*/
+                }
+            }
+        }
+        function cacheDownload() {
+            if(window.applicationCache) { //if we are online, check to see if the cache is updated
+                if (window.applicationCache.status == window.applicationCache.DOWNLOADING) {
+                    var cacheUpdateDiv = document.getElementById('cache_update');
+                    cacheUpdateDiv.innerHTML = 'Downloading the latest version of the app...';
+                    cacheUpdateDiv.style.display = 'block';
+                    window.applicationCache.addEventListener("cached", function() {cacheUpdateDiv.style.display = 'none';}, false);
+                }
+            }
+        }
+        
+        window.applicationCache.addEventListener("updateready", cacheRefresh, false);
+        document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+        
+        if ('standalone' in navigator && !navigator.standalone && (/iphone|ipod|ipad/gi).test(navigator.platform) && (/Safari/i).test(navigator.appVersion) && location.search.length == 0) {
+            document.write('<link rel="stylesheet" href="{!URLFOR($Resource.ContactAppRsrcs, 'css/add2home.css')}">');
+            document.write('<script type="application\/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/add2home.js')}"><\/script>');
+        }
+        var staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
+        document.addEventListener('DOMContentLoaded', prepareSession, false);
+    </script>
+    
+</apex:page>

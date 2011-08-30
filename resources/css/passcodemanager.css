@@ -1,0 +1,83 @@
+/*
+ * Copyright (c) 2011, salesforce.com <http://salesforce.com> , inc.
+ * Author: Akhilesh Gupta
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided 
+ * that the following conditions are met:
+ * 
+ *    Redistributions of source code must retain the above copyright notice, this list of conditions and the 
+ *    following disclaimer.
+ *  
+ *    Redistributions in binary form must reproduce the above copyright notice, this list of conditions and 
+ *    the following disclaimer in the documentation and/or other materials provided with the distribution. 
+ *    
+ *    Neither the name of salesforce.com <http://salesforce.com> , inc. nor the names of its contributors may be used to endorse or 
+ *    promote products derived from this software without specific prior written permission.
+ *  
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED 
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A 
+ * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR 
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED 
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+ 
+#passcode {
+	position:absolute;
+/*	top:0; */
+	width:320px;
+	overflow:hidden;
+}
+
+.passcodeTransition {
+	-webkit-transition: none 0.5s cubic-bezier(0.33, 0.66, 0.66, 1);
+	-moz-transition: none 0.5s cubic-bezier(0.33, 0.66, 0.66, 1);
+	-o-transition: none 0.5s cubic-bezier(0.33, 0.66, 0.66, 1);
+	-ms-transition: none 0.5s cubic-bezier(0.33, 0.66, 0.66, 1);
+	transition: none 0.5s cubic-bezier(0.33, 0.66, 0.66, 1);
+}
+
+#passcode table {
+	border: 1px solid #000; font-size:25px; 
+	width:100%;
+	text-align:center;
+	border-spacing:0px; 
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+#passcode table tr {
+	height:55px;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(100, 100, 100, 0.1)), color-stop(0.5, rgba(50, 50, 50, 0.7)), color-stop(1, rgba(0, 0, 0, 0.8)));
+	background-image: -moz-linear-gradient(top, rgba(100, 100, 100, 0.1), rgba(50, 50, 50, 0.7) 50%, rgba(0, 0, 0, 0.8));
+	background-image: -o-linear-gradient(top, rgba(100, 100, 100, 0.1), rgba(50, 50, 50, 0.7) 50%, rgba(0, 0, 0, 0.8));
+}
+
+#passcode table td.passcode_button {
+	width: 106px; border-top: 1px solid #333;
+	-webkit-tap-highlight-color:#009DDC;
+}
+
+#passcode table td.pressed {
+	background-color:rgb(3, 133, 243);
+}
+
+#passcode table tr td input {
+	padding:0px; margin:3px;
+	text-align:center; font-size: 30px;
+	width: 58px; line-height: 50px;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+}
+
+#passcode #passcode_header {
+	height:90px;
+}
+
+#passcode table .passcode_error {
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 200, 200, 0.7)), color-stop(0.5, rgba(255, 100, 100, 0.7)), color-stop(1, rgba(255, 0, 0, 0.5)));
+	background-image: -moz-linear-gradient(top, rgba(255, 200, 200, 0.7), rgba(255, 100, 100, 0.7) 50%, rgba(255, 0, 0, 0.5));
+	background-image: -o-linear-gradient(top, rgba(255, 200, 200, 0.7). rgba(255, 100, 100, 0.7) 50%, rgba(255, 0, 0, 0.5));
+}
