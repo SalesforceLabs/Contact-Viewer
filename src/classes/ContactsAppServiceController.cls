@@ -230,17 +230,13 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     	
     	if (clientId != null && clientId.trim().length() > 0) {
     	   List<AppClient__c> appClients = [SELECT id, AppUser__c FROM AppClient__c WHERE id = :clientId.trim()];
-    	   System.debug('1');
     	   if (appClients != null && !appClients.isEmpty()) {
     	       List<AppUser__c> appUserList = [SELECT id, UserID__c, OrganizationID__c, EULA__c FROM AppUser__c where id = :appClients[0].AppUser__c];
-    	       System.debug('2');
     	       if (appUserList != null && !appUserList.isEmpty()) {
     	           String userInfoStr = client.getUserInfo();
     	           JSONObject userInfo = JSONObject.newInstance(client.getUserInfo());
-    	           System.debug('3');
     	           if(userInfo != null && userInfo.get('user_id').value() == appUserList[0].UserID__c && 
     	               userInfo.get('organization_id').value() == appUserList[0].OrganizationID__c) {
-                       System.debug('4');
                        if(eulaResponse != null && eulaResponse.trim().equalsIgnoreCase('accept')) {
                             appUserList[0].Eula__c = true;
                             appUserList[0].EULA_Acceptance_Date__c = DateTime.now();
@@ -248,7 +244,6 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
                             response.put('success', 'true');
                             response.remove('errorCode');
                             response.remove('error');
-                            System.debug('5');
                        } else {
                             response.put('errorCode', 'INVALID_RESPONSE');
                             response.put('error', 'Not a valid response.');

@@ -28,9 +28,10 @@
 public with sharing class ContactsAppController {
 	
 	private String userAgent {get; set;}
+	public String device { get; private set; }
 	
 	public boolean isIPhone {get {
-		    return userAgent.contains('iPhone');
+		    return userAgent.contains('iPhone') || device == 'mobile';
     	}
 	}
 	
@@ -40,7 +41,7 @@ public with sharing class ContactsAppController {
 	}
 	
 	public boolean isIPad {get {
-            return userAgent.contains('iPad') || (!isIPhone && isWebkit);
+            return userAgent.contains('iPad') || (isWebkit && device != 'mobile');
         }
 	}
 	
@@ -49,8 +50,13 @@ public with sharing class ContactsAppController {
 	   }
 	}
 	
-	public String maifestHeader { get {
-	       return '<html manifest="' + Site.getCurrentSiteUrl() + 'ContactsAppManifest">';
+	public String tabletManifestHeader { get {
+           return '<html manifest="' + Site.getCurrentSiteUrl() + 'ContactsAppManifest?device=tablet">';
+       }
+    }
+    
+	public String mobileManifestHeader { get {
+	       return '<html manifest="' + Site.getCurrentSiteUrl() + 'ContactsAppManifest?device=mobile">';
 	   }
 	}
 	
@@ -61,7 +67,7 @@ public with sharing class ContactsAppController {
 	
 	public ContactsAppController() {
 		this.userAgent = System.currentPageReference().getHeaders().get('User-Agent');
-		System.debug(this.userAgent);
+		this.device = System.currentPageReference().getParameters().get('device');
 	}
 
 }

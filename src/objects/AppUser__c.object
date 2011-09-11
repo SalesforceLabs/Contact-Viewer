@@ -37,7 +37,7 @@
     <enableEnhancedLookup>false</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
-    <enableReports>false</enableReports>
+    <enableReports>true</enableReports>
     <fields>
         <fullName>EULA_Acceptance_Date__c</fullName>
         <externalId>false</externalId>
@@ -75,6 +75,7 @@
         <fullName>All</fullName>
         <columns>NAME</columns>
         <columns>EULA__c</columns>
+        <columns>CREATED_DATE</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>

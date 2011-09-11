@@ -26,9 +26,20 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
 -->
+
+    <script>
+        var siteUrl = '{!$Site.CurrentSiteUrl}';
+        if (Math.min(window.screen.availHeight, window.screen.availWidth) < 500) {
+            if (!(/\/ContactsAppMobile\/?$/).test(window.location.pathname) && window.location.search.length == 0)
+                window.location = siteUrl + 'ContactsAppMobile';
+        } else {
+            if (window.location.pathname != '{!$Site.Prefix}' && window.location.pathname != '{!$Site.Prefix}/' && window.location.search.length == 0)
+                window.location = siteUrl;
+        }
+    </script>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
     
-    <link rel="stylesheet" href="/contacts/ContactsAppAddCSS" />
     <link rel="apple-touch-icon" href="{!URLFOR($Resource.ContactAppRsrcs, 'images/contacts-icon.png')}"/>
             
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -55,38 +66,41 @@
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/modernizr.custom.55761.js')}"/>
     
     <script>
-        function cacheRefresh() {
-            if(window.applicationCache) { //if we are online, check to see if the cache is updated
-                if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-                    window.applicationCache.update();
-                    window.applicationCache.swapCache();
-                    /*var cacheUpdateDiv = document.getElementById('cache_update');
-                    cacheUpdateDiv.innerHTML = 'Download complete. Please relaunch the app to use the latest version.';
-                    cacheUpdateDiv.style.display = 'block';
-                    setTimeout(function() { cacheUpdateDiv.style.display = 'none';}, 20000);*/
-                }
-            }
-        }
-        function cacheDownload() {
-            if(window.applicationCache) { //if we are online, check to see if the cache is updated
-                if (window.applicationCache.status == window.applicationCache.DOWNLOADING) {
-                    var cacheUpdateDiv = document.getElementById('cache_update');
-                    cacheUpdateDiv.innerHTML = 'Downloading the latest version of the app...';
-                    cacheUpdateDiv.style.display = 'block';
-                    window.applicationCache.addEventListener("cached", function() {cacheUpdateDiv.style.display = 'none';}, false);
-                }
-            }
-        }
+        var staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
+        var loadingImg = staticRsrcUrl + '/images/loading.gif';
         
-        window.applicationCache.addEventListener("updateready", cacheRefresh, false);
         document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
         
         if ('standalone' in navigator && !navigator.standalone && (/iphone|ipod|ipad/gi).test(navigator.platform) && (/Safari/i).test(navigator.appVersion) && location.search.length == 0) {
             document.write('<link rel="stylesheet" href="{!URLFOR($Resource.ContactAppRsrcs, 'css/add2home.css')}">');
             document.write('<script type="application\/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/add2home.js')}"><\/script>');
         }
-        var staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
-        document.addEventListener('DOMContentLoaded', prepareSession, false);
+        
+        function checkCacheAndPrepareSession() {
+            if (window.applicationCache) {
+                switch (window.applicationCache.status) {
+                    case window.applicationCache.CHECKING:
+                    case window.applicationCache.DOWNLOADING:
+                        var loading = $j(document).showActivityInd(loadingImg, 'Loading...'); // Show Loading
+                        var callback = function() { loading.hide(); checkCacheAndPrepareSession(); }
+                        window.applicationCache.addEventListener('updateready', callback, false);
+                        window.applicationCache.addEventListener('cached', callback, false);
+                        window.applicationCache.addEventListener('error', callback, false);
+                        window.applicationCache.addEventListener('noupdate', callback, false);
+                        break;
+                    case window.applicationCache.UPDATEREADY:
+                        window.applicationCache.swapCache();
+                        location.reload();
+                        break;
+                    default:
+                        prepareSession();
+                }
+            } else {
+                prepareSession();
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', checkCacheAndPrepareSession, false);
     </script>
     
 </apex:page>

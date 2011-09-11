@@ -38,7 +38,7 @@ var login_redirect_storage_key = 'SFDC-LOGIN-REDIRECT';
 
 var listpagescroll, feedpagescroll, infopagescroll;
 var sf, sessionAlive, isStandalone, username;
-var loadingImg, contactListPullDownCB, listPopoverWindowListener;
+var contactListPullDownCB, listPopoverWindowListener;
 var hasRecordTypes = false;
 var contactLabel = 'Contact', contactPluralLabel = 'Contacts';
 var currentContacts = [], selectedContactId, selectedListId;
@@ -48,8 +48,10 @@ function errorCallback(jqXHR, statusText){
 		alert('Server Unavailable. Check network connection or try again later.');
 	} else if (statusText = 'timeout') {
 		if ((/NO_API_ACCESS/gi).test(jqXHR.responseText)) {
-			alert('API is not accessible to current user. Please login with a user with access to Salesforce API.');
-			logout(true);
+			if (!postLogout) {
+				alert('API is not accessible to current user. Please login with a user with access to Salesforce API.');
+				logout(true);
+			}
 		} else {
 			alert('Session timed out.');
 			clearSessionValue(session_alive_storage_key);
@@ -278,8 +280,6 @@ function prepareSession() {
 	
 	if (!sf) sf = new sforce.Client();
 	
-	loadingImg = staticRsrcUrl + '/images/loading.gif';
-	
 	isStandalone = ('standalone' in navigator && navigator.standalone);
 	sessionAlive = getSessionValue(session_alive_storage_key);
 	
@@ -372,7 +372,7 @@ function logout(redirect) {
 	
 	clearAll();
 	if (!redirect) setSessionValue(login_redirect_storage_key, false);
-	postLogout = function() { window.location = getBaseUrl() };
+	postLogout = function() { window.location = getBaseUrl(); };
 	
 	if (instanceUrl) {
 		iframe = $j('<iframe src="' + instanceUrl + '/secur/logout.jsp" style="display:none" onload="logoutCallback(this);"/>');

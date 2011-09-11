@@ -37,7 +37,7 @@
     <enableEnhancedLookup>false</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
-    <enableReports>false</enableReports>
+    <enableReports>true</enableReports>
     <fields>
         <fullName>AppUser__c</fullName>
         <externalId>false</externalId>
@@ -103,6 +103,7 @@
     <label>App Client</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
         <columns>AppUser__c</columns>
         <columns>HasPasscode__c</columns>
         <columns>Last_Login__c</columns>

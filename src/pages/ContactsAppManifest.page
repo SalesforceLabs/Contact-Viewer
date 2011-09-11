@@ -14,7 +14,7 @@ NETWORK:
 
 CACHE:
 #css
-{!$Site.CurrentSiteUrl}ContactsAppAddCSS
+{!$Site.CurrentSiteUrl}ContactsAppAddCSS{!IF(isIPad, "?device=tablet", "?device=mobile")}
 {!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'css/basicstyle-ipad.css'), "")}
 {!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'css/basicstyle.css'), "")}
 {!URLFOR($Resource.ContactAppRsrcs, 'css/passcodemanager.css')}

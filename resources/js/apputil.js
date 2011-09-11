@@ -108,9 +108,8 @@ function removeWindowTouchListener(listener) {
 }
 
 function getBaseUrl() {
-	var basepath = window.location.protocol + '//' + window.location.hostname;
-	basepath += (window.location.pathname.length > 1) ? window.location.pathname : '';
-	return basepath;
+	if (siteUrl.endsWith('/')) return siteUrl.substring(0, siteUrl.length-1);
+	return siteUrl;
 }
 
 function getFieldDescribe() {

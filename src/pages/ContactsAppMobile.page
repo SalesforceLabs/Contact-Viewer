@@ -1,22 +1,22 @@
 <apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactsAppController">
 <apex:outputText escape="false" value="{!'<!DOCTYPE HTML>'}"/>
-<apex:outputText rendered="{!addManifest}" escape="false" value="{!tabletManifestHeader}"/>
+<apex:outputText rendered="{!addManifest}" escape="false" value="{!mobileManifestHeader}"/>
 
     <title>ContactViewer</title>
         
     <apex:composition template="MobileAppTemplate">
         <apex:define name="body">
                 
-            <c:ContactsForIPad rendered="{!isWebkit}"/>
+            <c:ContactsForIPhone rendered="{!isWebkit}"/>
             
             <apex:outputPanel rendered="{!!isWebkit}">
                 <script>
                     alert('This web app is currently supported for only webkit based browsers such as Chrome and Safari.'); 
-                    window.location='http://www.salesforce.com';
+                    window.location='http://appexchange.salesforce.com/listingDetail?listingId=a0N300000056pmWEAQ';
                 </script>
             </apex:outputPanel>
             
-            <link rel="stylesheet" href="/contacts/ContactsAppAddCSS?device=tablet" />
+            <link rel="stylesheet" href="/contacts/ContactsAppAddCSS?device=mobile" />
             
         </apex:define>
     </apex:composition>

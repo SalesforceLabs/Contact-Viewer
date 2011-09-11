@@ -28,6 +28,7 @@
         <members>ContactsAppAddCSS</members>
         <members>ContactsAppEULA</members>
         <members>ContactsAppManifest</members>
+        <members>ContactsAppMobile</members>
         <members>ContactsAppOAuth</members>
         <members>ContactsAppService</members>
         <members>MobileAppTemplate</members>
