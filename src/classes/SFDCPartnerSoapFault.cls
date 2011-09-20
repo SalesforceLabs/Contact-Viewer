@@ -56,4 +56,14 @@ public class SFDCPartnerSoapFault {
         private String[] apex_schema_type_info = new String[]{'urn:fault.partner.soap.sforce.com','true','false'};
         private String[] field_order_type_info = new String[]{};
     }
+    
+    // Since this class is auto generated, don't need to add any functional testing. 
+    // Just adding a test to have code coverage for this class.
+    public static testmethod void addBasicCodeCoverage() {
+        new ApiFault();
+        new InvalidSObjectFault();
+        new InvalidIdFault();
+        new ApiQueryFault();
+        new UnexpectedErrorFault();
+    }
 }

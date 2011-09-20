@@ -6,17 +6,17 @@
     #listpage>div { background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/bg.png')}'); }
 }
 
-#rightsection #detailpage #leftnav div.dsIcons { background: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/ds-icons.png')}') no-repeat top left; }
-#detailpage #detail #summary #call_contact a>div { background: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/action-icons.png')}') no-repeat top left; }
-.rc_div { background: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/corners.png')}') no-repeat top left; }
-#listpage #footer>div { background: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/home_gear.png')}') no-repeat top left; }
+#detailpage #leftnav div.dsIcons { background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/ds-icons.png')}'); }
+#detailpage #detail #summary #call_contact a>div { background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/action-icons.png')}'); }
+.rc_div { background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/corners.png')}'); }
+#listpage #footer>div { background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/home_gear.png')}'); }
 
 </apex:outputPanel>
 
 #searchbar>form { -webkit-border-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/search/border.png')}') 0 17 0 17; }
-#searchbar>form .search-bg { background: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/search/search-mg-close.png')}') no-repeat top left; }
+#searchbar>form .search-bg { background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/search/search-mg-close.png')}'); }
 
-.appleui { background: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/extra-sprites.png')}') no-repeat top left; }
+.appleui { background: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/extra-sprites.png')}') no-repeat; }
 .cellselected { background-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/leftgradient.png')}'); color: white; }
 
 #pullDown.loading .pullDownIcon { background:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/loading.gif')}') 0 0 no-repeat; margin: 5px 5px; }

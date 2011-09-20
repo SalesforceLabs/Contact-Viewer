@@ -29,14 +29,15 @@ var FeedPhotoRenderer = function() { this.userIds = []; }
 
 FeedPhotoRenderer.prototype.getImage = function(userId) {
 	this.userIds.push(userId);
-	return '<img class="feedImage" id="photo__' + escape(userId) + '"/>';
+	return '<img class="feedImage" id="photo__' + escape(userId) + '" src="' + staticRsrcUrl + '/images/userChatterPic.png"/>';
 }
 
 FeedPhotoRenderer.prototype.renderImages = function(scope) {
 	if (this.userIds.length == 0) return;
 	
 	if (!scope) scope = $j(document.body);
-	sf.getUsersInfoViaApex(this.userIds,
+	if (hasChatterEnabled) {
+		sf.getUsersInfoViaApex(this.userIds, hasChatterEnabled,
 						 function(response) {
 	    					$j.each(response.records, 
     							function () {
@@ -44,6 +45,7 @@ FeedPhotoRenderer.prototype.renderImages = function(scope) {
 	    						}
 		    				);
 						 }, errorCallback);
+	}
 }
 
 function feedRenderer(records, noFeedMsg, options) {
@@ -82,7 +84,7 @@ function feedRenderer(records, noFeedMsg, options) {
 function generateChatterItem(rec, parent, photoRenderer, fieldInfos, options) {
 
     var text = (rec.Body || '');
-    if (rec.Type == 'TrackedChange') {
+    if (rec.Type == 'TrackedChange' && rec.FeedTrackedChanges && rec.FeedTrackedChanges.records) {
     	$j.each(rec.FeedTrackedChanges.records,
      		function() {
     			if (this.FieldName == 'created') text = 'created this ' + contactLabel.toLowerCase() + '.';

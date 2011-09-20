@@ -39,7 +39,7 @@ var login_redirect_storage_key = 'SFDC-LOGIN-REDIRECT';
 var listpagescroll, feedpagescroll, infopagescroll;
 var sf, sessionAlive, isStandalone, username;
 var contactListPullDownCB, listPopoverWindowListener;
-var hasRecordTypes = false;
+var hasRecordTypes = false, hasChatterEnabled = false;
 var contactLabel = 'Contact', contactPluralLabel = 'Contacts';
 var currentContacts = [], selectedContactId, selectedListId;
 
@@ -336,7 +336,7 @@ function sessionCallback() {
 		
 		describeCallback = function(success) { 
 			if (success) switchToDetail('#listpage', false, '', onSlide); 
-			resetContactList();
+			setupContactListSection();
 		}
 	} else {
 		showMainFeed = function(success) {
@@ -347,17 +347,14 @@ function sessionCallback() {
 		}
 		
 		describeCallback = function(success) {
-			resetContactList();
-			$j(window).orientationChange(resetContactList);
+			setupContactListSection();
 			showMainFeed(success);
 		};
 	}
 	
-	$j(window).orientationChange(resetContactList);
-	
 	fetchContactDescribe(describeCallback);
 	displayList('recent', showMainFeed);
-	initializeMap();
+	$j(window).orientationChange(resetContactList);
 }
 
 var postLogout;
@@ -386,6 +383,8 @@ function setupContactListSection() {
 	$j('#listpage #header #searchbar input[type="search"]').attr('placeholder', 'Search All ' + contactPluralLabel);
 	$j('#listpage #header #listselect #owner').text('My ' + contactPluralLabel);
 	$j('#listpage #header #listselect #follow').text(contactPluralLabel + ' I Follow');
+	if(!hasChatterEnabled) $j('#listpage #header #listselect button#follow').hide();
+	
 	switch (isPortrait()) {
 		case true:
 			$j('#listpage').appendTo('#popover');
@@ -680,6 +679,10 @@ function searchContacts(searchText, callback) {
 }
 
 function getChatter(contactId, callback) {
+	if (!hasChatterEnabled) {
+		callback();	return;
+	}
+	
     var onComplete = function(jqXHR, statusText) {
 		if (typeof callback == 'function') {
 			callback(statusText);
@@ -724,12 +727,28 @@ function displayContactSummary(contact) {
 	var fieldInfo = getFieldDescribe();
 	var detail = $j('#rightsection #detailpage #detail');
 	detail.find('#summary #photo_div>div').html(formatStr(contact.Name, 25));
-	detail.find('#summary #company .fieldLbl').setText(fieldInfo.AccountId.relationshipLabel.toUpperCase(), true);
-	detail.find('#summary #company .fieldVal').setText(contact.Account ? contact.Account.Name : ' ', true);
-	detail.find('#summary #title .fieldLbl').setText(fieldInfo.Title.label.toUpperCase(), true);
-	detail.find('#summary #title .fieldVal').setText(contact.Title || ' ', true);
-	detail.find('#summary #phone .fieldLbl').setText(fieldInfo.Phone.label.toUpperCase(), true);
-	detail.find('#summary #phone .fieldVal').setText(contact.Phone || ' ', true);
+	if (fieldInfo.AccountId) {
+		detail.find('#summary #company').show();
+		detail.find('#summary #company .fieldLbl').setText(fieldInfo.AccountId.relationshipLabel.toUpperCase(), true);
+		detail.find('#summary #company .fieldVal').setText(contact.Account ? contact.Account.Name : ' ', true);
+	} else {
+		detail.find('#summary #company').hide();
+	}
+	if (fieldInfo.Title) {
+		detail.find('#summary #title').show();
+		detail.find('#summary #title .fieldLbl').setText(fieldInfo.Title.label.toUpperCase(), true);
+		detail.find('#summary #title .fieldVal').setText(contact.Title || ' ', true);
+	} else {
+		detail.find('#summary #title').hide();
+	}
+	if (fieldInfo.Phone) {
+		detail.find('#summary #phone').show();
+		detail.find('#summary #phone .fieldLbl').setText(fieldInfo.Phone.label.toUpperCase(), true);
+		detail.find('#summary #phone .fieldVal').setText(contact.Phone || ' ', true);
+	} else {
+		detail.find('#summary #phone').hide();
+	}
+	
 		
 	if (contact.Phone) {
 		var phone = cleanupPhone(contact.Phone);
@@ -760,23 +779,58 @@ function displayContactSummary(contact) {
 function displayContactDetails(contact) {
 	var fieldInfo = getFieldDescribe();
 	var info = $j('#rightsection #detailpage #detail #info');
-	info.find('#Account .fieldLbl').text(fieldInfo.AccountId.relationshipLabel);
-	info.find('#Account .fieldVal').html(contact.Account ? formatStr(contact.Account.Name, 50) : '&nbsp;');
-	info.find('#Department .fieldLbl').text(fieldInfo.Department.label);
-	info.find('#Department .fieldVal').html(formatStr(contact.Department, 50) || '&nbsp;');
-	info.find('#Phone .fieldLbl').text(fieldInfo.Phone.label);
-	info.find('#Phone .fieldVal').html((contact.Phone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.Phone)) + '" style="text-decoration:none;">' + formatStr(contact.Phone, 30) + '</a>' : '&nbsp;');
-	info.find('#Mobile .fieldLbl').text(fieldInfo.MobilePhone.label);
-	info.find('#Mobile .fieldVal').html((contact.MobilePhone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.MobilePhone)) + '">' + formatStr(contact.MobilePhone, 30) + '</a>' : '&nbsp;');
-	info.find('#Email .fieldLbl').text(fieldInfo.Email.label);
-	info.find('#Email .fieldVal').html((contact.Email) ? '<a href="mailto:' + contact.Email + '" style="text-decoration:none;">' + formatStr(contact.Email, 50) + '</a>' : '&nbsp;');
-	info.find('#ReportsTo .fieldLbl').text(fieldInfo.ReportsToId.label.replace(/\sID$/,''));
-	info.find('#ReportsTo .fieldVal').html(contact.ReportsTo ? formatStr(contact.ReportsTo.Name, 50) : '&nbsp;');
-					
-	add = formatAddress(contact);
-	info.find('#Address .fieldLbl').text('Mailing Address');
-	info.find('#Address .fieldVal').html((add.length > 0 ) ? add.replace(/\n/g, '<br/>') : '&nbsp;');
-	codeAddressOnMap(add.replace(/\n/g, ', '));
+	if (fieldInfo.AccountId) {
+		info.find('#Account').show();
+		info.find('#Account .fieldLbl').text(fieldInfo.AccountId.relationshipLabel);
+		info.find('#Account .fieldVal').html(contact.Account ? formatStr(contact.Account.Name, 50) : '&nbsp;');
+	} else {
+		info.find('#Account').hide();
+	}
+	if (fieldInfo.Department) {
+		info.find('#Department').show();
+		info.find('#Department .fieldLbl').text(fieldInfo.Department.label);
+		info.find('#Department .fieldVal').html(formatStr(contact.Department, 50) || '&nbsp;');
+	} else {
+		info.find('#Department').hide();
+	}
+	if (fieldInfo.Phone) {
+		info.find('#Phone').show();
+		info.find('#Phone .fieldLbl').text(fieldInfo.Phone.label);
+		info.find('#Phone .fieldVal').html((contact.Phone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.Phone)) + '" style="text-decoration:none;">' + formatStr(contact.Phone, 30) + '</a>' : '&nbsp;');
+	} else {
+		info.find('#Phone').hide();
+	}
+	if (fieldInfo.MobilePhone) {
+		info.find('#Mobile').show();
+		info.find('#Mobile .fieldLbl').text(fieldInfo.MobilePhone.label);
+		info.find('#Mobile .fieldVal').html((contact.MobilePhone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.MobilePhone)) + '">' + formatStr(contact.MobilePhone, 30) + '</a>' : '&nbsp;');
+	} else {
+		info.find('#Mobile').hide();
+	}
+	if (fieldInfo.Email) {
+		info.find('#Email').show();
+		info.find('#Email .fieldLbl').text(fieldInfo.Email.label);
+		info.find('#Email .fieldVal').html((contact.Email) ? '<a href="mailto:' + contact.Email + '" style="text-decoration:none;">' + formatStr(contact.Email, 50) + '</a>' : '&nbsp;');	
+	} else {
+		info.find('#Email').hide();
+	}
+	if (fieldInfo.ReportsToId) {
+		info.find('#ReportsTo').show();
+		info.find('#ReportsTo .fieldLbl').text(fieldInfo.ReportsToId.label.replace(/\sID$/,''));
+		info.find('#ReportsTo .fieldVal').html(contact.ReportsTo ? formatStr(contact.ReportsTo.Name, 50) : '&nbsp;');	
+	} else {
+		info.find('#ReportsTo').hide();
+	}				
+	if (fieldInfo.MailingStreet != undefined) {
+		var add = formatAddress(contact);
+		info.find('#Address').show();
+		info.find('#Address .fieldLbl').text('Mailing Address');
+		info.find('#Address .fieldVal').html((add.length > 0 ) ? add.replace(/\n/g, '<br/>') : '&nbsp;');
+		codeAddressOnMap(add.replace(/\n/g, ', '));
+	} else {
+		info.find('#Address').hide();
+		$j('#map_section').hide();
+	}
 }
 
 function renderContactInfo(contactId, callback) {
@@ -796,6 +850,13 @@ function renderContactInfo(contactId, callback) {
         	      'MobilePhone', 'Email', 'MailingStreet', 'MailingCity', 'MailingState', 
         	      'MailingCountry', 'MailingPostalCode', 'ReportsTo.Name'];
     if (hasRecordTypes) fields.push('RecordTypeId');
+    
+    var fieldInfos = getFieldDescribe();
+    
+    fields = fields.filter(function(fieldName) {
+    	fieldName = fieldName.split('.');
+    	return (true && fieldInfos[fieldName[0]]);
+    });
 	
 	var info = $j('#rightsection #detailpage #detail #info');
 	
@@ -850,6 +911,7 @@ function showContactNews(callback, showLoadingIndicator) {
 	focusOutContactList(); 
 	$j('#detailpage #contactInfo').hide();
 	$j('#detailpage .header>span').text(contactLabel + ' Feed');
+	$j('#feedscroller ul').empty();
 	$j('#feedscroller').appendTo('#contactNews .contentpage').css('visibility', 'hidden').show();
 	$j('#detailpage #contactNews').show();
 	$j('#contactlist .cellselected').removeClass('cellselected');
@@ -921,12 +983,16 @@ function getAggregateFeed(contactIdArr, callback, options) {
 		}
 	}
 	
-    sf.fetchChatterViaApex(contactIdArr,
+	if (hasChatterEnabled) {
+		sf.fetchChatterViaApex(contactIdArr,
     		function(response) {
     			recs[0] = (response.totalSize > 0) ? response.records : [];
     			onSuccess();
 			}, 
 			errorCallback, onComplete);
+	} else {
+		recs[0] = []; onSuccess();
+	}
 			
 	sf.fetchActivitiesViaApex(contactIdArr,
     		function(response) {
@@ -947,17 +1013,23 @@ function fetchContactDescribe(callback) {
 					$j.each(response.fields,
 						function() {
 							var field = {'label':this.label, 'type':this.type, 'length': this.length};
+							fields[this.name] = field;
 							if (field.type == 'reference') {
 								field.relationshipName = this.relationshipName;
 								field.referenceTo = this.referenceTo;
 								field.relationshipLabel = this.relationshipLabel || '';
+								fields[this.relationshipName] = field;
 							}
-							fields[this.name] = field;
 						});
 					setSessionValue(contact_describe_storage_key, JSON.stringify(fields));
 				}
 				if (response.recordTypeInfos && response.recordTypeInfos.length > 1) {
 					hasRecordTypes = true;
+				}
+				if (response.childRelationships) {
+					hasChatterEnabled = response.childRelationships.some(function(rel) {
+						return rel.childSObject == 'ContactFeed';
+					});
 				}
 			}, errorCallback, callback);
 }
@@ -977,9 +1049,11 @@ function addLeftNavClickListeners(contact) {
 			var ind = $j('#rightsection #detailpage').showActivityInd(loadingImg, loadingText + '...');
 			switchDetailSection(this.id, contact, ind.hide); 
 		});
+	if (!hasChatterEnabled) $j('#rightsection #detailpage #leftnav #chatter').hide();
 }
 
 function switchDetailSection(section, contact, callback) {
+	$j('#feedscroller ul').empty();
 	$j('#feedscroller').appendTo('#rightsection #detailpage #detail>span');	
 	$j('#detailpage #contactInfo').show();
 	$j('#detailpage #contactNews').hide();

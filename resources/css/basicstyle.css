@@ -337,8 +337,8 @@ input[type="search"] { -webkit-appearance:none; }
 	margin-left: 5px;
 }
 
-.back-arrow { background-position: 0px -29px; width: 12px; height: 29px; float: left; margin-top: 7px;}
-.arrow-next { background-position: 0px 0px; width: 9px; height: 13px; float: right; margin: 15px 0 0 10px;}
+.appleui.back-arrow { background-position: 0px -29px; width: 12px; height: 29px; float: left; margin-top: 7px;}
+.appleui.arrow-next { background-position: 0px 0px; width: 9px; height: 13px; float: right; margin: 15px 0 0 10px;}
 .appleui.check { background-position: 0px -14px; width: 14px; height: 14px; float: right; margin: 15px 0 0 10px; }
 
 .header_button {

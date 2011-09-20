@@ -140,7 +140,7 @@ global with sharing class ContactsAppOAuthController {
             HttpResponse resp = h.send(req);
             
             if (resp.getStatusCode() == 200) {
-                this.userInfo = ContactsAppUtil.parseSimpleJson(resp.getBody());
+                this.userInfo = JSONObject.parseSimpleJson(resp.getBody());
                 this.username = this.userInfo.get('username');
                 this.displayName = this.userInfo.get('display_name');
                 System.debug(username);
@@ -176,7 +176,7 @@ global with sharing class ContactsAppOAuthController {
 	    	String decryptedString = ContactsAppUtil.decrypt(privatekey, clientSideString);
 	        
 	        //Get all the parts
-	        Map<String, String> clientSideRefTokenParts = ContactsAppUtil.parseSimpleJson(decryptedString);
+	        Map<String, String> clientSideRefTokenParts = JSONObject.parseSimpleJson(decryptedString);
 	        
 	        if (clientSideRefTokenParts != null && clientSideRefTokenParts.size() > 0) {
 	        	String tokenId = clientSideRefTokenParts.get(TOKEN_ID_KEY);
@@ -239,7 +239,7 @@ global with sharing class ContactsAppOAuthController {
             this.clientId = this.client.Id;
             
             if (this.isValidPasscode) {
-	            String clientSideRefToken = ContactsAppUtil.createSimpleJson(new Map<String, String> {
+	            String clientSideRefToken = JSONObject.createSimpleJson(new Map<String, String> {
 	                PASS_KEY => this.passcode, 
 	                TOKEN_ID_KEY => this.client.token_id__c,
 	                CLIENT_ID_KEY => this.client.id, 

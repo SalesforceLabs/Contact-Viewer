@@ -39,7 +39,7 @@ var login_redirect_storage_key = 'SFDC-LOGIN-REDIRECT';
 var listpagescroll, infopagescroll;
 var sf, sessionAlive, isStandalone, username;
 var contactListPullDownCB;
-var hasRecordTypes = false;
+var hasRecordTypes = false, hasChatterEnabled = false;
 var contactLabel = 'Contact', contactPluralLabel = 'Contacts';
 var currentContacts = [], selectedContactId, selectedListId;
 
@@ -340,6 +340,7 @@ function setupContactListSection() {
 	$j('#listpage #header #searchbar input[type="search"]').attr('placeholder', 'Search All ' + contactPluralLabel);
 	$j('#listpage #header #listselect #owner').text('My ' + contactPluralLabel);
 	$j('#listpage #header #listselect #follow').text(contactPluralLabel + ' I Follow');
+	if(!hasChatterEnabled) $j('#listpage #header #listselect button#follow').hide();
 	
 	initiateContactListScroller(null, true);
 }
@@ -609,27 +610,62 @@ function displayContactSummary(contact) {
 function displayContactDetails(contact) {
 	var fieldInfo = getFieldDescribe();
 	var info = $j('#detailpage #detail #info');
-	info.find('#Account .fieldLbl').text(fieldInfo.AccountId.relationshipLabel);
-	info.find('#Account .fieldVal').html(contact.Account ? formatStr(contact.Account.Name, 50) : '&nbsp;');
-	info.find('#Department .fieldLbl').text(fieldInfo.Department.label);
-	info.find('#Department .fieldVal').html(formatStr(contact.Department, 50) || '&nbsp;');
-	info.find('#Phone .fieldLbl').text(fieldInfo.Phone.label);
-	info.find('#Phone .fieldVal').html((contact.Phone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.Phone)) + '" style="text-decoration:none;">' + formatStr(contact.Phone, 30) + '</a>' : '&nbsp;');
-	info.find('#Mobile .fieldLbl').text(fieldInfo.MobilePhone.label);
-	info.find('#Mobile .fieldVal').html((contact.MobilePhone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.MobilePhone)) + '">' + formatStr(contact.MobilePhone, 30) + '</a>' : '&nbsp;');
-	info.find('#Email .fieldLbl').text(fieldInfo.Email.label);
-	info.find('#Email .fieldVal').html((contact.Email) ? '<a href="mailto:' + contact.Email + '" style="text-decoration:none;">' + formatStr(contact.Email, 50) + '</a>' : '&nbsp;');
-	info.find('#ReportsTo .fieldLbl').text(fieldInfo.ReportsToId.label.replace(/\sID$/,''));
-	info.find('#ReportsTo .fieldVal').html(contact.ReportsTo ? formatStr(contact.ReportsTo.Name, 50) : '&nbsp;');
-					
-	add = formatAddress(contact);
-	info.find('#Address .fieldLbl').text('Mailing Address');
-	if (add.length > 0 ) {
-		add = '<a href="http://maps.google.com/maps?daddr=' + add.replace(/\n/g, ', ') + '">' +
-			  add.replace(/\n/g, '<br/>') + '</a>';
-		info.find('#Address .fieldVal').html(add);
+	if (fieldInfo.AccountId) {
+		info.find('#Account').show();
+		info.find('#Account .fieldLbl').text(fieldInfo.AccountId.relationshipLabel);
+		info.find('#Account .fieldVal').html(contact.Account ? formatStr(contact.Account.Name, 50) : '&nbsp;');
 	} else {
-		info.find('#Address .fieldVal').empty();
+		info.find('#Account').hide();
+	}
+	if (fieldInfo.Department) {
+		info.find('#Department').show();
+		info.find('#Department .fieldLbl').text(fieldInfo.Department.label);
+		info.find('#Department .fieldVal').html(formatStr(contact.Department, 50) || '&nbsp;');
+	} else {
+		info.find('#Department').hide();
+	}
+	if (fieldInfo.Phone) {
+		info.find('#Phone').show();
+		info.find('#Phone .fieldLbl').text(fieldInfo.Phone.label);
+		info.find('#Phone .fieldVal').html((contact.Phone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.Phone)) + '" style="text-decoration:none;">' + formatStr(contact.Phone, 30) + '</a>' : '&nbsp;');
+	} else {
+		info.find('#Phone').hide();
+	}
+	if (fieldInfo.MobilePhone) {
+		info.find('#Mobile').show();
+		info.find('#Mobile .fieldLbl').text(fieldInfo.MobilePhone.label);
+		info.find('#Mobile .fieldVal').html((contact.MobilePhone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.MobilePhone)) + '">' + formatStr(contact.MobilePhone, 30) + '</a>' : '&nbsp;');
+	} else {
+		info.find('#Mobile').hide();
+	}
+	if (fieldInfo.Email) {
+		info.find('#Email').show();
+		info.find('#Email .fieldLbl').text(fieldInfo.Email.label);
+		info.find('#Email .fieldVal').html((contact.Email) ? '<a href="mailto:' + contact.Email + '" style="text-decoration:none;">' + formatStr(contact.Email, 50) + '</a>' : '&nbsp;');	
+	} else {
+		info.find('#Email').hide();
+	}
+	if (fieldInfo.ReportsToId) {
+		info.find('#ReportsTo').show();
+		info.find('#ReportsTo .fieldLbl').text(fieldInfo.ReportsToId.label.replace(/\sID$/,''));
+		info.find('#ReportsTo .fieldVal').html(contact.ReportsTo ? formatStr(contact.ReportsTo.Name, 50) : '&nbsp;');	
+	} else {
+		info.find('#ReportsTo').hide();
+	}
+
+	if (fieldInfo.MailingStreet != undefined) {
+		var add = formatAddress(contact);
+		info.find('#Address').show();
+		info.find('#Address .fieldLbl').text('Mailing Address');
+		if (add.length > 0 ) {
+			add = '<a href="http://maps.google.com/maps?daddr=' + add.replace(/\n/g, ', ') + '">' +
+				  add.replace(/\n/g, '<br/>') + '</a>';
+			info.find('#Address .fieldVal').html(add);
+		} else {
+			info.find('#Address .fieldVal').empty();
+		}
+	} else {
+		info.find('#Address').hide();
 	}
 }
 
@@ -651,6 +687,13 @@ function renderContactInfo(contactId, callback) {
         	      'MailingCountry', 'MailingPostalCode', 'ReportsTo.Name'];
     if (hasRecordTypes) fields.push('RecordTypeId');
 	
+	var fieldInfos = getFieldDescribe();
+    
+    fields = fields.filter(function(fieldName) {
+    	fieldName = fieldName.split('.');
+    	return (true && fieldInfos[fieldName[0]]);
+    });
+    
 	var info = $j('#detailpage #detail #info');
 	
     sf.retrieveContactViaApex(contactId, fields,
@@ -679,17 +722,23 @@ function fetchContactDescribe(callback) {
 					$j.each(response.fields,
 						function() {
 							var field = {'label':this.label, 'type':this.type, 'length': this.length};
+							fields[this.name] = field;
 							if (field.type == 'reference') {
 								field.relationshipName = this.relationshipName;
 								field.referenceTo = this.referenceTo;
 								field.relationshipLabel = this.relationshipLabel || '';
+								fields[this.relationshipName] = field;
 							}
-							fields[this.name] = field;
 						});
 					setSessionValue(contact_describe_storage_key, JSON.stringify(fields));
 				}
 				if (response.recordTypeInfos && response.recordTypeInfos.length > 1) {
 					hasRecordTypes = true;
+				}
+				if (response.childRelationships) {
+					hasChatterEnabled = response.childRelationships.some(function(rel) {
+						return rel.childSObject == 'ContactFeed';
+					});
 				}
 			}, errorCallback, callback);
 }

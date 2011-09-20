@@ -55,7 +55,6 @@
     
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.6.1.min.js')}"/>
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.wipetouch.js')}"/>
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}"/>
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}"/>
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}"/>
@@ -63,7 +62,6 @@
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}"/>
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}"/>
     <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/appSettings.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/modernizr.custom.55761.js')}"/>
     
     <script>
         var staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
@@ -89,7 +87,6 @@
                         window.applicationCache.addEventListener('noupdate', callback, false);
                         break;
                     case window.applicationCache.UPDATEREADY:
-                        window.applicationCache.swapCache();
                         location.reload();
                         break;
                     default:

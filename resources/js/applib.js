@@ -145,10 +145,10 @@ if (sforce.Client === undefined) {
      * @param success function to call on success
      * @param error function to call on failure
      */
-    sforce.Client.prototype.getUsersInfoViaApex = function(uids, success, error, complete) {
+    sforce.Client.prototype.getUsersInfoViaApex = function(uids, fetchPhotos, success, error, complete) {
         var that = this;
         var url = getBaseUrl() + '/ContactsAppService';
-        this.ajax('GET', url, 'action=getUsersInfo&id=' + uids, success, error, complete);
+        this.ajax('GET', url, 'action=getUsersInfo&id=' + uids + '&fetchPhotos=' + fetchPhotos, success, error, complete);
     }
     
     

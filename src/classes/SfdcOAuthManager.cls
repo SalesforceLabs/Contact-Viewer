@@ -128,7 +128,7 @@ public with sharing class SfdcOAuthManager {
         
         OAuthResponse oAuthResp = new OAuthResponse();
         
-        Map<String, String> oauthRespMap = ContactsAppUtil.parseSimpleJson(jsonResp);
+        Map<String, String> oauthRespMap = JSONObject.parseSimpleJson(jsonResp);
         
         for (String key : oauthRespMap.keySet()) {
             

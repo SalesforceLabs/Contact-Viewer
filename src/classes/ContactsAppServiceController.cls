@@ -133,7 +133,7 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     	
     	System.debug(addWhereClause);
 
-        return client.query('SELECT Id, FirstName, LastName, Name, Account.Id, Account.Name ' + 
+        return client.query('SELECT Id, FirstName, LastName, Name ' + 
                             'FROM   Contact ' + addWhereClause );
     }
     
@@ -161,13 +161,19 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     
     private String getUsersInfo() {
         
+        String fetchPhototsParam = System.currentPageReference().getParameters().get('fetchPhotos');
+        boolean addPhotos = (fetchPhototsParam != null && fetchPhototsParam.trim().equalsIgnoreCase('true'));
+        
         String uids = System.currentPageReference().getParameters().get('id');
         uids = String.escapeSingleQuotes(uids.trim()).replaceAll(',', '\',\'');
-        String jsonResp = client.query('Select id, name, smallPhotoUrl from User where id IN (\'' + uids + '\')');
+        String jsonResp = client.query('Select id, name' + ((addPhotos) ? ', smallPhotoUrl' : '') + ' from User where id IN (\'' + uids + '\')');
         
-        return jsonResp.replaceAll('\"SmallPhotoUrl\":\"/([^\"]*?)"', '\"SmallPhotoUrl\":\"' + this.sm.instanceUrl + '/$1\"')
+        if (addPhotos) {
+        	jsonResp = jsonResp.replaceAll('\"SmallPhotoUrl\":\"/([^\"]*?)"', '\"SmallPhotoUrl\":\"' + this.sm.instanceUrl + '/$1\"')
                        .replaceAll('\"SmallPhotoUrl\":\"([^\"]*?)"', '\"SmallPhotoUrl\":\"$1?oauth_token=' + this.sm.accessToken + '\"');
+        }
         
+        return jsonResp;
     }
     
     private String searchContacts() {
@@ -253,7 +259,7 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     	   }
     	}
     	
-    	return ContactsAppUtil.createSimpleJson(response);
+    	return JSONObject.createSimpleJson(response);
     }
     
 }

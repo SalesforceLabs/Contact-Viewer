@@ -465,4 +465,34 @@ public class SFDCPartnerSoap {
         private String[] apex_schema_type_info = new String[]{'urn:partner.soap.sforce.com','true','false'};
         private String[] field_order_type_info = new String[]{'columns','custom','field','label','limitRows','name','sobject_x','sort_x'};
     }
+    
+    // Since this class is auto generated, don't need to add any functional testing. 
+    // Just adding a test to have code coverage for this class.
+    public static testmethod void addBasicCodeCoverage() {
+        new Field();
+        new CallOptions_element();
+        new describeLayoutResponse_element();
+        new Soap();
+        new SessionHeader_element();
+        new DescribeSObjectResult();
+        new describeLayout_element();
+        new DescribeLayout();
+        new RecordTypeMapping();
+        new PicklistEntry();
+        new DescribeLayoutButton();
+        new DescribeLayoutItem();
+        new describeSObjectResponse_element();
+        new RelatedListColumn();
+        new DescribeLayoutRow();
+        new DescribeLayoutResult();
+        new RecordTypeInfo();
+        new DescribeLayoutSection();
+        new RelatedListSort();
+        new describeSObject_element();
+        new ChildRelationship();
+        new DescribeLayoutButtonSection();
+        new PicklistForRecordType();
+        new DescribeLayoutComponent();
+        new RelatedList();
+    }
 }

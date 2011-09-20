@@ -50,12 +50,12 @@ public with sharing class JSONObject {
         this.arrayValues = values;
     }
     
-    private static String createSimpleJson(Map<String, String> keyValueMap) {
+    public static String createSimpleJson(Map<String, String> keyValueMap) {
         
         String json = '{';
         
         for (String key : keyValueMap.keySet()) {
-            json += '"' + key + '":' + keyValueMap.get(key) + ',';
+            json += '"' + key + '":"' + keyValueMap.get(key) + '",';
         }
         
         json = json.subString(0, json.length()-1) + '}';
@@ -63,7 +63,7 @@ public with sharing class JSONObject {
         return json;   
     }
     
-    private static Map<String, String> parseSimpleJson(String jsonStr) {
+    public static Map<String, String> parseSimpleJson(String jsonStr) {
         
         Pattern jsonPattern = Pattern.compile('\\s*"([^"]+?)"\\s*:\\s*("[^"]*?"|[a-zA-Z0-9]+|\\$[0-9]+\\$|\\[[\\$0-9,]*\\])\\s*[,\\}]');
         Matcher respMatcher = jsonPattern.matcher(jsonStr);
@@ -72,7 +72,9 @@ public with sharing class JSONObject {
         
         while (respMatcher.find()) {
             if (respMatcher.groupCount() == 2) {
-                jsonMap.put(respMatcher.group(1), respMatcher.group(2));
+            	String val = respMatcher.group(2);
+            	val = ('null'.equals(val) ? null : val.replaceFirst('"(.*)"', '$1'));
+                jsonMap.put(respMatcher.group(1), val);
             }
         }
         
@@ -154,10 +156,27 @@ public with sharing class JSONObject {
             val = val.substring(1, val.length()-1);
             List<JSONObject> objs = new List<JSONObject>();
             for(String item : val.split(',')) {
-            	objs.add(getObjectForToken(item));
+            	if (item.startsWith('$') && item.endsWith('$'))
+            	   objs.add(getObjectForToken(item));
+            	else {
+            		item = ('null'.equals(item) ? null : item.replaceFirst('"(.*)"', '$1'));
+            		objs.add(new JSONObject(item));
+            	}
             }
             return objs;
         }
         return null;
+    }
+    
+    public static testmethod void testJSONParser() {
+    	String jsonStr = '{"boolean":true,"string":"text","nullValue":null,"array":[1,2,3],"object":{"prop":"value"}}';
+    	JSONObject obj = JSONObject.newInstance(jsonStr);
+    	
+    	System.assertEquals('true', obj.get('boolean').value());
+    	System.assertEquals('text', obj.get('string').value());
+    	System.assertEquals(null, obj.get('nullValue').value());
+    	System.assertEquals(3, obj.get('array').arrayValues.size());
+    	System.assertEquals(3, obj.getArray('array').size());
+    	System.assertEquals('value', obj.get('object').get('prop').value());
     }
 }
