@@ -40,6 +40,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         - OAuth Client Id: Copy the **Consumer Key** from **Remote Access** settings created in step 3(2).
         - OAuth Client Redirect URI: Copy the **Callback URL** from **Remote Access** settings created in step 3(2).
         - OAuth Client Secret: Copy the **Consumer Secret** from **Remote Access** settings created in step 3(2).
+    4. Lastly, you need to whitelist the instance URL on which your users will live. You can add that whitelist from Setup -> Security Controls -> Remote Site Settings
 
 You should now be all set and ready to use the app! To start using your newly deployed app, navigate to the sites URL created in step 3a from any webkit browser.
 
