@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>AppClient</value>
+    </caseValues>
+    <fields>
+        <label>Appユーザ</label>
+        <name>AppUser__c</name>
+        <relationshipLabel>Appクライアント</relationshipLabel>
+    </fields>
+    <fields>
+        <label>暗号キー</label>
+        <name>Encryption_Key__c</name>
+    </fields>
+    <fields>
+        <label>失敗カウント</label>
+        <name>Failure_Count__c</name>
+    </fields>
+    <fields>
+        <label>パスコード</label>
+        <name>HasPasscode__c</name>
+    </fields>
+    <fields>
+        <label>非アクティブ</label>
+        <name>Inactive__c</name>
+    </fields>
+    <fields>
+        <label>最終ログイン</label>
+        <name>Last_Login__c</name>
+    </fields>
+    <fields>
+        <label>トークンID</label>
+        <name>Token_ID__c</name>
+    </fields>
+</CustomObjectTranslation>

@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customLabels>
+        <label>現在のユーザではAPIが利用できません。</label>
+        <name>APIIsNotAccessibleToCurrentUser</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者ビューアーについて</label>
+        <name>AboutContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label>もちろんできます。設定ページでProductionかSandboxを選択するか、カスタムエンドポイントを入力してください。</label>
+        <name>AbsolutelyUnderTheSettingsPage</name>
+    </customLabels>
+    <customLabels>
+        <label>アカウント</label>
+        <name>Account</name>
+    </customLabels>
+    <customLabels>
+        <label>アカウント追加</label>
+        <name>AddAccount</name>
+    </customLabels>
+    <customLabels>
+        <label>コミュニティに質問</label>
+        <name>AskTheCommunity</name>
+    </customLabels>
+    <customLabels>
+        <label>認証に失敗しました。再ログインしてください。</label>
+        <name>AuthenticationFailurePleaseRelogin</name>
+    </customLabels>
+    <customLabels>
+        <label>戻る</label>
+        <name>Back</name>
+    </customLabels>
+    <customLabels>
+        <label>詳細　基本情報</label>
+        <name>BasicDetails</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者ビューアは、サンドボックスやリリース前の組織や、カスタムホストに接続できますか？</label>
+        <name>CanIConnectContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先</label>
+        <name>Company</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先</label>
+        <name>CompanyUpper</name>
+    </customLabels>
+    <customLabels>
+        <label>接続先</label>
+        <name>Connection</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者オブジェクトの住所情報はGoogleMapsの地図情報とhttps通信でセキュアに連携されています。</label>
+        <name>ContactAddressesAreGeocoded</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者の情報はhttps接続を通じて通信され、エンドユーザの端末上には決して保存されません。また、ユーザアカウントの認証情報も同様に端末上に保存されることはありません。取引先責任者ビューアはOAuthを使ってSalesforceとセキュアに接続し、128ビットAESで暗号化されたOAuthトークン情報をデバイス上にセキュアに保持します。</label>
+        <name>ContactInformationIsPulled</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者ビューアは Force.com Labsが提供する無償のオープンソースアプリケーションです。取引先責任者ビューアを使うことでSalesforce内の取引先責任者の情報と関連するフィード情報を最も簡単に閲覧することができます。</label>
+        <name>ContactViewerIsFreeOpenSourceApp</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- CONTACT VIEWER IS PROVIDED “AS-IS,” EXCLUSIVE OF ANY WARRANTY WHATSOEVER.  SFDC --></label>
+        <name>ContactViewerIsProvided</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者ビューアは他のForce.com Labアプリケーションと同様に無償かつノンサポートで提供されています。もし製品に関する質問やバグ報告がある場合は、GitHub上の情報を閲覧するか、ユーザコミュニティで質問してみましょう。success.salesforce.com/answer</label>
+        <name>ContactViewerLikeOtherForceCom</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Contact Viewer may contain bugs or errors.  Any production use of Contact Viewer --></label>
+        <name>ContactViewerMayContainBugs</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- &lt;strong&gt;“Contact Viewer”&lt;/strong&gt; means the Force.com Labs Contact Viewer Applic --></label>
+        <name>ContactViewerMeansTheForceComLabs</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者ビューア設定</label>
+        <name>ContactViewerSettings</name>
+    </customLabels>
+    <customLabels>
+        <label>フォローしている取引先責任者</label>
+        <name>ContactsIFollow</name>
+    </customLabels>
+    <customLabels>
+        <label>カスタムホスト</label>
+        <name>CustomHost</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Definitions. --></label>
+        <name>Definitions</name>
+    </customLabels>
+    <customLabels>
+        <label>削除</label>
+        <name>Delete</name>
+    </customLabels>
+    <customLabels>
+        <label>部署</label>
+        <name>Department</name>
+    </customLabels>
+    <customLabels>
+        <label>完了</label>
+        <name>Done</name>
+    </customLabels>
+    <customLabels>
+        <label>メール</label>
+        <name>Email</name>
+    </customLabels>
+    <customLabels>
+        <label>End User License Agreement</label>
+        <name>EndUserLicenseAgreement</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- End User License Agreement (&quot;EULA&quot;) --></label>
+        <name>EndUserLicenseAgreementEULA</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- FAQ --></label>
+        <name>FAQ</name>
+    </customLabels>
+    <customLabels>
+        <label>対面時間</label>
+        <name>Facetime</name>
+    </customLabels>
+    <customLabels>
+        <label>salesforceへの接続に失敗しました。</label>
+        <name>FailedToConnectToSalesforce</name>
+    </customLabels>
+    <customLabels>
+        <label>oauthアクセスの取得に失敗しました。</label>
+        <name>FailedToObtainOauthAccess</name>
+    </customLabels>
+    <customLabels>
+        <label>Force.com Labsから提供するアプリケーションは無償で利用する事が出来ますが、公式なSalesforce.comのプロダクトではなく、コミュニティ主導のプロジェクトです。これらのアプリケーションは製品レベルのテストやドキュメントの整備がされていません。また、全てのForce.com Labsのアプリケーションではセールスフォース・ドットコムのサポートを受けられない事に注意して下さい。</label>
+        <name>ForceComLabsApplications</name>
+    </customLabels>
+    <customLabels>
+        <label>Force.com Labsから提供するアプリケーションは無償で利用する事が出来ますが、公式なSalesforce.comのプロダクトではなく、コミュニティ主導のプロジェクトです。これらのアプリケーションは製品レベルのテストやドキュメントの整備がされていません。また、全てのForce.com Labsのアプリケーションではセールスフォース・ドットコムのサポートを受けられない事に注意して下さい。</label>
+        <name>ForceComLabsApplicationsAreFree</name>
+    </customLabels>
+    <customLabels>
+        <label>Force.com Labs 取引先責任者 Viewer利用規約</label>
+        <name>ForceComLabsContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label>Force.com Labsはセールスフォース・ドットコムのエンジニアやプロフェッショナルサービススタッフ、その他スタッフが作成したアプリケーションを、 AppExchangeを通してコミュニティに共有するプログラムです。大小様々な業態、業種から学んだこれらのアプリケーションは単純なユーティリティから業種別のソリューションまで多岐にわたります。</label>
+        <name>ForceComLabsIsProgram</name>
+    </customLabels>
+    <customLabels>
+        <label>Force.com Labsはセールスフォース・ドットコムのエンジニアやプロフェッショナルサービススタッフ、その他スタッフが作成したアプリケーションを、 AppExchangeを通してコミュニティに共有するプログラムです。大小様々な業態、業種から学んだこれらのアプリケーションは単純なユーティリティから業種別のソリューションまで多岐にわたります。</label>
+        <name>ForceComLabsIsProgramThatEnables</name>
+    </customLabels>
+    <customLabels>
+        <label>Force.com Labs on GitHub</label>
+        <name>ForceComLabsOnGitHub</name>
+    </customLabels>
+    <customLabels>
+        <label>ヘルプ</label>
+        <name>Help</name>
+    </customLabels>
+    <customLabels>
+        <label>セキュリティは保たれていますか？</label>
+        <name>HowIsMyDataSecured</name>
+    </customLabels>
+    <customLabels>
+        <label>同意します。</label>
+        <name>IAgree</name>
+    </customLabels>
+    <customLabels>
+        <label>機能要望がある場合はどうすればいいですか。</label>
+        <name>IHaveFeatureRequest</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- If you do not have such authority or do not agree to these terms, you may not us --></label>
+        <name>IfYouDoNotHaveSuchAuthority</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- If your use is on behalf of an entity with which you are employed, affiliated or --></label>
+        <name>IfYourUseIsOnBehalfOfAnEntity</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- If your use is personal to you as an individual, then you agree to the following --></label>
+        <name>IfYourUseIsPersonalToYou</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- IN NO EVENT SHALL SFDC HAVE ANY LIABILITY HEREUNDER TO YOU FOR ANY DAMAGES WHATS --></label>
+        <name>InNoEventShallSFDC</name>
+    </customLabels>
+    <customLabels>
+        <label>無効なトークンです。ログアウトしてから再ログインして下さい。</label>
+        <name>InvalidTokenPleaseLogoutAndRelogin</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者ビューアはサポートされていますか？</label>
+        <name>IsThereSupport</name>
+    </customLabels>
+    <customLabels>
+        <label>詳細情報を全て読み込む</label>
+        <name>LoadAllDetails</name>
+    </customLabels>
+    <customLabels>
+        <label>ログインアカウント</label>
+        <name>LoggedInAs</name>
+    </customLabels>
+    <customLabels>
+        <label>ログイン先</label>
+        <name>LoginHost</name>
+    </customLabels>
+    <customLabels>
+        <label>ログアウト</label>
+        <name>Logout</name>
+    </customLabels>
+    <customLabels>
+        <label>郵送先住所</label>
+        <name>MailingAddress</name>
+    </customLabels>
+    <customLabels>
+        <label>地図</label>
+        <name>Map</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Miscellaneous. --></label>
+        <name>Miscellaneous</name>
+    </customLabels>
+    <customLabels>
+        <label>携帯</label>
+        <name>Mobile</name>
+    </customLabels>
+    <customLabels>
+        <label>私の取引先責任者</label>
+        <name>MyContacts</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- No Damages. --></label>
+        <name>NoDamages</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- No Warranty. --></label>
+        <name>NoWarranty</name>
+    </customLabels>
+    <customLabels>
+        <label>有効なクライアントではありません。再ログインして下さい。</label>
+        <name>NotValidClientPleaseRelogin</name>
+    </customLabels>
+    <customLabels>
+        <label>有効なレスポンスではありません。</label>
+        <name>NotValidResponse</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Phone --></label>
+        <name>Phone</name>
+    </customLabels>
+    <customLabels>
+        <label>電話</label>
+        <name>PhoneUpper</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Please note use of Contact Viewer may require the use of third party software, i --></label>
+        <name>PleaseNoteUseOfContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Production --></label>
+        <name>Production</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Proprietary Rights. --></label>
+        <name>ProprietaryRights</name>
+    </customLabels>
+    <customLabels>
+        <label>中心にする</label>
+        <name>Recenter</name>
+    </customLabels>
+    <customLabels>
+        <label>最近の参照レコード</label>
+        <name>RecentlyViewed</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Relationship to Other Agreements. --></label>
+        <name>RelationshipToOtherAgreements</name>
+    </customLabels>
+    <customLabels>
+        <label>レポートする</label>
+        <name>ReportsTo</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- SFDC shall make Contact Viewer available to You subject to the terms of this Agr --></label>
+        <name>SFDCShallMakeContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Sandbox --></label>
+        <name>Sandbox</name>
+    </customLabels>
+    <customLabels>
+        <label>セッション有効期限が切れました。一度ログアウトして再度ログインし直して下さい。</label>
+        <name>SessionExpiredPleaselogoutAndRelogin</name>
+    </customLabels>
+    <customLabels>
+        <label>設定</label>
+        <name>Settings</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Skype --></label>
+        <name>Skype</name>
+    </customLabels>
+    <customLabels>
+        <label>取引先責任者ビューアをはじめとしたForce.com LabsのソースコードはGitHubで入手できます。</label>
+        <name>SourceCodeForContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Subject to the limited rights expressly granted hereunder, and as between You an --></label>
+        <name>SubjectToTheLimitedRights</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Term and Termination. --></label>
+        <name>TermAndTermination</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- These Terms of Use for the Force.com Labs Contact Viewer Application (“Terms”) a --></label>
+        <name>TheseTermsOfUse</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- These Terms were last updated on August 25, 2011. --></label>
+        <name>TheseTermsWereLastUpdated</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- These Terms will govern Your access to Contact Viewer but not Your access to oth --></label>
+        <name>TheseTermsWillGovernYourAccess</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- This Agreement shall commence on the date of Your acceptance of these Terms and --></label>
+        <name>ThisAgreementShallCommence</name>
+    </customLabels>
+    <customLabels>
+        <label>このアプリケーションはChromeやSafariなどのwebkitベースのWebブラウザのみをサポートしています。</label>
+        <name>ThisWebAppIsCurrentlySupported</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- TITLE --></label>
+        <name>Title</name>
+    </customLabels>
+    <customLabels>
+        <label>再度試して下さい。</label>
+        <name>TryAgainRemainingAttempts</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Use of Contact Viewer. --></label>
+        <name>UseOfContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label>ユーザの皆さんからの機能要望やアイディアを我々は歓迎致します。取引先責任者だけではなく他の他のAppExchangeのモバイルアプリへの要望も歓迎です。success.salesforce.com/answers　に是非投稿して下さい。</label>
+        <name>WeAreAlwaysInterested</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- “We” or “SFDC” shall mean salesforce.com, inc., The Landmark @ One Market, Suite --></label>
+        <name>WeOrSFDCShallMeanSalesforceCom</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- When we use “you” or “your” in these Terms, “you” or “your” means the Entity you --></label>
+        <name>WhenWeUseYouOrYour</name>
+    </customLabels>
+    <customLabels>
+        <label>地図情報はどこから取得していますか？</label>
+        <name>WhereDoesTheMapDataCome</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- You are responsible for all activities that occur in Your accounts and for compl --></label>
+        <name>YouAreResponsibleForAllActivities</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- You may not assign any of its rights or obligations hereunder, whether by operat --></label>
+        <name>YouMayNotAssign</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- You shall: --></label>
+        <name>YouShall</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Your Responsibilities. --></label>
+        <name>YourResponsibilities</name>
+    </customLabels>
+    <customLabels>
+        <label>(a) license, sublicense, sell, resell, rent, lease, transfer, assign, distribute, time share or otherwise commercially exploit Contact Viewer or make Contact Viewer available to any third party;</label>
+        <name>a_LicenseSublicense</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (b) use Contact Viewer to send spam or otherwise duplicative or unsolicited mess --></label>
+        <name>b_UseContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (c) use Contact Viewer to send or store infringing, obscene, threatening, libelo --></label>
+        <name>c_UseContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (d) use Contact Viewer to send or store any virus, worm, time bomb, Trojan horse --></label>
+        <name>d_UseContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (e) interfere with or disrupt the integrity or performance of Contact Viewer or --></label>
+        <name>e_InterfereWithOrDisrupt</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (f) attempt to gain unauthorized access to Contact Viewer or its related systems --></label>
+        <name>f_AttemptToGainUnauthorized</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (g) modify, copy or create derivative works based on Contact Viewer; --></label>
+        <name>g_ModifyCopyOrCreateDerivative</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (h) frame or mirror any content forming part of Contact Viewer, other than on Yo --></label>
+        <name>h_FrameOrMirrorAnyContent</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (i) have sole responsibility for the accuracy, quality, integrity, legality, rel --></label>
+        <name>i_HaveSoleResponsibility</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (i) reverse engineer Contact Viewer; --></label>
+        <name>i_ReverseEngineerContactViewer</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (ii) use commercially reasonable efforts to prevent unauthorized access to, or --></label>
+        <name>ii_UseCommerciallyReasonableEfforts</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- and (iii) comply with all applicable local, state, federal and foreign laws, an --></label>
+        <name>iii_ComplyWithAllApplicableLocal</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- (j) access Contact Viewer in order to build a competitive product or service, or --></label>
+        <name>j_AccessContactViewer</name>
+    </customLabels>
+</Translations>

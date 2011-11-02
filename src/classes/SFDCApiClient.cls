@@ -67,7 +67,7 @@ public with sharing class SFDCApiClient {
 			    makeRequest(req);
 			}
 		} else if (resp.getStatusCode() == 403) {
-			throw new ApiException('NO_API_ACCESS', 'API is not accessible to current user.');
+			throw new ApiException('NO_API_ACCESS', System.Label.APIIsNotAccessibleToCurrentUser);
 		}
 		return null;
 	}

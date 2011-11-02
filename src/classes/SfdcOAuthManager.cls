@@ -183,15 +183,15 @@ public with sharing class SfdcOAuthManager {
                 	String errorMsg = error.get('error_description').value();
                 	String errorCode = error.get('error').value();
                     if ('invalid_grant'.equalsIgnoreCase(errorCode)) {
-                    	errorMsg = 'Session Expired. Please logout and relogin.';
+                    	errorMsg = System.Label.SessionExpiredPleaselogoutAndRelogin;
                     }
                     throw new OAuthException(errorCode, errorMsg);
                 } else
-                   throw new OAuthException('OAUTH_FAILURE', 'Failed to obtain oauth access.');
+                   throw new OAuthException('OAUTH_FAILURE', System.Label.FailedToObtainOauthAccess);
             }
         } catch (CalloutException e) {
         	System.debug(e);
-            throw new OAuthException('CONNECTION_FAILURE', 'Failed to connect to salesforce.');
+            throw new OAuthException('CONNECTION_FAILURE', System.Label.FailedToConnectToSalesforce);
         }
         return null;
     }
