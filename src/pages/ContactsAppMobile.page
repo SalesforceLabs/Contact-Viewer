@@ -11,7 +11,7 @@
             
             <apex:outputPanel rendered="{!!isWebkit}">
                 <script>
-                    alert('This web app is currently supported for only webkit based browsers such as Chrome and Safari.'); 
+                    alert('{!$Label.ThisWebAppIsCurrentlySupported}'); 
                     window.location='http://appexchange.salesforce.com/listingDetail?listingId=a0N300000056pmWEAQ';
                 </script>
             </apex:outputPanel>
