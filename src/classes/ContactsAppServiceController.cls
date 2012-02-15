@@ -232,7 +232,7 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     	Map<String, String> response = new Map<String, String>();
     	response.put('success', 'false');
     	response.put('errorCode', 'INVALID_CLIENT');
-        response.put('error', 'Not a valid client. Please relogin.');
+        response.put('error', System.Label.NotValidClientPleaseRelogin);
     	
     	if (clientId != null && clientId.trim().length() > 0) {
     	   List<AppClient__c> appClients = [SELECT id, AppUser__c FROM AppClient__c WHERE id = :clientId.trim()];
@@ -252,7 +252,7 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
                             response.remove('error');
                        } else {
                             response.put('errorCode', 'INVALID_RESPONSE');
-                            response.put('error', 'Not a valid response.');
+                            response.put('error', System.Label.NotValidResponse);
                        }
     	           }
     	       }
