@@ -61,19 +61,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Has_Passcode__c</fullName>
-        <externalId>false</externalId>
-        <label>Has Passcode</label>
-        <summaryFilterItems>
-            <field>AppClient__c.HasPasscode__c</field>
-            <operation>equals</operation>
-            <value>Yes</value>
-        </summaryFilterItems>
-        <summaryForeignKey>AppClient__c.AppUser__c</summaryForeignKey>
-        <summaryOperation>count</summaryOperation>
-        <type>Summary</type>
-    </fields>
-    <fields>
         <fullName>Last_Login__c</fullName>
         <externalId>false</externalId>
         <label>Last Login</label>

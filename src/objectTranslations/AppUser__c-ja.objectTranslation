@@ -13,6 +13,14 @@
         <name>EULA__c</name>
     </fields>
     <fields>
+        <label><!-- Email --></label>
+        <name>Email__c</name>
+    </fields>
+    <fields>
+        <label><!-- Last Login --></label>
+        <name>Last_Login__c</name>
+    </fields>
+    <fields>
         <label>組織ID</label>
         <name>OrganizationID__c</name>
     </fields>
@@ -20,4 +28,9 @@
         <label>ユーザID</label>
         <name>UserID__c</name>
     </fields>
+    <fields>
+        <label><!-- Username --></label>
+        <name>Username__c</name>
+    </fields>
+    <nameFieldLabel><!-- App User Name --></nameFieldLabel>
 </CustomObjectTranslation>

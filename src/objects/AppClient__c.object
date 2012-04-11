@@ -50,26 +50,6 @@
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
-        <fullName>Device__c</fullName>
-        <externalId>false</externalId>
-        <formula>IF( CONTAINS(UserAgent__c, &apos;iPhone&apos;)  , &apos;iPhone&apos;, 
- IF( CONTAINS(UserAgent__c, &apos;iPad&apos;)  , &apos;iPad&apos;, 
- IF( CONTAINS(UserAgent__c, &apos;Android&apos;)  , &apos;Android&apos;, 
- IF( CONTAINS(UserAgent__c, &apos;PlayBook&apos;)  , &apos;PlayBook&apos;, &apos;Other&apos;))))</formula>
-        <label>Device</label>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Email__c</fullName>
-        <externalId>false</externalId>
-        <label>Email</label>
-        <required>false</required>
-        <type>Email</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Encryption_Key__c</fullName>
         <externalId>false</externalId>
         <label>Encryption Key</label>
@@ -90,16 +70,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>HasPasscode__c</fullName>
-        <externalId>false</externalId>
-        <formula>IF(ISBLANK( Encryption_Key__c ), &apos;No&apos;, &apos;Yes&apos;)</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Has Passcode</label>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Inactive__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
@@ -110,26 +80,10 @@
         <fullName>Last_Login__c</fullName>
         <externalId>false</externalId>
         <label>Last Login</label>
-        <required>false</required>
-        <type>DateTime</type>
-    </fields>
-    <fields>
-        <fullName>Name__c</fullName>
-        <externalId>false</externalId>
-        <label>Name</label>
-        <length>255</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>OrganizationID__c</fullName>
-        <externalId>false</externalId>
-        <label>Organization ID</label>
-        <length>18</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
+        <summarizedField>AppLogin__c.Timestamp__c</summarizedField>
+        <summaryForeignKey>AppLogin__c.AppClient__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>Token_ID__c</fullName>
@@ -147,32 +101,11 @@
         <required>false</required>
         <type>TextArea</type>
     </fields>
-    <fields>
-        <fullName>UserID__c</fullName>
-        <externalId>true</externalId>
-        <label>User ID</label>
-        <length>18</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Username__c</fullName>
-        <externalId>false</externalId>
-        <label>Username</label>
-        <length>255</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
     <label>App Client</label>
     <listViews>
         <fullName>All</fullName>
         <columns>NAME</columns>
         <columns>AppUser__c</columns>
-        <columns>Device__c</columns>
-        <columns>HasPasscode__c</columns>
-        <columns>Last_Login__c</columns>
         <columns>Inactive__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>

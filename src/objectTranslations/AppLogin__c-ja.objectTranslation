@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value><!-- App Login --></value>
+    </caseValues>
+    <fields>
+        <label><!-- App Client --></label>
+        <name>AppClient__c</name>
+        <relationshipLabel><!-- App Logins --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Timestamp --></label>
+        <name>Timestamp__c</name>
+    </fields>
+    <nameFieldLabel><!-- App Login Name --></nameFieldLabel>
+</CustomObjectTranslation>

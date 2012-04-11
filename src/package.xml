@@ -33,6 +33,10 @@
         <name>ApexPage</name>
     </types>
     <types>
+        <members>CustomLabels</members>
+        <name>CustomLabels</name>
+    </types>
+    <types>
         <members>AppClient__c</members>
         <members>AppLogin__c</members>
         <members>AppUser__c</members>
@@ -52,11 +56,11 @@
         <name>RemoteSiteSetting</name>
     </types>
     <types>
-        <members>ContactAppRsrcs<</members>
+        <members>ContactAppRsrcs</members>
         <name>StaticResource</name>
     </types>
     <types>
-        <members>js</members>
+        <members>ja</members>
         <name>Translations</name>
     </types>
     <version>24.0</version>

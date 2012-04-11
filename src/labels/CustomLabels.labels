@@ -137,8 +137,8 @@
         <fullName>ContactViewerMeansTheForceComLabs</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>&lt;strong&gt;“Contact Viewer”&lt;/strong&gt; means the Force.com Labs Contact Viewer Applic</shortDescription>
-        <value>&lt;strong&gt;“Contact Viewer”&lt;/strong&gt; means the Force.com Labs Contact Viewer Application available at http://appexchange.salesforce.com/mobile which allows users to find, browse and see details about their contacts when used with SFDC online services.</value>
+        <shortDescription>“Contact Viewer” means the Force.com Labs Contact Viewer Applic</shortDescription>
+        <value>“Contact Viewer” means the Force.com Labs Contact Viewer Application available at http://appexchange.salesforce.com/mobile which allows users to find, browse and see details about their contacts when used with SFDC online services.</value>
     </labels>
     <labels>
         <fullName>ContactViewerSettings</fullName>

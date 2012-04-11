@@ -18,10 +18,6 @@
         <name>Failure_Count__c</name>
     </fields>
     <fields>
-        <label>パスコード</label>
-        <name>HasPasscode__c</name>
-    </fields>
-    <fields>
         <label>非アクティブ</label>
         <name>Inactive__c</name>
     </fields>
@@ -33,4 +29,9 @@
         <label>トークンID</label>
         <name>Token_ID__c</name>
     </fields>
+    <fields>
+        <label><!-- User Agent --></label>
+        <name>UserAgent__c</name>
+    </fields>
+    <nameFieldLabel><!-- App Client Id --></nameFieldLabel>
 </CustomObjectTranslation>

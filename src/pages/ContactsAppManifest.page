@@ -9,8 +9,15 @@ CACHE:
 {!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'css/basicstyle.css'), "")}
 {!URLFOR($Resource.ContactAppRsrcs, 'css/passcodemanager.css')}
 
-#js
+#js - debug=false adds the minified version of js files
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}
+<apex:outputPanel layout="none" rendered="{!!debug}">
+{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.min.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-plugins.min.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/appCommon.min.js')}
+{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp-ipad.min.js'), "")}
+{!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.min.js'), "")}
+</apex:outputPanel>
 <apex:outputPanel layout="none" rendered="{!debug}">
 {!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}
@@ -27,13 +34,6 @@ CACHE:
 {!URLFOR($Resource.ContactAppRsrcs, 'js/splitViewManager.js')}
 {!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp-ipad.js'), "")}
 {!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.js'), "")}
-</apex:outputPanel>
-<apex:outputPanel layout="none" rendered="{!!debug}">
-{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.min.js')}
-{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-plugins.min.js')}
-{!URLFOR($Resource.ContactAppRsrcs, 'js/appCommon.min.js')}
-{!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp-ipad.min.js'), "")}
-{!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.min.js'), "")}
 </apex:outputPanel>
 
 #images
