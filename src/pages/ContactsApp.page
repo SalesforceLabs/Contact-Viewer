@@ -6,7 +6,7 @@
     <apex:composition template="MobileAppTemplate">
         <apex:define name="body">
                 
-            <c:ContactsForIPad rendered="{!isWebkit}" />
+            <c:ContactsForIPad rendered="{!isWebkit}"/>
             
             <apex:outputPanel rendered="{!!isWebkit}">
                 <script>

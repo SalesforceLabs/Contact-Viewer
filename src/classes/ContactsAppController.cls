@@ -37,7 +37,7 @@ public with sharing class ContactsAppController {
 	}
 	
 	public boolean isWebkit {get {
-            return userAgent.contains('AppleWebKit');
+            return userAgent.toLowerCase().contains('applewebkit');
 	   }
 	}
 	
