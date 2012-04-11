@@ -148,8 +148,8 @@ public with sharing class SfdcOAuthManager {
                 oAuthResp.instanceUrl = oauthRespMap.get(key);
             } else if (key == 'id') {
                 oAuthResp.userInfoUri = oauthRespMap.get(key);
-                Integer userIdStart = oAuthResp.userInfoUri.indexOf('005');
-                oAuthResp.userId = oAuthResp.userInfoUri.subString(userIdStart);
+                Integer userIdStart = oAuthResp.userInfoUri.indexOf('/005');
+                oAuthResp.userId = oAuthResp.userInfoUri.subString(userIdStart+1);
             }
         }
         oAuthResp.userInfoUri = oAuthResp.userInfoUri.replace('https://login.salesforce.com', oAuthResp.instanceUrl);
