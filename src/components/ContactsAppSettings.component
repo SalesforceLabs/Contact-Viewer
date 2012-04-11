@@ -1,68 +1,68 @@
 <apex:component >
     <div id="app_settings" style="display:none;">
         <div id="header" class="header">
-            <div id="title" style="width: 100%; ">Settings</div>
+            <div id="title" style="width: 100%; ">{!$Label.Settings}</div>
             <div id="left" style="position:absolute; margin-left: 10px; top: 0px; left: 0px; display: none;">
                 <span class="appleui back-arrow"/>
-                <div class="header_button" style="border-bottom: 2px solid #206A82; background-color: #1667A5; background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.199219)), color-stop(0.6, rgba(255, 255, 255, 0)), to(transparent)); left: 12px; border-left-style: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding-left: 0px;">Contact Viewer Settings</div>
+                <div class="header_button" style="border-bottom: 2px solid #206A82; background-color: #1667A5; background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.199219)), color-stop(0.6, rgba(255, 255, 255, 0)), to(transparent)); left: 12px; border-left-style: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding-left: 0px;">{!$Label.ContactViewerSettings}</div>
             </div>
-            <div id="done" style="margin-right: 10px; right: 0px; display: block;" class="header_button">Done</div>
+            <div id="done" style="margin-right: 10px; right: 0px; display: block;" class="header_button">{!$Label.Done}</div>
         </div>
         
         <div class="settings_body">
             <div id="main" class="page">
                 <div class="content">
-	            <div style="text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">Account</div>
+	            <div style="text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Account}</div>
 	            <table style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
 	                <tbody><tr><td style="">
-	                    <div style="font-weight: bold; float: left; padding: 0 10px;">Logged In As</div>
+	                    <div style="font-weight: bold; float: left; padding: 0 10px;">{!$Label.LoggedInAs}</div>
 	                    <div id="username" style="color: #395483; position: relative; left: 0px; text-align: right; right: 0px; height: 44px; overflow: hidden; margin-right: 10px"></div>
 	                </td></tr></tbody>
 	            </table>
 	            
-	            <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">Connection</div>
+	            <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Connection}</div>
 	            <table id="connection" style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
 	                <tbody><tr><td id="hostType" style="border-bottom: 1px solid silver;">
-	                    <div style="font-weight: bold; float: left;  padding-left: 10px;">Login Host</div>
+	                    <div style="font-weight: bold; float: left;  padding-left: 10px;">{!$Label.LoginHost}</div>
 	                    <div style="color: #395483; float: right; padding-right: 10px;">
 	                       <span id="name"></span><span class="appleui arrow-next"/>
 	                    </div>
 	                </td></tr><tr><td id="host_url" style="text-align: left;font-weight: bold;  padding:0 10px;">
 	                    <form>
-	                    <div style="float: left; width: 110px;">Custom Host</div>
+	                    <div style="float: left; width: 110px;">{!$Label.CustomHost}</div>
                         <div style="margin-left: 110px; margin-right: 10px;"><input style="margin: 10px 0; font-size: 15px; border: none;  color: #395483; -webkit-appearance:none; width: 100%" type="text"/></div>
                         </form>	                    
 	                </td></tr></tbody>
 	            </table>
 	            
-	            <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">Help</div>
+	            <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Help}</div>
                 <table id="help" style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
                     <tbody><tr><td id="help_about" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
-                        About Contact Viewer<span class="appleui arrow-next"/>
+                        {!$Label.AboutContactViewer}<span class="appleui arrow-next"/>
                     </td></tr><tr><td id="help_faq" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
-                        FAQ<span class="appleui arrow-next"/>
+                        {!$Label.FAQ}<span class="appleui arrow-next"/>
                     </td></tr><tr><td id="help_eula" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
-                        End User License Agreement<span class="appleui arrow-next"/>
+                        {!$Label.EndUserLicenseAgreement}<span class="appleui arrow-next"/>
                     </td></tr><tr><td id="help_ask" style="text-align: left; font-weight: bold;  padding-left: 10px;">
                         <a href="http://success.salesforce.com/answers" style="color: #2A2A2A;" target="_blank">
-                        <div style="font-weight: bold; float: left; padding-right:10px;">Ask the Community</div>
+                        <div style="font-weight: bold; float: left; padding-right:10px;">{!$Label.AskTheCommunity}</div>
                         <div style="color: #395483; position: relative; left: 0px; text-align: right; right: 0px; height: 44px; overflow: hidden; margin-right: 10px">success.salesforce.com/answers</div>
                         </a>
                     </td></tr></tbody>
                 </table>
-	            <button id="loginbtn" style="width: 100%; height: 40px; font-size: 16px;  -webkit-border-radius: 10px;  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent)); margin-top: 25px; color: white; font-weight: bold; background-color: rgb(40, 180, 40);">Add Account</button>
-	            <button id="logoutbtn" style="width: 100%; height: 40px; font-size: 16px;  -webkit-border-radius: 10px;  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent)); margin-top: 25px; color: white; font-weight: bold; background-color: #B42828;">Logout</button>
+	            <button id="loginbtn" style="width: 100%; height: 40px; font-size: 16px;  -webkit-border-radius: 10px;  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent)); margin-top: 25px; color: white; font-weight: bold; background-color: rgb(40, 180, 40);">{!$Label.AddAccount}</button>
+	            <button id="logoutbtn" style="width: 100%; height: 40px; font-size: 16px;  -webkit-border-radius: 10px;  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent)); margin-top: 25px; color: white; font-weight: bold; background-color: #B42828;">{!$Label.Logout}</button>
 	            </div>
             </div>
             <div id="hosts" class="page" style="visibility:hidden">
                 <div class="content">
                 <table style="margin-top: 20px; width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
                     <tbody><tr><td id="host_production" style="border-bottom: 1px solid silver; text-align: left; padding: 0 10px; font-weight: bold;">
-                        <span>Production</span><span id="check" class="appleui check"/>
+                        <span>{!$Label.Production}</span><span id="check" class="appleui check"/>
                     </td></tr><tr><td id="host_sandbox" style="border-bottom: 1px solid silver; text-align: left; padding: 0 10px; font-weight: bold;">
-                        <span>Sandbox</span>
+                        <span>{!$Label.Sandbox}</span>
                     </td></tr><tr><td id="host_custom" style="text-align: left; padding: 0 10px; font-weight: bold;">
-                        <span>Custom Host</span>
+                        <span>{!$Label.CustomHost}</span>
                     </td></tr></tbody>
                 </table>
                 </div>
@@ -71,14 +71,14 @@
                 <div style="padding-top: 20px; line-height: 18px; font-size: 14px;" class="content">
                     <img id="check" src="{!URLFOR($Resource.ContactAppRsrcs, 'images/flask.png')}" style="float:left; padding: 0px 10px 0 0;" height="100px"/>
                     <span>
-                    Contact Viewer is a free open-source app from Force.com Labs. Contact Viewer is the easiest way to browse your Contacts in any Salesforce environment and see the related activity feed.<br/><br/>
-                    Force.com Labs is a program that enables salesforce.com engineers, professional services staff, and other salesforce.com employees to share applications they've created with the salesforce.com customer community. Inspired by employees' work with customers of all sizes and industries, these apps range from simple utilities to entire vertical solutions.<br/><br/>
-                    Force.com Labs applications are free to use, but are not official salesforce.com products, and should be considered community projects - these apps are not officially tested or documented. For support on any Force.com Labs app please consult the Successforce message boards - salesforce.com support is not available for these applications.<br/><br/>
-                    Source code for Contact Viewer, and other Force.com Labs applications, is available on GitHub.
+                    {!$Label.ContactViewerIsFreeOpenSourceApp}<br/><br/>
+                    {!$Label.ForceComLabsIsProgramThatEnables}<br/><br/>
+                    {!$Label.ForceComLabsApplicationsAreFree}<br/><br/>
+                    {!$Label.SourceCodeForContactViewer}
                     </span>
                     <a href="https://github.com/ForceDotComLabs/Contact-Viewer" target="_blank">
                         <div style="border: 1px solid silver; text-align: left;  font-weight: bold; -webkit-border-radius: 10px; line-height: 34px; margin-top: 20px; text-align: center; background-color: white;">
-                            Force.com Labs on GitHub
+                            {!$Label.ForceComLabsOnGitHub}
                         </div>
                     </a>
                     <div style="text-align: center; font-size: 12px; margin-top: 40px;">&copy; 2011 Salesforce.com</div>
@@ -86,16 +86,16 @@
             </div>
             <div id="faq" class="page" style="visibility:hidden; margin: 0px">
                 <div class="content" style="line-height: 18px; font-size: 14px;">
-                    <div class="question">Is there support for Contact Viewer?</div>
-                    <div class="answer">Contact Viewer, like other Force.com Labs apps, is released free with no support. If you have questions, comments, or bug reports, see Contact Viewer on GitHub or ask a question to the customer community at success.salesforce.com/answers.</div>
-                    <div class="question">How is my data secured?</div>
-                    <div class="answer">Contact information is pulled from salesforce over secure https connection and the data is never stored on the device, nor are your login credentials stored on the device. Contact Viewer connects to Salesforce securely with OAuth and stores the OAuth tokens securely on your device using 128-bit AES Encryption.</div>
-                    <div class="question">Where does the map data come from?</div>
-                    <div class="answer">Contact addresses are geocoded with Google's geocoding service. Addresses information is sent to Google Maps service over secure https connection.</div>
-                    <div class="question">Can I connect Contact Viewer to my Sandbox, Pre-release environment, or other custom host?</div>
-                    <div class="answer">Absolutely! Under the Settings page, you can select Production or Sandbox as your login host, or enter your own custom endpoint.</div>
-                    <div class="question">I have a feature request!</div>
-                    <div class="answer">We're always interested in your feature requests and ideas for Contact Viewer and other Mobile Appexchange Labs apps. Voice your opinion on success.salesforce.com/answers and let us know!</div>
+                    <div class="question">{!$Label.IsThereSupport}</div>
+                    <div class="answer">{!$Label.ContactViewerLikeOtherForceCom}</div>
+                    <div class="question">{!$Label.HowIsMyDataSecured}</div>
+                    <div class="answer">{!$Label.ContactInformationIsPulled}</div>
+                    <div class="question">{!$Label.WhereDoesTheMapDataCome}</div>
+                    <div class="answer">{!$Label.ContactAddressesAreGeocoded}</div>
+                    <div class="question">{!$Label.CanIConnectContactViewer}</div>
+                    <div class="answer">{!$Label.AbsolutelyUnderTheSettingsPage}</div>
+                    <div class="question">{!$Label.IHaveFeatureRequest}</div>
+                    <div class="answer">{!$Label.WeAreAlwaysInterested}</div>
                 </div>
             </div>
             <div id="eula" class="page" style="visibility:hidden; margin: 0px">
@@ -103,8 +103,8 @@
                 </div>
             </div>
             <div id="eula_buttons">
-               <div id="accept" style="margin: 10px 4%; width: 40%; border: 1px solid black; -webkit-border-radius: 5px; background-color: white; font-weight: bold; float: left;">I Agree</div>
-               <div id="decline" style="margin: 10px 4%; width: 40%; border: 1px solid black; -webkit-border-radius: 5px; background-color: white; font-weight: bold; float: left;">Logout</div>
+               <div id="accept" style="margin: 10px 4%; width: 40%; border: 1px solid black; -webkit-border-radius: 5px; background-color: white; font-weight: bold; float: left;">{!$Label.IAgree}</div>
+               <div id="decline" style="margin: 10px 4%; width: 40%; border: 1px solid black; -webkit-border-radius: 5px; background-color: white; font-weight: bold; float: left;">{!$Label.Logout}</div>
             </div>
         </div>
     </div>

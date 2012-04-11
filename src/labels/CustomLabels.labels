@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>APIIsNotAccessibleToCurrentUser</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>API is not accessible to current user.</shortDescription>
+        <value>API is not accessible to current user.</value>
+    </labels>
+    <labels>
+        <fullName>AboutContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>About Contact Viewer</shortDescription>
+        <value>About Contact Viewer</value>
+    </labels>
+    <labels>
+        <fullName>AbsolutelyUnderTheSettingsPage</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Absolutely! Under the Settings page, you can select Production or Sandbox as you</shortDescription>
+        <value>Absolutely! Under the Settings page, you can select Production or Sandbox as your login host, or enter your own custom endpoint.</value>
+    </labels>
+    <labels>
+        <fullName>Account</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Account</shortDescription>
+        <value>Account</value>
+    </labels>
+    <labels>
+        <fullName>AddAccount</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Account</shortDescription>
+        <value>Add Account</value>
+    </labels>
+    <labels>
+        <fullName>AskTheCommunity</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Ask the Community</shortDescription>
+        <value>Ask the Community</value>
+    </labels>
+    <labels>
+        <fullName>AuthenticationFailurePleaseRelogin</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Authentication Failure. Please relogin.</shortDescription>
+        <value>Authentication Failure. Please relogin.</value>
+    </labels>
+    <labels>
+        <fullName>Back</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Back</shortDescription>
+        <value>Back</value>
+    </labels>
+    <labels>
+        <fullName>BasicDetails</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Basic Details</shortDescription>
+        <value>Basic Details</value>
+    </labels>
+    <labels>
+        <fullName>CanIConnectContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Can I connect Contact Viewer to my Sandbox, Pre-release environment, or other cu</shortDescription>
+        <value>Can I connect Contact Viewer to my Sandbox, Pre-release environment, or other custom host?</value>
+    </labels>
+    <labels>
+        <fullName>Company</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Company</shortDescription>
+        <value>Company</value>
+    </labels>
+    <labels>
+        <fullName>CompanyUpper</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>COMPANY</shortDescription>
+        <value>COMPANY</value>
+    </labels>
+    <labels>
+        <fullName>Connection</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Connection</shortDescription>
+        <value>Connection</value>
+    </labels>
+    <labels>
+        <fullName>ContactAddressesAreGeocoded</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contact addresses are geocoded with Google&apos;s geocoding service. Addresses inform</shortDescription>
+        <value>Contact addresses are geocoded with Google&apos;s geocoding service. Addresses information is sent to Google Maps service over secure https connection.</value>
+    </labels>
+    <labels>
+        <fullName>ContactInformationIsPulled</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contact information is pulled from salesforce over secure https connection and t</shortDescription>
+        <value>Contact information is pulled from salesforce over secure https connection and the data is never stored on the device, nor are your login credentials stored on the device. Contact Viewer connects to Salesforce securely with OAuth and stores the OAuth tokens securely on your device using 128-bit AES Encryption.</value>
+    </labels>
+    <labels>
+        <fullName>ContactViewerIsFreeOpenSourceApp</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contact Viewer is a free open-source app from Force.com Labs. Contact Viewer is</shortDescription>
+        <value>Contact Viewer is a free open-source app from Force.com Labs. Contact Viewer is the easiest way to browse your Contacts in any Salesforce environment and see the related activity feed.</value>
+    </labels>
+    <labels>
+        <fullName>ContactViewerIsProvided</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CONTACT VIEWER IS PROVIDED “AS-IS,” EXCLUSIVE OF ANY WARRANTY WHATSOEVER.  SFDC</shortDescription>
+        <value>CONTACT VIEWER IS PROVIDED “AS-IS,” EXCLUSIVE OF ANY WARRANTY WHATSOEVER.  SFDC DISCLAIMS ALL EXPRESS OR IMPLIED WARRANTIES, INCLUDING WITHOUT LIMITATION ANY IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  CONTACT VIEWER IS NOT A PRODUCT OF SFDC AND IS NOT SUPPORTED BY SFDC IN ANY WAY.</value>
+    </labels>
+    <labels>
+        <fullName>ContactViewerLikeOtherForceCom</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contact Viewer, like other Force.com Labs apps, is released free with no support</shortDescription>
+        <value>Contact Viewer, like other Force.com Labs apps, is released free with no support. If you have questions, comments, or bug reports, see Contact Viewer on GitHub or ask a question to the customer community at success.salesforce.com/answers.</value>
+    </labels>
+    <labels>
+        <fullName>ContactViewerMayContainBugs</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contact Viewer may contain bugs or errors.  Any production use of Contact Viewer</shortDescription>
+        <value>Contact Viewer may contain bugs or errors.  Any production use of Contact Viewer is at Your sole risk.   You acknowledge that SFDC may discontinue making Contact Viewer available to You at any time in its sole discretion.</value>
+    </labels>
+    <labels>
+        <fullName>ContactViewerMeansTheForceComLabs</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>&lt;strong&gt;“Contact Viewer”&lt;/strong&gt; means the Force.com Labs Contact Viewer Applic</shortDescription>
+        <value>&lt;strong&gt;“Contact Viewer”&lt;/strong&gt; means the Force.com Labs Contact Viewer Application available at http://appexchange.salesforce.com/mobile which allows users to find, browse and see details about their contacts when used with SFDC online services.</value>
+    </labels>
+    <labels>
+        <fullName>ContactViewerSettings</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contact Viewer Settings</shortDescription>
+        <value>Contact Viewer Settings</value>
+    </labels>
+    <labels>
+        <fullName>Contacts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contacts</shortDescription>
+        <value>Contacts</value>
+    </labels>
+    <labels>
+        <fullName>ContactsIFollow</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contacts I Follow</shortDescription>
+        <value>Contacts I Follow</value>
+    </labels>
+    <labels>
+        <fullName>CustomHost</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Custom Host</shortDescription>
+        <value>Custom Host</value>
+    </labels>
+    <labels>
+        <fullName>Definitions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Definitions.</shortDescription>
+        <value>Definitions.</value>
+    </labels>
+    <labels>
+        <fullName>Delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete</shortDescription>
+        <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>Department</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Department</shortDescription>
+        <value>Department</value>
+    </labels>
+    <labels>
+        <fullName>Done</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Done</shortDescription>
+        <value>Done</value>
+    </labels>
+    <labels>
+        <fullName>Email</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Email</shortDescription>
+        <value>Email</value>
+    </labels>
+    <labels>
+        <fullName>EndUserLicenseAgreement</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>End User License Agreement</shortDescription>
+        <value>End User License Agreement</value>
+    </labels>
+    <labels>
+        <fullName>EndUserLicenseAgreementEULA</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>End User License Agreement (&quot;EULA&quot;)</shortDescription>
+        <value>End User License Agreement (&quot;EULA&quot;)</value>
+    </labels>
+    <labels>
+        <fullName>FAQ</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>FAQ</shortDescription>
+        <value>FAQ</value>
+    </labels>
+    <labels>
+        <fullName>Facetime</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Facetime</shortDescription>
+        <value>Facetime</value>
+    </labels>
+    <labels>
+        <fullName>FailedToConnectToSalesforce</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Failed to connect to salesforce.</shortDescription>
+        <value>Failed to connect to salesforce.</value>
+    </labels>
+    <labels>
+        <fullName>FailedToObtainOauthAccess</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Failed to obtain oauth access.</shortDescription>
+        <value>Failed to obtain oauth access.</value>
+    </labels>
+    <labels>
+        <fullName>ForceComLabsApplications</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Force.com Labs applications are free to use, but are not official salesforce.com</shortDescription>
+        <value>Force.com Labs applications are free to use, but are not official salesforce.com products, and should be considered community projects - these apps are not officially tested or documented.  For support on any Force.com Labs app please consult the Successforce message boards - salesforce.com support is not available for these applications.  Support requests for Force.com Applications should be directed to the “Ask the Community” link at http://success.salesforce.com/answers.  Source code for Force.com Labs applications can be found at https://github.com/ForceDotComLabs under separate and different license terms.</value>
+    </labels>
+    <labels>
+        <fullName>ForceComLabsApplicationsAreFree</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Force.com Labs applications are free to use, but are not official salesforce.co</shortDescription>
+        <value>Force.com Labs applications are free to use, but are not official salesforce.com products, and should be considered community projects - these apps are not officially tested or documented. For support on any Force.com Labs app please consult the Successforce message boards - salesforce.com support is not available for these applications.</value>
+    </labels>
+    <labels>
+        <fullName>ForceComLabsContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Force.com Labs Contact Viewer Application Terms of Use</shortDescription>
+        <value>Force.com Labs Contact Viewer Application Terms of Use</value>
+    </labels>
+    <labels>
+        <fullName>ForceComLabsIsProgram</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Force.com Labs is a program that lets salesforce.com engineers, professional ser</shortDescription>
+        <value>Force.com Labs is a program that lets salesforce.com engineers, professional services staff, other salesforce.com employees and members of the salesforce.com developer community share applications they&apos;ve created with the salesforce.com customer community.  Inspired by employees&apos; and developers’ work with customers of all sizes and industries, these applications range from simple utilities to entire vertical solutions.</value>
+    </labels>
+    <labels>
+        <fullName>ForceComLabsIsProgramThatEnables</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Force.com Labs is a program that enables salesforce.com engineers, professional</shortDescription>
+        <value>Force.com Labs is a program that enables salesforce.com engineers, professional services staff, and other salesforce.com employees to share applications they&apos;ve created with the salesforce.com customer community. Inspired by employees&apos; work with customers of all sizes and industries, these apps range from simple utilities to entire vertical solutions.</value>
+    </labels>
+    <labels>
+        <fullName>ForceComLabsOnGitHub</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Force.com Labs on GitHub</shortDescription>
+        <value>Force.com Labs on GitHub</value>
+    </labels>
+    <labels>
+        <fullName>Help</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Help</shortDescription>
+        <value>Help</value>
+    </labels>
+    <labels>
+        <fullName>HowIsMyDataSecured</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>How is my data secured?</shortDescription>
+        <value>How is my data secured?</value>
+    </labels>
+    <labels>
+        <fullName>IAgree</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>I Agree</shortDescription>
+        <value>I Agree</value>
+    </labels>
+    <labels>
+        <fullName>IFollow</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>I Follow</shortDescription>
+        <value>I Follow</value>
+    </labels>
+    <labels>
+        <fullName>IHaveFeatureRequest</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>I have a feature request!</shortDescription>
+        <value>I have a feature request!</value>
+    </labels>
+    <labels>
+        <fullName>IfYouDoNotHaveSuchAuthority</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>If you do not have such authority or do not agree to these terms, you may not us</shortDescription>
+        <value>If you do not have such authority or do not agree to these terms, you may not use Contact Viewer.</value>
+    </labels>
+    <labels>
+        <fullName>IfYourUseIsOnBehalfOfAnEntity</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>If your use is on behalf of an entity with which you are employed, affiliated or</shortDescription>
+        <value>If your use is on behalf of an entity with which you are employed, affiliated or associated (the “Entity”), then you represent that you have the authority to bind the Entity to these terms, as we may update them from time to time, and you agree to the following terms on behalf of the Entity, and/or</value>
+    </labels>
+    <labels>
+        <fullName>IfYourUseIsPersonalToYou</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>If your use is personal to you as an individual, then you agree to the following</shortDescription>
+        <value>If your use is personal to you as an individual, then you agree to the following terms on behalf of yourself</value>
+    </labels>
+    <labels>
+        <fullName>InNoEventShallSFDC</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>IN NO EVENT SHALL SFDC HAVE ANY LIABILITY HEREUNDER TO YOU FOR ANY DAMAGES WHATS</shortDescription>
+        <value>IN NO EVENT SHALL SFDC HAVE ANY LIABILITY HEREUNDER TO YOU FOR ANY DAMAGES WHATSOEVER, INCLUDING BUT NOT LIMITED TO DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES, OR DAMAGES BASED ON LOST PROFITS, DATA OR USE, HOWEVER CAUSED AND, WHETHER IN CONTRACT, TORT OR UNDER ANY OTHER THEORY OF LIABILITY, WHETHER OR NOT YOU HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</value>
+    </labels>
+    <labels>
+        <fullName>InvalidTokenPleaseLogoutAndRelogin</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Invalid token. Please logout and relogin.</shortDescription>
+        <value>Invalid token. Please logout and relogin.</value>
+    </labels>
+    <labels>
+        <fullName>IsThereSupport</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Is there support for Contact Viewer?</shortDescription>
+        <value>Is there support for Contact Viewer?</value>
+    </labels>
+    <labels>
+        <fullName>LoadAllDetails</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Load All Details</shortDescription>
+        <value>Load All Details</value>
+    </labels>
+    <labels>
+        <fullName>LoggedInAs</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Logged In As</shortDescription>
+        <value>Logged In As</value>
+    </labels>
+    <labels>
+        <fullName>LoginHost</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Login Host</shortDescription>
+        <value>Login Host</value>
+    </labels>
+    <labels>
+        <fullName>Logout</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Logout</shortDescription>
+        <value>Logout</value>
+    </labels>
+    <labels>
+        <fullName>MailingAddress</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Mailing Address</shortDescription>
+        <value>Mailing Address</value>
+    </labels>
+    <labels>
+        <fullName>Map</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Map</shortDescription>
+        <value>Map</value>
+    </labels>
+    <labels>
+        <fullName>Miscellaneous</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Miscellaneous.</shortDescription>
+        <value>Miscellaneous.</value>
+    </labels>
+    <labels>
+        <fullName>Mobile</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Mobile</shortDescription>
+        <value>Mobile</value>
+    </labels>
+    <labels>
+        <fullName>My</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>My</shortDescription>
+        <value>My</value>
+    </labels>
+    <labels>
+        <fullName>MyContacts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>My Contacts</shortDescription>
+        <value>My Contacts</value>
+    </labels>
+    <labels>
+        <fullName>NoDamages</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No Damages.</shortDescription>
+        <value>No Damages.</value>
+    </labels>
+    <labels>
+        <fullName>NoWarranty</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No Warranty.</shortDescription>
+        <value>No Warranty.</value>
+    </labels>
+    <labels>
+        <fullName>NotValidClientPleaseRelogin</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Not a valid client. Please relogin.</shortDescription>
+        <value>Not a valid client. Please relogin.</value>
+    </labels>
+    <labels>
+        <fullName>NotValidResponse</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Not a valid response.</shortDescription>
+        <value>Not a valid response.</value>
+    </labels>
+    <labels>
+        <fullName>Phone</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Phone</shortDescription>
+        <value>Phone</value>
+    </labels>
+    <labels>
+        <fullName>PhoneUpper</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>PHONE</shortDescription>
+        <value>PHONE</value>
+    </labels>
+    <labels>
+        <fullName>PleaseNoteUseOfContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Please note use of Contact Viewer may require the use of third party software, i</shortDescription>
+        <value>Please note use of Contact Viewer may require the use of third party software, including open source software that is not produced by, warranted by or licensed by salesforce.com.  You are responsible for complying with any licenses or terms and conditions that may govern your use of such software.  Please see documentation for Contact Viewer for any additional notices required by SFDC’s licensors.</value>
+    </labels>
+    <labels>
+        <fullName>Production</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Production</shortDescription>
+        <value>Production</value>
+    </labels>
+    <labels>
+        <fullName>ProprietaryRights</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Proprietary Rights.</shortDescription>
+        <value>Proprietary Rights.</value>
+    </labels>
+    <labels>
+        <fullName>Recenter</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Recenter</shortDescription>
+        <value>Recenter</value>
+    </labels>
+    <labels>
+        <fullName>RecentlyViewed</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Recently Viewed</shortDescription>
+        <value>Recently Viewed</value>
+    </labels>
+    <labels>
+        <fullName>RelationshipToOtherAgreements</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Relationship to Other Agreements.</shortDescription>
+        <value>Relationship to Other Agreements.</value>
+    </labels>
+    <labels>
+        <fullName>ReportsTo</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Reports To</shortDescription>
+        <value>Reports To</value>
+    </labels>
+    <labels>
+        <fullName>SFDCShallMakeContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SFDC shall make Contact Viewer available to You subject to the terms of this Agr</shortDescription>
+        <value>SFDC shall make Contact Viewer available to You subject to the terms of this Agreement.  You shall only use Contact Viewer in connection with SFDC online services.</value>
+    </labels>
+    <labels>
+        <fullName>Sandbox</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Sandbox</shortDescription>
+        <value>Sandbox</value>
+    </labels>
+    <labels>
+        <fullName>SessionExpiredPleaselogoutAndRelogin</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Session Expired. Please logout and relogin.</shortDescription>
+        <value>Session Expired. Please logout and relogin.</value>
+    </labels>
+    <labels>
+        <fullName>Settings</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Settings</shortDescription>
+        <value>Settings</value>
+    </labels>
+    <labels>
+        <fullName>Skype</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Skype</shortDescription>
+        <value>Skype</value>
+    </labels>
+    <labels>
+        <fullName>SourceCodeForContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Source code for Contact Viewer, and other Force.com Labs applications, is availa</shortDescription>
+        <value>Source code for Contact Viewer, and other Force.com Labs applications, is available on GitHub.</value>
+    </labels>
+    <labels>
+        <fullName>SubjectToTheLimitedRights</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Subject to the limited rights expressly granted hereunder, and as between You an</shortDescription>
+        <value>Subject to the limited rights expressly granted hereunder, and as between You and SFDC, SFDC reserves all rights, title and interest in and to Contact Viewer, including all related intellectual property rights.  No rights are granted to You hereunder other than as expressly set forth herein.</value>
+    </labels>
+    <labels>
+        <fullName>TermAndTermination</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Term and Termination.</shortDescription>
+        <value>Term and Termination.</value>
+    </labels>
+    <labels>
+        <fullName>TheseTermsOfUse</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>These Terms of Use for the Force.com Labs Contact Viewer Application (“Terms”) a</shortDescription>
+        <value>These Terms of Use for the Force.com Labs Contact Viewer Application (“Terms”) are legally binding terms governing your use of the Force.com Labs Contact Viewer Application.  Please read it carefully.  By clicking &quot;I Agree&quot; or accessing or using the Force.com Labs Contact Viewer Application and/or any updates to such service provided by salesforce.com</value>
+    </labels>
+    <labels>
+        <fullName>TheseTermsWereLastUpdated</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>These Terms were last updated on August 25, 2011.</shortDescription>
+        <value>These Terms were last updated on August 25, 2011.</value>
+    </labels>
+    <labels>
+        <fullName>TheseTermsWillGovernYourAccess</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>These Terms will govern Your access to Contact Viewer but not Your access to oth</shortDescription>
+        <value>These Terms will govern Your access to Contact Viewer but not Your access to other SFDC online services.  Use of any other services provided by SFDC and/or its affiliates or subsidiaries (including services that Contact Viewer may allow you to access or interact with) are governed by the applicable master subscription or other agreement for that service and not these Terms.  Your use of other services provided by third parties are governed by your applicable agreement with that third party.  No service level agreements in effect between you or any Entity and SFDC shall apply to Contact Viewer.</value>
+    </labels>
+    <labels>
+        <fullName>ThisAgreementShallCommence</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This Agreement shall commence on the date of Your acceptance of these Terms and</shortDescription>
+        <value>This Agreement shall commence on the date of Your acceptance of these Terms and remain in effect with respect to Contact Viewer until the earlier of either (1) SFDC ceasing to make Contact Viewer available to You, or (2) termination of the Agreement at any time in SFDC’s sole discretion.  Termination of these Terms shall not entitle You or any Entity to a refund, credit, or other compensation from SFDC under any agreement with SFDC or any other agreement or from any third party.</value>
+    </labels>
+    <labels>
+        <fullName>ThisWebAppIsCurrentlySupported</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This web app is currently supported for only webkit based browsers such as Chrom</shortDescription>
+        <value>This web app is currently supported for only webkit based browsers such as Chrome and Safari.</value>
+    </labels>
+    <labels>
+        <fullName>Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>TITLE</shortDescription>
+        <value>TITLE</value>
+    </labels>
+    <labels>
+        <fullName>TryAgainRemainingAttempts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Try again. Remaining attempts</shortDescription>
+        <value>Try again. Remaining attempts</value>
+    </labels>
+    <labels>
+        <fullName>UseOfContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Use of Contact Viewer.</shortDescription>
+        <value>Use of Contact Viewer.</value>
+    </labels>
+    <labels>
+        <fullName>WeAreAlwaysInterested</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>We&apos;re always interested in your feature requests and ideas for Contact Viewer an</shortDescription>
+        <value>We&apos;re always interested in your feature requests and ideas for Contact Viewer and other Mobile Appexchange Labs apps. Voice your opinion on success.salesforce.com/answers and let us know!</value>
+    </labels>
+    <labels>
+        <fullName>WeOrSFDCShallMeanSalesforceCom</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>“We” or “SFDC” shall mean salesforce.com, inc., The Landmark @ One Market, Suite</shortDescription>
+        <value>“We” or “SFDC” shall mean salesforce.com, inc., The Landmark @ One Market, Suite 300, San Francisco, California 94105, U.S.A.</value>
+    </labels>
+    <labels>
+        <fullName>WhenWeUseYouOrYour</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>When we use “you” or “your” in these Terms, “you” or “your” means the Entity you</shortDescription>
+        <value>When we use “you” or “your” in these Terms, “you” or “your” means the Entity you are agreeing to these Terms on the Entity’s behalf or, you as an individual if you are agreeing to these Terms as an individual.</value>
+    </labels>
+    <labels>
+        <fullName>WhereDoesTheMapDataCome</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Where does the map data come from?</shortDescription>
+        <value>Where does the map data come from?</value>
+    </labels>
+    <labels>
+        <fullName>YouAreResponsibleForAllActivities</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You are responsible for all activities that occur in Your accounts and for compl</shortDescription>
+        <value>You are responsible for all activities that occur in Your accounts and for compliance by your employees, consultants, contractors, agents and affiliates with this Agreement.  Except as and only to the extent permitted by applicable law, or by licensing terms governing use of the open-sourced Contact Viewer code, You shall not:</value>
+    </labels>
+    <labels>
+        <fullName>YouMayNotAssign</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You may not assign any of its rights or obligations hereunder, whether by operat</shortDescription>
+        <value>You may not assign any of its rights or obligations hereunder, whether by operation of law or otherwise, without the prior written consent of the SFDC.  This Agreement shall be governed exclusively by the internal laws of the State of California, without regard to its conflicts of laws rules.  Each party hereby consents to the exclusive jurisdiction of the state and federal courts located in San Francisco County, California to adjudicate any dispute arising out of or relating to this Agreement.  This Agreement constitutes the entire agreement between the parties, and supersedes all prior and contemporaneous agreements, proposals or representations, written or oral, concerning its subject matter.  No modification, amendment, or waiver of any provision of this Agreement shall be effective unless in writing and signed by the party against whom the modification, amendment or waiver is to be asserted.</value>
+    </labels>
+    <labels>
+        <fullName>YouShall</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You shall:</shortDescription>
+        <value>You shall:</value>
+    </labels>
+    <labels>
+        <fullName>YourResponsibilities</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Your Responsibilities.</shortDescription>
+        <value>Your Responsibilities.</value>
+    </labels>
+    <labels>
+        <fullName>a_LicenseSublicense</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(a) license, sublicense, sell, resell, rent, lease, transfer, assign, distribute</shortDescription>
+        <value>(a) license, sublicense, sell, resell, rent, lease, transfer, assign, distribute, time share or otherwise commercially exploit Contact Viewer or make Contact Viewer available to any third party;</value>
+    </labels>
+    <labels>
+        <fullName>b_UseContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(b) use Contact Viewer to send spam or otherwise duplicative or unsolicited mess</shortDescription>
+        <value>(b) use Contact Viewer to send spam or otherwise duplicative or unsolicited messages in violation of applicable laws;</value>
+    </labels>
+    <labels>
+        <fullName>c_UseContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(c) use Contact Viewer to send or store infringing, obscene, threatening, libelo</shortDescription>
+        <value>(c) use Contact Viewer to send or store infringing, obscene, threatening, libelous, or otherwise unlawful or tortious material, including material that is harmful to children or violates third party privacy rights;</value>
+    </labels>
+    <labels>
+        <fullName>d_UseContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(d) use Contact Viewer to send or store any virus, worm, time bomb, Trojan horse</shortDescription>
+        <value>(d) use Contact Viewer to send or store any virus, worm, time bomb, Trojan horse or other harmful or malicious code, file, script, agent or programs;</value>
+    </labels>
+    <labels>
+        <fullName>e_InterfereWithOrDisrupt</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(e) interfere with or disrupt the integrity or performance of Contact Viewer or</shortDescription>
+        <value>(e) interfere with or disrupt the integrity or performance of Contact Viewer or the data contained therein;</value>
+    </labels>
+    <labels>
+        <fullName>f_AttemptToGainUnauthorized</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(f) attempt to gain unauthorized access to Contact Viewer or its related systems</shortDescription>
+        <value>(f) attempt to gain unauthorized access to Contact Viewer or its related systems or networks;</value>
+    </labels>
+    <labels>
+        <fullName>g_ModifyCopyOrCreateDerivative</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(g) modify, copy or create derivative works based on Contact Viewer;</shortDescription>
+        <value>(g) modify, copy or create derivative works based on Contact Viewer;</value>
+    </labels>
+    <labels>
+        <fullName>h_FrameOrMirrorAnyContent</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(h) frame or mirror any content forming part of Contact Viewer, other than on Yo</shortDescription>
+        <value>(h) frame or mirror any content forming part of Contact Viewer, other than on Your own intranets or otherwise for Your own internal business purposes;</value>
+    </labels>
+    <labels>
+        <fullName>i_HaveSoleResponsibility</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(i) have sole responsibility for the accuracy, quality, integrity, legality, rel</shortDescription>
+        <value>(i) have sole responsibility for the accuracy, quality, integrity, legality, reliability, and appropriateness of all content and data submitted to Contact Viewer by You;</value>
+    </labels>
+    <labels>
+        <fullName>i_ReverseEngineerContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(i) reverse engineer Contact Viewer;</shortDescription>
+        <value>(i) reverse engineer Contact Viewer;</value>
+    </labels>
+    <labels>
+        <fullName>ii_UseCommerciallyReasonableEfforts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(ii) use commercially reasonable efforts to prevent unauthorized access to, or</shortDescription>
+        <value>(ii) use commercially reasonable efforts to prevent unauthorized access to, or use of, Contact Viewer, and notify SFDC promptly of any such unauthorized access or use;</value>
+    </labels>
+    <labels>
+        <fullName>iii_ComplyWithAllApplicableLocal</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>and (iii) comply with all applicable local, state, federal and foreign laws, an</shortDescription>
+        <value>and (iii) comply with all applicable local, state, federal and foreign laws, and written or electronically provided instructions from SFDC, in using Contact Viewer.</value>
+    </labels>
+    <labels>
+        <fullName>j_AccessContactViewer</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>(j) access Contact Viewer in order to build a competitive product or service, or</shortDescription>
+        <value>(j) access Contact Viewer in order to build a competitive product or service, or (k) access Contact Viewer in order to copy any ideas, features, functions or graphics of Contact Viewer.</value>
+    </labels>
+</CustomLabels>

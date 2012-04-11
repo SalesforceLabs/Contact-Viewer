@@ -8,7 +8,7 @@
                  <div id="listheader" style="position:relative;">
                       <img id="gear" src="{!URLFOR($Resource.ContactAppRsrcs, 'images/gear-small.png')}" style="float:right; margin: 12px 12px 0 0;" />
                       <div id="titlebar">
-                          <span><span id="title">Recently Viewed</span>&nbsp;<span style="font-size: 12px;">▼</span></span>
+                          <span><span id="title">{!$Label.RecentlyViewed}</span>&nbsp;<span style="font-size: 12px;">▼</span></span>
                       </div>
                       <div id="searchbar" style="width: 100%; height: 38px; position:relative;">
                           <form>
@@ -20,9 +20,9 @@
                  </div>
                  <div style="overflow:hidden; width: 100%;">
                   <div id="listselect" style="display:none; width: 100%;">
-                         <button id="owner">My Contacts</button>
-                         <button id="follow">Contacts I Follow</button>
-                         <button id="recent">Recently Viewed</button>
+                         <button id="owner">{!$Label.MyContacts}</button>
+                         <button id="follow">{!$Label.ContactsIFollow}</button>
+                         <button id="recent">{!$Label.RecentlyViewed}</button>
                   </div>
               </div>
              </div>
@@ -41,7 +41,7 @@
             <div class="header">
                 <div id="left" style="position:absolute; margin-left: 10px; top: 0px; left: 0px;">
                     <span class="appleui back-arrow"/>
-                    <div class="header_button" style="border-bottom: 2px solid #206A82; background-color: #1667A5; background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.199219)), color-stop(0.6, rgba(255, 255, 255, 0)), to(transparent)); left: 12px; border-left-style: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding: 0 5px 0 0;">Back</div>
+                    <div class="header_button" style="border-bottom: 2px solid #206A82; background-color: #1667A5; background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.199219)), color-stop(0.6, rgba(255, 255, 255, 0)), to(transparent)); left: 12px; border-left-style: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding: 0 5px 0 0;">{!$Label.Back}</div>
                 </div>
                 <span></span>
             </div>
@@ -53,9 +53,9 @@
                        <span style=" margin: 20px 10px; position: absolute; top: 0;"></span>
                     </div>
                     <div id="call_contact" style="padding: 0 20px;">
-                        <a id="email" href="#"><div>Email</div></a>
-                        <a id="facetime" href="#"><div>Facetime</div></a>
-                        <a id="skype" href="#"><div>Skype</div></a>
+                        <a id="email" href="#"><div>{!$Label.Email}</div></a>
+                        <a id="facetime" href="#"><div>{!$Label.Facetime}</div></a>
+                        <a id="skype" href="#"><div>{!$Label.Skype}</div></a>
                     </div>
                   </div>
                   
@@ -64,25 +64,25 @@
                     <div id="info" style="width:100%; padding: 15px 0;">                      
                       <table cellspacing="0" style="margin: 5px 20px; font-size: 12px;">
                         <tbody><tr id="Account">
-                            <td class="fieldLbl">Company</td>
+                            <td class="fieldLbl">{!$Label.Company}</td>
                             <td class="fieldVal"></td>
                         </tr><tr id="Department">
-                            <td class="fieldLbl">Department</td>
+                            <td class="fieldLbl">{!$Label.Department}</td>
                             <td class="fieldVal"></td>
                         </tr><tr id="Phone">
-                            <td class="fieldLbl">Phone</td>
+                            <td class="fieldLbl">{!$Label.Phone}</td>
                             <td class="fieldVal"></td>
                         </tr><tr id="Mobile">
-                            <td class="fieldLbl">Mobile</td>
+                            <td class="fieldLbl">{!$Label.Mobile}</td>
                             <td class="fieldVal"></td>
                         </tr><tr id="Email">
-                            <td class="fieldLbl">Email</td>
+                            <td class="fieldLbl">{!$Label.Email}</td>
                             <td class="fieldVal"></td>
                         </tr><tr id="ReportsTo">
-                            <td class="fieldLbl">Reports To</td>
+                            <td class="fieldLbl">{!$Label.ReportsTo}</td>
                             <td class="fieldVal">&nbsp;</td>
                         </tr><tr id="Address">
-                            <td class="fieldLbl">Mailing Address</td>
+                            <td class="fieldLbl">{!$Label.MailingAddress}</td>
                             <td class="fieldVal"></td>
                         </tr></tbody>
                       </table>
