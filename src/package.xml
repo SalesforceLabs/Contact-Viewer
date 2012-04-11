@@ -33,12 +33,31 @@
         <name>ApexPage</name>
     </types>
     <types>
-        <members>*</members>
+        <members>AppClient__c</members>
+        <members>AppLogin__c</members>
+        <members>AppUser__c</members>
+        <members>ContactsAppSettings__c</members>
         <name>CustomObject</name>
     </types>
     <types>
-        <members>ContactAppRsrcs</members>
+        <members>AppClient__c-ja</members>
+        <members>AppLogin__c-ja</members>
+        <members>AppUser__c-ja</members>
+        <members>ContactsAppSettings__c-ja</members>
+        <name>CustomObjectTranslation</name>
+    </types>
+    <types>
+        <members>SFDCLogin</members>
+        <members>SalesforceSandbox</members>
+        <name>RemoteSiteSetting</name>
+    </types>
+    <types>
+        <members>ContactAppRsrcs<</members>
         <name>StaticResource</name>
     </types>
-    <version>20.0</version>
+    <types>
+        <members>js</members>
+        <name>Translations</name>
+    </types>
+    <version>24.0</version>
 </Package>

@@ -281,14 +281,14 @@ global with sharing class ContactsAppOAuthController {
 	                		client.Inactive__c = true;
 	                		client.Encryption_Key__c = null;
 	                	}
-	                    throw new AuthenticationException('WRONG_PASSCODE', 'Try again. Remaining attempts: ' + (MAX_FAILURE_COUNT - client.Failure_Count__c));
+	                    throw new AuthenticationException('WRONG_PASSCODE', System.Label.TryAgainRemainingAttempts + ': ' + (MAX_FAILURE_COUNT - this.client.Failure_Count__c));
 	                }
 	            } else {
-	            	throw new AuthenticationException('INVALID_TOKEN', 'Invalid token. Please logout and relogin.');
+	            	throw new AuthenticationException('INVALID_TOKEN', System.Label.InvalidTokenPleaseLogoutAndRelogin);
 	            }
 	        }
     	} else {
-    		throw new AuthenticationException('INVALID_TOKEN', 'Authentication Failure. Please relogin.');
+    		throw new AuthenticationException('INVALID_TOKEN', System.Label.AuthenticationFailurePleaseRelogin);
     	}
         
         return null;   

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>AppUser</value>
+    </caseValues>
+    <fields>
+        <label>EULA受付日</label>
+        <name>EULA_Acceptance_Date__c</name>
+    </fields>
+    <fields>
+        <label>EULA受付</label>
+        <name>EULA__c</name>
+    </fields>
+    <fields>
+        <label>組織ID</label>
+        <name>OrganizationID__c</name>
+    </fields>
+    <fields>
+        <label>ユーザID</label>
+        <name>UserID__c</name>
+    </fields>
+</CustomObjectTranslation>

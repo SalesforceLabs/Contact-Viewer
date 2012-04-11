@@ -28,9 +28,9 @@
             <td class="passcode_button">9</td>
         </tr>
         <tr>
-            <td id="cancel" class="passcode_button" style="font-size:16px;">Logout</td>
+            <td id="cancel" class="passcode_button" style="font-size:16px;">{!$Label.Logout}</td>
             <td class="passcode_button" style="border-left: 1px solid #000; border-right: 1px solid #000;">0</td>
-            <td class="passcode_button" style="font-size:16px;">Delete</td>
+            <td class="passcode_button" style="font-size:16px;">{!$Label.Delete}</td>
         </tr>
     </table>
 </div>
