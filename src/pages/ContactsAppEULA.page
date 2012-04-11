@@ -1,36 +1,36 @@
 <apex:page showHeader="false"  standardStylesheets="false" cache="true" sidebar="false">
-Force.com Labs Contact Viewer Application Terms of Use<br/>
-End User License Agreement ("EULA")
+{!$Label.ForceComLabsContactViewer}<br/>
+{!$Label.EndUserLicenseAgreementEULA}
 <br/><br/>
-These Terms of Use for the Force.com Labs Contact Viewer Application (“Terms”) are legally binding terms governing your use of the Force.com Labs Contact Viewer Application.  Please read it carefully.  By clicking "I Agree" or accessing or using the Force.com Labs Contact Viewer Application and/or any updates to such service provided by salesforce.com:<br/><br/>
+{!$Label.TheseTermsOfUse}:<br/><br/>
 <span style="font-weight:bold">
 <ul style="margin-left: 20px">
-<li>If your use is on behalf of an entity with which you are employed, affiliated or associated (the “Entity”), then you represent that you have the authority to bind the Entity to these terms, as we may update them from time to time, and you agree to the following terms on behalf of the Entity, and/or</li>
-<li>If your use is personal to you as an individual, then you agree to the following terms on behalf of yourself</li>
+<li>{!$Label.IfYourUseIsOnBehalfOfAnEntity}</li>
+<li>{!$Label.IfYourUseIsPersonalToYou}</li>
 </ul><br/>
-When we use “you” or “your” in these Terms, “you” or “your” means the Entity you are agreeing to these Terms on the Entity’s behalf or, you as an individual if you are agreeing to these Terms as an individual.
+{!$Label.WhenWeUseYouOrYour}
 <br/><br/>
-“We” or “SFDC” shall mean salesforce.com, inc., The Landmark @ One Market, Suite 300, San Francisco, California 94105, U.S.A.
+{!$Label.WeOrSFDCShallMeanSalesforceCom}
 <br/><br/>
-If you do not have such authority or do not agree to these terms, you may not use Contact Viewer.
+{!$Label.IfYouDoNotHaveSuchAuthority}
 </span>
 <br/><br/>
-Force.com Labs is a program that lets salesforce.com engineers, professional services staff, other salesforce.com employees and members of the salesforce.com developer community share applications they've created with the salesforce.com customer community.  Inspired by employees' and developers’ work with customers of all sizes and industries, these applications range from simple utilities to entire vertical solutions. Force.com Labs applications are free to use, but are not official salesforce.com products, and should be considered community projects - these apps are not officially tested or documented.  For support on any Force.com Labs app please consult the Successforce message boards - salesforce.com support is not available for these applications.  Support requests for Force.com Applications should be directed to the “Ask the Community” link at http://success.salesforce.com/answers.  Source code for Force.com Labs applications can be found at https://github.com/ForceDotComLabs under separate and different license terms. 
+{!$Label.ForceComLabsIsProgram} {!$Label.ForceComLabsApplications}
 <br/><br/>
-Please note use of Contact Viewer may require the use of third party software, including open source software that is not produced by, warranted by or licensed by salesforce.com.  You are responsible for complying with any licenses or terms and conditions that may govern your use of such software.  Please see documentation for Contact Viewer for any additional notices required by SFDC’s licensors. 
+{!$Label.PleaseNoteUseOfContactViewer}
 <br/><br/>
-These Terms were last updated on August 25, 2011. 
+{!$Label.TheseTermsWereLastUpdated}
 <br/>
 <ol>
-<li><strong>Definitions.</strong><br/>  
-<strong>“Contact Viewer”</strong> means the Force.com Labs Contact Viewer Application available at http://appexchange.salesforce.com/mobile which allows users to find, browse and see details about their contacts when used with SFDC online services.</li>  
-<li><strong>Use of Contact Viewer.</strong>  SFDC shall make Contact Viewer available to You subject to the terms of this Agreement.  You shall only use Contact Viewer in connection with SFDC online services. </li>
-<li><strong>Term and Termination.</strong>   This Agreement shall commence on the date of Your acceptance of these Terms and remain in effect with respect to Contact Viewer until the earlier of either (1) SFDC ceasing to make Contact Viewer available to You, or (2) termination of the Agreement at any time in SFDC’s sole discretion.  Termination of these Terms shall not entitle You or any Entity to a refund, credit, or other compensation from SFDC under any agreement with SFDC or any other agreement or from any third party.</li>
-<li><strong>Your Responsibilities.</strong>   You are responsible for all activities that occur in Your accounts and for compliance by your employees, consultants, contractors, agents and affiliates with this Agreement.  Except as and only to the extent permitted by applicable law, or by licensing terms governing use of the open-sourced Contact Viewer code, You shall not: (a) license, sublicense, sell, resell, rent, lease, transfer, assign, distribute, time share or otherwise commercially exploit Contact Viewer or make Contact Viewer available to any third party; (b) use Contact Viewer to send spam or otherwise duplicative or unsolicited messages in violation of applicable laws; (c) use Contact Viewer to send or store infringing, obscene, threatening, libelous, or otherwise unlawful or tortious material, including material that is harmful to children or violates third party privacy rights; (d) use Contact Viewer to send or store any virus, worm, time bomb, Trojan horse or other harmful or malicious code, file, script, agent or programs; (e) interfere with or disrupt the integrity or performance of Contact Viewer or the data contained therein; (f) attempt to gain unauthorized access to Contact Viewer or its related systems or networks; (g) modify, copy or create derivative works based on Contact Viewer; (h) frame or mirror any content forming part of Contact Viewer, other than on Your own intranets or otherwise for Your own internal business purposes; (i) reverse engineer Contact Viewer; (j) access Contact Viewer in order to build a competitive product or service, or (k) access Contact Viewer in order to copy any ideas, features, functions or graphics of Contact Viewer. You shall:  (i) have sole responsibility for the accuracy, quality, integrity, legality, reliability, and appropriateness of all content and data submitted to Contact Viewer by You; (ii) use commercially reasonable efforts to prevent unauthorized access to, or use of, Contact Viewer, and notify SFDC promptly of any such unauthorized access or use; and (iii) comply with all applicable local, state, federal and foreign laws, and written or electronically provided instructions from SFDC, in using Contact Viewer.</li>  
-<li><strong>No Warranty.</strong>  CONTACT VIEWER IS PROVIDED “AS-IS,” EXCLUSIVE OF ANY WARRANTY WHATSOEVER.  SFDC DISCLAIMS ALL EXPRESS OR IMPLIED WARRANTIES, INCLUDING WITHOUT LIMITATION ANY IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  CONTACT VIEWER IS NOT A PRODUCT OF SFDC AND IS NOT SUPPORTED BY SFDC IN ANY WAY.   Contact Viewer may contain bugs or errors.  Any production use of Contact Viewer is at Your sole risk.   You acknowledge that SFDC may discontinue making Contact Viewer available to You at any time in its sole discretion.</li>
-<li><strong>No Damages.</strong>  IN NO EVENT SHALL SFDC HAVE ANY LIABILITY HEREUNDER TO YOU FOR ANY DAMAGES WHATSOEVER, INCLUDING BUT NOT LIMITED TO DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES, OR DAMAGES BASED ON LOST PROFITS, DATA OR USE, HOWEVER CAUSED AND, WHETHER IN CONTRACT, TORT OR UNDER ANY OTHER THEORY OF LIABILITY, WHETHER OR NOT YOU HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</li>
-<li><strong>Proprietary Rights.</strong>  Subject to the limited rights expressly granted hereunder, and as between You and SFDC, SFDC reserves all rights, title and interest in and to Contact Viewer, including all related intellectual property rights.  No rights are granted to You hereunder other than as expressly set forth herein.</li>
-<li><strong>Relationship to Other Agreements.</strong>  These Terms will govern Your access to Contact Viewer but not Your access to other SFDC online services.  Use of any other services provided by SFDC and/or its affiliates or subsidiaries (including services that Contact Viewer may allow you to access or interact with) are governed by the applicable master subscription or other agreement for that service and not these Terms.  Your use of other services provided by third parties are governed by your applicable agreement with that third party.  No service level agreements in effect between you or any Entity and SFDC shall apply to Contact Viewer.</li>  
-<li><strong>Miscellaneous.</strong>  You may not assign any of its rights or obligations hereunder, whether by operation of law or otherwise, without the prior written consent of the SFDC.  This Agreement shall be governed exclusively by the internal laws of the State of California, without regard to its conflicts of laws rules.  Each party hereby consents to the exclusive jurisdiction of the state and federal courts located in San Francisco County, California to adjudicate any dispute arising out of or relating to this Agreement.  This Agreement constitutes the entire agreement between the parties, and supersedes all prior and contemporaneous agreements, proposals or representations, written or oral, concerning its subject matter.  No modification, amendment, or waiver of any provision of this Agreement shall be effective unless in writing and signed by the party against whom the modification, amendment or waiver is to be asserted.</li> 
+<li><strong>{!$Label.Definitions}</strong><br/>
+{!$Label.ContactViewerMeansTheForceComLabs}</li>
+<li><strong>{!$Label.UseOfContactViewer}</strong>  {!$Label.SFDCShallMakeContactViewer}</li>
+<li><strong>{!$Label.TermAndTermination}</strong>  {!$Label.ThisAgreementShallCommence}</li>
+<li><strong>{!$Label.YourResponsibilities}</strong>  {!$Label.YouAreResponsibleForAllActivities}{!$Label.a_LicenseSublicense} {!$Label.b_UseContactViewer} {!$Label.c_UseContactViewer} {!$Label.d_UseContactViewer} {!$Label.e_InterfereWithOrDisrupt} {!$Label.f_AttemptToGainUnauthorized} {!$Label.g_ModifyCopyOrCreateDerivative} {!$Label.h_FrameOrMirrorAnyContent} {!$Label.i_ReverseEngineerContactViewer} {!$Label.j_AccessContactViewer} {!$Label.YouShall}  {!$Label.i_HaveSoleResponsibility}{!$Label.ii_UseCommerciallyReasonableEfforts} {!$Label.iii_ComplyWithAllApplicableLocal}</li>  
+<li><strong>{!$Label.NoWarranty}</strong>  {!$Label.ContactViewerIsProvided}   {!$Label.ContactViewerMayContainBugs}</li>
+<li><strong>{!$Label.NoDamages}</strong>  {!$Label.InNoEventShallSFDC}</li>
+<li><strong>{!$Label.ProprietaryRights}</strong>  {!$Label.SubjectToTheLimitedRights}</li>
+<li><strong>{!$Label.RelationshipToOtherAgreements}</strong>  {!$Label.TheseTermsWillGovernYourAccess}</li>  
+<li><strong>{!$Label.Miscellaneous}</strong>  {!$Label.YouMayNotAssign}</li> 
 </ol>
 </apex:page>
