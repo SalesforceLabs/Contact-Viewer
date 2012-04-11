@@ -36,6 +36,5 @@
 </div>
 
 <link rel="stylesheet" href="{!URLFOR($Resource.ContactAppRsrcs, 'css/passcodemanager.css')}" />
-<apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/passcodemanager.js')}"/>
             
 </apex:component>

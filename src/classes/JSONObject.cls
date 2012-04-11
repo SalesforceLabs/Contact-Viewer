@@ -64,8 +64,8 @@ public with sharing class JSONObject {
     }
     
     public static Map<String, String> parseSimpleJson(String jsonStr) {
-        
-        Pattern jsonPattern = Pattern.compile('\\s*"([^"]+?)"\\s*:\\s*("[^"]*?"|[a-zA-Z0-9]+|\\$[0-9]+\\$|\\[[\\$0-9,]*\\])\\s*[,\\}]');
+    	
+    	Pattern jsonPattern = Pattern.compile('\\s*"([^"]+?)"\\s*:\\s*("[^"]*?"|[a-zA-Z0-9]+|\\$[0-9]+\\$|\\[[\\$0-9,]*\\])\\s*[,\\}]');
         Matcher respMatcher = jsonPattern.matcher(jsonStr);
         
         Map<String, String> jsonMap = new Map<String, String>();

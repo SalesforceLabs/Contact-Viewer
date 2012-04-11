@@ -43,7 +43,7 @@ var SettingsManager = (function () {
 
 		if (settings.width() < 500) settings.find('#header #left>div').text('Back');
 		
-		if (sessionAlive) {
+		if (ManageUserSession.isActive()) {
 			settings.find('#header #done').show();
 			settings.find('#loginbtn').hide();
 			settings.find('#logoutbtn').show();
@@ -57,7 +57,7 @@ var SettingsManager = (function () {
 		if (page && scrollerOnPage != page) {
 			if (settingsScroller) _destroyScroller();
 			
-			settingsScroller = createScroller(settings.find('.settings_body ' + page));
+			settingsScroller = createScroller(settings.find('.settings_body ' + page), null, {onBeforeScrollStart: function() {}});
 			scrollerOnPage = page;
 			$j(window).orientationChange( function() { _initiateScroller(); } );
 		} else if (settingsScroller) {
@@ -75,11 +75,11 @@ var SettingsManager = (function () {
 	}
 	
 	var _renderConnectionInfo = function() {
-		var host = getLocalValue(login_host_storage_key);
+		var host = ManageUserSession.getLoginHostType();
 		
 		if (!host) {
 			host = settings.find('#hosts table td')[0].id;
-			setLocalValue(login_host_storage_key, host);
+			ManageUserSession.setLoginHostType(host);
 		}
 		var hostLabel = 'Production';
 		
@@ -91,7 +91,7 @@ var SettingsManager = (function () {
 			settings.find('#hosts #' + host).css('color', '#395483').append(settings.find('#hosts #check'));
 		}
 		settings.find('#main #connection #host_url input').val(
-			getLocalValue(login_host_url_storage_key)
+			ManageUserSession.getLoginHostUrl()
 		);
 	}
 	
@@ -101,7 +101,7 @@ var SettingsManager = (function () {
 				settings.find('#header #left').hide().unbind();
 				from.changePage(settings.find('#main'), true, function() { from.css('visibility', 'hidden'); } );
 				settings.find('#header #title').text('Settings');
-				if(sessionAlive) settings.find('#header #done').show();
+				if(ManageUserSession.isActive()) settings.find('#header #done').show();
 				_initiateScroller('#main');
 //				_destroyScroller();
 			}
@@ -134,15 +134,18 @@ var SettingsManager = (function () {
 			if (typeof callback == 'function') callback(textStatus);
 		}
 		
-		sf.getContactAppEula(onSuccess, errorCallback, onComplete);
+		ManageUserSession.getApiClient().getContactAppEula(onSuccess, errorCallback, onComplete);
 	}
 	
 	var _navigatePage = function(to, titleText, showBackButton, cb) {
 
 		if (customHostInFocus) {
-			if (_validateCustomHost()) {
+			setTimeout(function() {
+				settings.find('#main #connection #host_url input').blur();
+			}, 10);
+			/*if (_validateCustomHost()) {
 				settings.find('#main #connection #host_url form').submit();
-			} else return;
+			} else return;*/
 		}
 		
 		var that = $j(this);
@@ -178,7 +181,7 @@ var SettingsManager = (function () {
 			function() {
 				var that = $j(this);
 				that.addClass('cellselected');
-				setLocalValue(login_host_storage_key, this.id);
+				ManageUserSession.setLoginHostType(this.id);
 				_renderConnectionInfo();
 				setTimeout(function() {that.removeClass('cellselected');}, 100);
 			}
@@ -189,17 +192,11 @@ var SettingsManager = (function () {
 				customHostInFocus = true;
 				var that = $j(this);
 				that.css('text-align', 'left');
-				/*var touchAction = addWindowTouchListener(that.parent(), null, 
-					function() { 
-						if(validateUrl(that.val().trim())) that.blur();
-						return false;
-					});
-				that.blur(function() { removeWindowTouchListener(touchAction); });*/
 			}
 		).blur(
 			function() {
 				customHostInFocus = false;
-				$j(this).val(getLocalValue(login_host_url_storage_key));
+				$j(this).val(ManageUserSession.getLoginHostUrl());
 				$j(this).css('text-align', 'right');
 				setTimeout(function(){ $j(document.body).scrollTop(0); }, 10);
 			}
@@ -210,7 +207,8 @@ var SettingsManager = (function () {
 				var inputField = settings.find('#main #connection #host_url input');
 				
 				if(_validateCustomHost()) {
-					setLocalValue(login_host_url_storage_key, inputField.val());
+					ManageUserSession.setLoginHostUrl(inputField.val());
+					_renderConnectionInfo();
 					inputField.blur();
 				}
 				return false;
@@ -232,15 +230,14 @@ var SettingsManager = (function () {
 			}
 		);
 		
-		settings.find('#loginbtn').unbind().click( authorizeUser ).touch( function(e) { e.stopPropagation(); });
+		settings.find('#loginbtn').unbind()
+				.click( function() { prepareSession(); } )
+				.touch( function(e) { e.stopPropagation(); });
     	settings.find('#logoutbtn').unbind().click(function(e) {
         	// Delete the saved refresh token
-	        var resp = confirm('Logout user ' + username + '?');
+	        var resp = confirm('Logout user ' + ManageUserSession.getUsername() + '?');
     	    if (resp) {
 				logout(false);
-				/*$j('#app_settings #username').html('None');
-				$j('#app_settings #logoutbtn').hide();
-				$j('#app_settings #loginbtn').show();*/
 			}
     	}).touch( function(e) { e.stopPropagation(); });
     };
@@ -254,25 +251,24 @@ var SettingsManager = (function () {
 		
 			_setup();
 			
-			var that = this;
 			overlay = $j('#loggedin').addOverlay();
 			
-			settings.find('#username').setText(username || 'None');
+			settings.find('#username').setText(ManageUserSession.getUsername() || 'None');
 	
-			var loc = { left: ($j(window).width() - settings.outerWidth(false))/2, top: 0 };
+			var loc = { top: 0, left: (window.innerWidth - settings.width())/2 };
 			settings.hide().css(loc).css('zIndex', $j.topZIndex(overlay.elem) + 10);
 			var initialY = window.innerHeight;
 			var finalY = (window.innerHeight - settings.height())/2;
-		
+			
 			var onComplete = function() {
-				that.hide();
+				SettingsManager.hide();
 				$j(this).unbind('click');
-				if(!sessionAlive) window.location = getBaseUrl();
+				if(!ManageUserSession.isActive()) window.location = getBaseUrl();
 			}
 			settings.find('#header #done').unbind('click').click(onComplete);
-			if(!sessionAlive) settings.find('#header #done').hide();
+			if(!ManageUserSession.isActive()) settings.find('#header #done').hide();
 		
-			settings.show().slideIn('Y', initialY, finalY, _positionCenter);
+			settings.show().slideIn('Y', initialY, finalY);
 			_initiateScroller('#main');
 			settings.orientationChange(_positionCenter);
 		},
@@ -290,13 +286,13 @@ var SettingsManager = (function () {
 		},
 		
 		showEula: function(onAccept, onDecline) {
-			this.show();
+			SettingsManager.show();
 			_navigatePage('#eula', 'End User License Agreement', false, 
 				function() { _showEula(true); _addEulaResponseListeners(onAccept, onDecline); });
 		},
 		
 		hideEula: function() {
-			this.hide(function() {
+			SettingsManager.hide(function() {
 				settings.find('#eula').changePage(settings.find('#main'), true);
 				settings.find('#eula').css('visibility', 'hidden');
 				settings.find('#eula_buttons').hide();

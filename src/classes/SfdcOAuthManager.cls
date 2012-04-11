@@ -30,16 +30,11 @@ public with sharing class SfdcOAuthManager {
     public static final String LOGIN_URL = 'https://login.salesforce.com';
     public static final String CLIENT_ID, CLIENT_SECRET, REDIRECT_URI;
     
-    private static final String ACCESS_TOKEN_COOKIE = 'oauth_access_token';
-    private static final String INSTANCE_URL_COOKIE = 'oauth_instance_url';
-    private static final String REFRESH_TOKEN_COOKIE = 'oauth_refresh_token';
-    private static final String USERID_COOKIE = 'oauth_uid_token';
-    
     private static final String PRIVATE_KEY;
     
     static {
-    	ContactsAppSettings__c cas = ContactsAppSettings__c.getOrgDefaults();
-    	CLIENT_ID = cas.OAuthClientId__c;
+        ContactsAppSettings__c cas = ContactsAppSettings__c.getOrgDefaults();
+        CLIENT_ID = cas.OAuthClientId__c;
         CLIENT_SECRET = cas.OAuthClientSecret__c;
         REDIRECT_URI = cas.OAuthClientRedirectURI__c;
         PRIVATE_KEY = cas.encryptionKey__c;
@@ -59,69 +54,82 @@ public with sharing class SfdcOAuthManager {
     
         private OAuthResponse() {}
         
-	    public String userId {get; private set;}
-	    public String userInfoUri {get; private set;}
-	    public String accessToken {get; private set;}
-	    public String instanceUrl {get; private set;}
-	    private String refreshToken {get; set {
-	            this.refreshToken = value;
-	            this.encryptedRefreshToken = ContactsAppUtil.encrypt(PRIVATE_KEY, this.refreshToken);
-	        }
-	    }
-	    
-	    public String encryptedRefreshToken {get; private set;}
-	    
-	    public void setOAuthCookies(boolean includeRefreshToken) {
-	        Cookie accessToken, refreshToken, instanceUrl;
-	        List<Cookie> oauthCookies = new List<Cookie>();
-	        
-	        if (this.accessToken != null) {
-	            oauthCookies.add(new Cookie(ACCESS_TOKEN_COOKIE, this.accessToken, null, -1, true));
-	        }
-	        if (this.instanceUrl != null) {
-	            oauthCookies.add(new Cookie(INSTANCE_URL_COOKIE, this.instanceUrl, null, -1, true));
-	        }
-	        if (includeRefreshToken && this.encryptedRefreshToken != null) {
-	            oauthCookies.add(new Cookie(REFRESH_TOKEN_COOKIE, this.encryptedRefreshToken, null, -1, true));
-	        }
-	        if (this.userInfoUri != null) {
-	            oauthCookies.add(new Cookie(USERID_COOKIE, this.userInfoUri, null, -1, true));
-	        }
-	        ApexPages.currentPage().setCookies(oauthCookies);
-	    }
-	}
-	
-	public static OAuthResponse initializeRespFromCookies() {
+        public String accessToken {get; private set;}
+        public String instanceUrl {get; private set;}
+        private String refreshToken {get; private set;}
+        public String userInfoUri {get; private set;}
+        
+        public String userId {
+            get {
+                if (this.userId == null && this.userInfoUri != null) {
+                    Integer userIdStart = this.userInfoUri.indexOf('/005');
+                    return this.userInfoUri.subString(userIdStart+1);
+                }
+                return this.userId;
+            }
+            private set;
+        }
+        
+        public String encryptedRefreshToken {
+        	get {
+        		if (this.encryptedRefreshToken == null && this.refreshToken != null) {
+        			return ContactsAppUtil.encrypt(PRIVATE_KEY, this.refreshToken);
+        		}
+        		return this.encryptedRefreshToken;
+        	}
+            private set;
+        }
+        
+        public String serialize() {
+            String jsonVal = JSON.serialize(this);
+            return EncodingUtil.base64Encode(Blob.valueOf(jsonVal));
+        }
+    }
+    
+    /**
+    * Initialize OAuthResponse from a previous serialized state
+    * @param serializedSession Serialized state of OAuthResponse
+    */
+    public static OAuthResponse initialize(String serializedSession) {
+        String jsonVal = EncodingUtil.base64Decode(serializedSession).toString();
+        return (OAuthResponse)JSON.deserialize(jsonVal, Type.forName('SfdcOAuthManager.OAuthResponse'));
+    }
+    
+    /**
+    * Initialize OAuthResponse from OAuth values provided in the map
+    * @param authValueMap Map with different OAuth values to initialize the OAuthResponse
+    */
+    public static OAuthResponse initialize(Map<String, String> authValueMap) {
         OAuthResponse authResp = new OAuthResponse();
         
-        if (ApexPages.currentPage() != null) {
-            Map<String, Cookie> cookies = ApexPages.currentPage().getCookies();
-            
-            Cookie acTkCookie = cookies.get(ACCESS_TOKEN_COOKIE);
-            Cookie instUrlCookie = cookies.get(INSTANCE_URL_COOKIE);
-            Cookie refTkCookie = cookies.get(REFRESH_TOKEN_COOKIE);
-            Cookie uInfoUriCookie = cookies.get(USERID_COOKIE);
-            
-            if (acTkCookie != null) {
-                authResp.accessToken = acTkCookie.getValue();
-            }
-            if (instUrlCookie != null) {
-                authResp.instanceUrl = instUrlCookie.getValue();
-            }
-            if (refTkCookie != null) {
-                authResp.encryptedRefreshToken = refTkCookie.getValue();
-            }
-            if (uInfoUriCookie != null) {
-                authResp.userInfoUri = uInfoUriCookie.getValue();
-                Integer userIdStart = authResp.userInfoUri.indexOf('005');
-                authResp.userId = authResp.userInfoUri.subString(userIdStart);
-            }
-        }
+        authResp.accessToken = authValueMap.get('Oauth-Acess-Token');
+        authResp.refreshToken = authValueMap.get('Oauth-Refresh-Token');
+        authResp.instanceUrl = authValueMap.get('Oauth-Instance-Url');
+        authResp.userInfoUri = authValueMap.get('Oauth-Uid-Token');
+        
         return authResp;
     }
-	
-	private static String getAccessTokenUrl() {
-        return LOGIN_URL + '/services/oauth2/token';
+    
+    private static String getLoginHostUrl(String host) {
+    	if (host != null && host.trim().length() > 0) {
+            host = host.trim().toLowerCase();
+            if (host.startsWith('http://') || host.startsWith('https://')) {
+                host = host.replaceFirst('http[s]?://', '');
+            }
+            host = host.replace('[/]*$', '');
+        }
+        
+        if (host == null || host.contains('/') || !host.endsWith('salesforce.com')) {
+            host = LOGIN_URL; 
+        } else {
+            host = 'https://' + host;
+        }
+        
+        return host;
+    }
+    
+    private static String getAccessTokenUrl(String host) {
+        return getLoginHostUrl(host) + '/services/oauth2/token';
     }
     
     private static OAuthResponse generateOAuthResponse(String jsonResp) {
@@ -139,7 +147,7 @@ public with sharing class SfdcOAuthManager {
             } else if (key == 'instance_url') {
                 oAuthResp.instanceUrl = oauthRespMap.get(key);
             } else if (key == 'id') {
-            	oAuthResp.userInfoUri = oauthRespMap.get(key);
+                oAuthResp.userInfoUri = oauthRespMap.get(key);
                 Integer userIdStart = oAuthResp.userInfoUri.indexOf('005');
                 oAuthResp.userId = oAuthResp.userInfoUri.subString(userIdStart);
             }
@@ -151,26 +159,12 @@ public with sharing class SfdcOAuthManager {
     
     public static String getAuthorizeUserUrl(String host) {
         
-        if (host != null && host.trim().length() > 0) {
-        	host = host.trim();
-        	if (host.startsWith('http://') || host.startsWith('https://')) {
-        		host = host.replaceFirst('http[s]?://', '');
-        	}
-        	host = host.replace('[/]*$', '');
-        }
-        
-        if (host == null || host.contains('/')) {
-        	host = LOGIN_URL; 
-        } else {
-        	host = 'https://' + host;
-        }
-        
-        return host + '/services/oauth2/authorize?response_type=code&display=touch&client_id=' + 
+        return getLoginHostUrl(host) + '/services/oauth2/authorize?response_type=code&display=touch&prompt=login&client_id=' + 
                CLIENT_ID + '&redirect_uri=' + REDIRECT_URI;
     }
     
     private static OAuthResponse sendOAuthRequest(HttpRequest req) {
-    	Http h = new Http();
+        Http h = new Http();
         try {
             HttpResponse res = h.send(req);
             
@@ -180,27 +174,27 @@ public with sharing class SfdcOAuthManager {
             } else {
                 JSONObject error = JSONObject.newInstance(res.getBody());
                 if (error != null) {
-                	String errorMsg = error.get('error_description').value();
-                	String errorCode = error.get('error').value();
+                    String errorMsg = error.get('error_description').value();
+                    String errorCode = error.get('error').value();
                     if ('invalid_grant'.equalsIgnoreCase(errorCode)) {
-                    	errorMsg = 'Session Expired. Please logout and relogin.';
+                        errorMsg = 'Session Expired. Please logout and relogin.';
                     }
                     throw new OAuthException(errorCode, errorMsg);
                 } else
                    throw new OAuthException('OAUTH_FAILURE', 'Failed to obtain oauth access.');
             }
         } catch (CalloutException e) {
-        	System.debug(e);
+            System.debug(e);
             throw new OAuthException('CONNECTION_FAILURE', 'Failed to connect to salesforce.');
         }
         return null;
     }
     
-    public static OAuthResponse authenticateUser(String authCode) {
+    public static OAuthResponse authenticateUser(String host, String authCode) {
         
         HttpRequest req = new HttpRequest();
         req.setMethod('POST');
-        req.setEndpoint(getAccessTokenUrl());
+        req.setEndpoint(getAccessTokenUrl(host));
         req.setTimeout(20000);
         req.setBody('grant_type=authorization_code' + 
                     '&format=json' +
@@ -212,11 +206,11 @@ public with sharing class SfdcOAuthManager {
         return sendOAuthRequest(req);
     }
     
-    private static OAuthResponse refreshAccessToken(String refreshToken) {
+    private static OAuthResponse refreshAccessToken(String host, String refreshToken) {
         
         HttpRequest req = new HttpRequest();
         req.setMethod('POST');
-        req.setEndpoint(getAccessTokenUrl());
+        req.setEndpoint(getAccessTokenUrl(host));
         req.setTimeout(20000);
         req.setBody('grant_type=refresh_token' + 
                     '&format=json' +
@@ -227,12 +221,12 @@ public with sharing class SfdcOAuthManager {
         return sendOAuthRequest(req);
     }
     
-    public static OAuthResponse refreshAccessFromEncRefToken(String encRefToken) {
+    public static OAuthResponse refreshAccessFromEncRefToken(String host, String encRefToken) {
         
         String refreshToken = ContactsAppUtil.decrypt(PRIVATE_KEY, encRefToken);
         
         if (refreshToken != null) {
-            OAuthResponse atResp = refreshAccessToken(refreshToken);
+            OAuthResponse atResp = refreshAccessToken(host, refreshToken);
             atResp.refreshToken = refreshToken;
             return atResp;
         }

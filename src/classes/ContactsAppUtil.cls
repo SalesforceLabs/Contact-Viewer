@@ -26,8 +26,8 @@
  */
 
 public with sharing class ContactsAppUtil {
-    
-    public static String encrypt(String key, String value) {
+	
+	public static String encrypt(String key, String value) {
         String encryptedValue = '';
         if (value != null) {
             Blob keyBlob = EncodingUtil.base64Decode(key);
@@ -72,8 +72,6 @@ public with sharing class ContactsAppUtil {
             }
             csv = csv.subString(0, csv.length() - 1);
         }
-        
         return csv;
     }
-
 }

@@ -1,5 +1,4 @@
-<apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactsAppController">
-<apex:outputText escape="false" value="{!'<!DOCTYPE HTML>'}"/>
+<apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactsAppController" doctype="html-5.0">
 <apex:outputText rendered="{!addManifest}" escape="false" value="{!mobileManifestHeader}"/>
 
     <title>ContactViewer</title>
@@ -15,8 +14,6 @@
                     window.location='http://appexchange.salesforce.com/listingDetail?listingId=a0N300000056pmWEAQ';
                 </script>
             </apex:outputPanel>
-            
-            <link rel="stylesheet" href="/contacts/ContactsAppAddCSS?device=mobile" />
             
         </apex:define>
     </apex:composition>

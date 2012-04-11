@@ -45,7 +45,29 @@
         <referenceTo>AppUser__c</referenceTo>
         <relationshipLabel>App Clients</relationshipLabel>
         <relationshipName>AppClients</relationshipName>
-        <type>Lookup</type>
+        <relationshipOrder>0</relationshipOrder>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Device__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( CONTAINS(UserAgent__c, &apos;iPhone&apos;)  , &apos;iPhone&apos;, 
+ IF( CONTAINS(UserAgent__c, &apos;iPad&apos;)  , &apos;iPad&apos;, 
+ IF( CONTAINS(UserAgent__c, &apos;Android&apos;)  , &apos;Android&apos;, 
+ IF( CONTAINS(UserAgent__c, &apos;PlayBook&apos;)  , &apos;PlayBook&apos;, &apos;Other&apos;))))</formula>
+        <label>Device</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Email</label>
+        <required>false</required>
+        <type>Email</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Encryption_Key__c</fullName>
@@ -92,9 +114,52 @@
         <type>DateTime</type>
     </fields>
     <fields>
+        <fullName>Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Name</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>OrganizationID__c</fullName>
+        <externalId>false</externalId>
+        <label>Organization ID</label>
+        <length>18</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Token_ID__c</fullName>
         <externalId>true</externalId>
         <label>Token ID</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>UserAgent__c</fullName>
+        <externalId>false</externalId>
+        <label>User Agent</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>UserID__c</fullName>
+        <externalId>true</externalId>
+        <label>User ID</label>
+        <length>18</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Username__c</fullName>
+        <externalId>false</externalId>
+        <label>Username</label>
         <length>255</length>
         <required>false</required>
         <type>Text</type>
@@ -105,6 +170,7 @@
         <fullName>All</fullName>
         <columns>NAME</columns>
         <columns>AppUser__c</columns>
+        <columns>Device__c</columns>
         <columns>HasPasscode__c</columns>
         <columns>Last_Login__c</columns>
         <columns>Inactive__c</columns>
@@ -118,5 +184,5 @@
     </nameField>
     <pluralLabel>App Clients</pluralLabel>
     <searchLayouts/>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
 </CustomObject>

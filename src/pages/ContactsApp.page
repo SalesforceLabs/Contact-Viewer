@@ -1,5 +1,4 @@
-<apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactsAppController">
-<apex:outputText escape="false" value="{!'<!DOCTYPE HTML>'}"/>
+<apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactsAppController" doctype="html-5.0">
 <apex:outputText rendered="{!addManifest}" escape="false" value="{!tabletManifestHeader}"/>
 
     <title>ContactViewer</title>
@@ -7,16 +6,14 @@
     <apex:composition template="MobileAppTemplate">
         <apex:define name="body">
                 
-            <c:ContactsForIPad rendered="{!isWebkit}"/>
+            <c:ContactsForIPad rendered="{!isWebkit}" />
             
             <apex:outputPanel rendered="{!!isWebkit}">
                 <script>
                     alert('This web app is currently supported for only webkit based browsers such as Chrome and Safari.'); 
-                    window.location='http://www.salesforce.com';
+                    window.location='http://appexchange.salesforce.com/listingDetail?listingId=a0N300000056pmWEAQ';
                 </script>
             </apex:outputPanel>
-            
-            <link rel="stylesheet" href="/contacts/ContactsAppAddCSS?device=tablet" />
             
         </apex:define>
     </apex:composition>

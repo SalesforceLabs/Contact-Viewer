@@ -55,7 +55,7 @@ public with sharing class ContactDetailsController extends BaseServiceController
 	}
 	
 	public ContactDetailsController() {
-        super();
+        super(System.currentPageReference().getHeaders());
     }
     
     private static List<String> getFieldNamesFromLayout(SFDCPartnerSoap.DescribeLayout layout) {
@@ -138,8 +138,6 @@ public with sharing class ContactDetailsController extends BaseServiceController
 	        	// Grab fields to query
 	        	List<String> fields = getFieldNamesFromLayout(layout);
 	        	
-	        	//System.debug(ContactsAppUtil.createCSVFromList(fields));
-	        	
 	        	if (fields != null && fields.size() > 0) {
 	        	    
 	        	    fieldInfos = getFieldInfoMap(client.describeSObjectSOAP('Contact'));
@@ -160,9 +158,7 @@ public with sharing class ContactDetailsController extends BaseServiceController
 	        	    	}
 	        	    }
 	        	    String details = client.details('Contact', cid, fields);
-	        	    //System.debug(details);
 	        	    fieldAndValues = JSONObject.newInstance(details);
-	        	    //System.debug('Parsed JSON:' + fieldAndValues.value());
 	        	}
         	}
         	
@@ -186,8 +182,6 @@ public with sharing class ContactDetailsController extends BaseServiceController
 	                    if ('reference'.equalsIgnoreCase(fieldInfo.type_x)) {
 	                    	String relName = fieldInfo.relationshipName;
 	                    	String fieldName = ('Case'.equalsIgnoreCase(fieldInfo.referenceTo[0])) ? 'Subject' : 'Name';
-	                    	//System.debug('Reference:' + relName + '.' + fieldName);
-	                    	//System.debug(fieldAndValues.get(relName).value());
 	                    	val.value = fieldAndValues.get(relName).get(fieldName).value();
 	                    	val.dataType = 'string'; // set type as string
 	                    } else {
@@ -213,7 +207,6 @@ public with sharing class ContactDetailsController extends BaseServiceController
 	            }
 	        }
         }
-        //System.debug(val.label + ':' + val.value);
         if (val.dataType != null && 
             (val.dataType.equalsIgnoreCase('boolean') ||
                 (val.value != null && val.value.length() > 0))) 

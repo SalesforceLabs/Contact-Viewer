@@ -1,20 +1,22 @@
 <apex:component >
     
-    <div id="loggedin" style="display: none; width:100%; height:100%; position:absolute; top:0px; left:0px; overflow:hidden">
+    <apex:attribute name="debug" required="false" type="boolean" default="false" description="Current mode of the app. In debug=false, scripts are returned in minified version."/>
+    
+    <div id="loggedin" style="display: none; width:100%; height:100%; position:absolute; top:0px; left:0px;">
         
         <div id="listpage">
             <div style="position:relative; height:100%; width:100%">
              <div id="header">
                  <div id="listheader" style="position:relative;">
-                      <img id="gear" src="{!URLFOR($Resource.ContactAppRsrcs, 'images/gear-small.png')}" style="float:right; margin: 12px 12px 0 0;" />
+                      <div id="gear" class="app-images" style="float:right; margin: 12px 12px 0 0; background-position: -246px 0px; width: 19px; height: 20px;" />
                       <div id="titlebar">
                           <span><span id="title">Recently Viewed</span>&nbsp;<span style="font-size: 12px;">▼</span></span>
                       </div>
                       <div id="searchbar" style="width: 100%; height: 38px; position:relative;">
                           <form>
-                              <div class="search-bg"/>
+                              <div class="app-images search-bg"/>
                               <input type="search" placeholder="Search All" style="opacity:1"/>
-                              <button id="closebutton" type="button" class="search-bg"/>
+                              <button id="closebutton" type="button" class="app-images search-bg"/>
                           </form>
                       </div>
                  </div>
@@ -39,8 +41,8 @@
         
         <div id="detailpage" style="visibility:hidden" class="detailpane transformTransition">
             <div class="header">
-                <div id="left" style="position:absolute; margin-left: 10px; top: 0px; left: 0px;">
-                    <span class="appleui back-arrow"/>
+                <div id="left" style="position:absolute; margin-left: 10px; top: 0px; left: 0px; -webkit-tap-highlight-color:rgba(0,0,0,0);">
+                    <span class="app-images appleui back-arrow"/>
                     <div class="header_button" style="border-bottom: 2px solid #206A82; background-color: #1667A5; background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.199219)), color-stop(0.6, rgba(255, 255, 255, 0)), to(transparent)); left: 12px; border-left-style: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding: 0 5px 0 0;">Back</div>
                 </div>
                 <span></span>
@@ -99,6 +101,11 @@
     <link rel="apple-touch-startup-image" href="{!URLFOR($Resource.ContactAppRsrcs, 'images/startup-sfdc-iphone.png')}"/>
 
     <link rel="stylesheet" href="{!URLFOR($Resource.ContactAppRsrcs, 'css/basicstyle.css')}" />
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.js')}"/>
+    <apex:outputPanel rendered="{!debug}">
+    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.js')}"/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!!debug}">
+    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.min.js')}"/>
+    </apex:outputPanel>
     
 </apex:component>

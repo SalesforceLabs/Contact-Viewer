@@ -80,7 +80,7 @@ var PasscodeManager = (function () {
 			
 			if ((/ipad/gi).test(navigator.platform) || windowSmallDimension > $j('#passcode table').outerHeight()) {
 				
-				props.passcodeElem.hide().css('opacity', '0').show(); 
+				props.passcodeElem.css('opacity', '0'); 
 				_positionCenter();
 				props.passcodeElem.addClass('passcodeTransition').css(vendor + 'TransitionProperty', 'opacity').css('opacity', '1');
 				props.passcodeElem.orientationChange(_positionCenter);
@@ -90,7 +90,8 @@ var PasscodeManager = (function () {
 			}
 		};
 		
-		props.passcodeElem.hide().css('opacity', '0').show('fast',  displayWidget); // Need to unhide to calculate height/width
+		props.passcodeElem.css('opacity', '0').show(); // Need to unhide to calculate height/width
+		setTimeout(displayWidget, 0);
 	};
 	
 	var _hidePasscodeInput = function() {
@@ -121,8 +122,6 @@ var PasscodeManager = (function () {
 
 		if (initialized === undefined) {
 			var buttons = props.passcodeElem.find('table td.passcode_button');
-//			var eventStartType = isTouchDevice() ? 'touchstart' : 'click';
-//			var eventEndType = isTouchDevice() ? 'touchend' : 'mouseup';
 
 			buttons.each(
 				function() {

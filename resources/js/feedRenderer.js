@@ -28,56 +28,56 @@
 var FeedPhotoRenderer = function() { this.userIds = []; }
 
 FeedPhotoRenderer.prototype.getImage = function(userId) {
-	this.userIds.push(userId);
-	return '<img class="feedImage" id="photo__' + escape(userId) + '" src="' + staticRsrcUrl + '/images/userChatterPic.png"/>';
+    this.userIds.push(userId);
+    return '<img class="feedImage app-images" id="photo__' + escape(userId) + '"/>';
 }
 
 FeedPhotoRenderer.prototype.renderImages = function(scope) {
-	if (this.userIds.length == 0) return;
-	
-	if (!scope) scope = $j(document.body);
-	if (hasChatterEnabled) {
-		sf.getUsersInfoViaApex(this.userIds, hasChatterEnabled,
-						 function(response) {
-	    					$j.each(response.records, 
-    							function () {
-    								scope.find('#photo__' + escape(this.Id)).attr('src', this.SmallPhotoUrl);
-	    						}
-		    				);
-						 }, errorCallback);
-	}
+    if (this.userIds.length == 0) return;
+    
+    if (!scope) scope = $j(document.body);
+    if (hasChatterEnabled) {
+        ManageUserSession.getApiClient().getUsersInfoViaApex(this.userIds, hasChatterEnabled,
+                         function(response) {
+                            $j.each(response.records, 
+                                function () {
+                                    scope.find('#photo__' + escape(this.Id)).removeClass('app-images').attr('src', this.SmallPhotoUrl);
+                                }
+                            );
+                         }, errorCallback);
+    }
 }
 
 function feedRenderer(records, noFeedMsg, options) {
-	var feedWrapperDiv = $j('#feedscroller #feed');
-	var feedList = feedWrapperDiv.find('ul');
-	
+    var feedWrapperDiv = $j('#feedscroller #feed');
+    var feedList = feedWrapperDiv.find('ul');
+    
     feedList.empty();
     feedWrapperDiv.find('div').remove();
     
-	if (!records || records.length == 0) {
-		feedWrapperDiv.append($j('<div style="padding-top:20px"></div>').text(noFeedMsg));
-		return;
-	}
-	
-	var photoRenderer = new FeedPhotoRenderer();
-	var fieldInfos = getFieldDescribe();
-	
-	$j.each(records,
-		function() {
-			var rec = this;
-			var type = rec.attributes.type;
-			if (type == 'ContactFeed') {
-				// add chatter item
-				generateChatterItem(rec, feedList, photoRenderer, fieldInfos, options);
-			} else if (type == 'Task') {
-				// add task item
-				generateTaskItem(rec, feedList, photoRenderer, options);
-			}
-		}
-	);
-	
-	photoRenderer.renderImages(feedList);
+    if (!records || records.length == 0) {
+        feedWrapperDiv.append($j('<div style="padding-top:20px"></div>').text(noFeedMsg));
+        return;
+    }
+    
+    var photoRenderer = new FeedPhotoRenderer();
+    var fieldInfos = getFieldDescribe();
+    
+    $j.each(records,
+        function() {
+            var rec = this;
+            var type = rec.attributes.type;
+            if (type == 'ContactFeed') {
+                // add chatter item
+                generateChatterItem(rec, feedList, photoRenderer, fieldInfos, options);
+            } else if (type == 'Task') {
+                // add task item
+                generateTaskItem(rec, feedList, photoRenderer, options);
+            }
+        }
+    );
+    
+    photoRenderer.renderImages(feedList);
 }
 
 //chatter feed renderer
@@ -85,53 +85,53 @@ function generateChatterItem(rec, parent, photoRenderer, fieldInfos, options) {
 
     var text = (rec.Body || '');
     if (rec.Type == 'TrackedChange' && rec.FeedTrackedChanges && rec.FeedTrackedChanges.records) {
-    	$j.each(rec.FeedTrackedChanges.records,
-     		function() {
-    			if (this.FieldName == 'created') text = 'created this ' + contactLabel.toLowerCase() + '.';
-    			else if (this.FieldName == 'contactUpdatedByLead') text = 'updated this ' + contactLabel.toLowerCase() + ' by converting a lead.';
-    			else if (this.FieldName == 'contactCreatedFromLead') text = 'converted a lead to this ' + contactLabel.toLowerCase() + '.';
-    			else if (this.NewValue != null || this.OldValue != null) {
-    				var fieldLabel;
-    				var fieldInfo = fieldInfos[this.FieldName.split('.')[1]]; 
-    				
-    				if (fieldInfo) fieldLabel = fieldInfo.label;
-    				else return;
-    				
-    				text = ('updated ' + fieldLabel + ' from ' + (this.OldValue || 'blank') + ' to ' + (this.NewValue || 'blank'));
-    			}
-	    	}
-     	);
+        $j.each(rec.FeedTrackedChanges.records,
+            function() {
+                if (this.FieldName == 'created') text = 'created this ' + contactLabel.toLowerCase() + '.';
+                else if (this.FieldName == 'contactUpdatedByLead') text = 'updated this ' + contactLabel.toLowerCase() + ' by converting a lead.';
+                else if (this.FieldName == 'contactCreatedFromLead') text = 'converted a lead to this ' + contactLabel.toLowerCase() + '.';
+                else if (this.NewValue != null || this.OldValue != null) {
+                    var fieldLabel;
+                    var fieldInfo = fieldInfos[this.FieldName.split('.')[1]]; 
+                    
+                    if (fieldInfo) fieldLabel = fieldInfo.label;
+                    else return;
+                    
+                    text = ('updated ' + fieldLabel + ' from ' + (this.OldValue || 'blank') + ' to ' + (this.NewValue || 'blank'));
+                }
+            }
+        );
     }
     
     if (text && text.length > 0) {
-	    var feedItemParent;
-    	if (options && options.includeParent) {
-    		feedItemParent = $j('<span style="font-weight:bold"></span>').text(rec.Parent.Name);
-	    	feedItemParent = $j('<a href="#"/>').attr('id', 'contact_' + htmlEncode(rec.Parent.Id)).append(feedItemParent);
-    		feedItemParent[0].onclick = options.onClickParent;
-	    }
-	
-		var feedBody = $j('<div class="feedBody"></div>').append(feedItemParent).append((feedItemParent) ? '&nbsp;-&nbsp;' : '')
-						.append($j('<strong></strong>').text(rec.CreatedBy.Name)).append('&nbsp;') 
-						.append($j('<span></span>').text(text)).append('<br/><span class="datetime">' +  $j.format.date(rec.CreatedDate, 'MMM dd, yyyy (at) hh:mm a') + '</span>');
-		$j('<li></li>').append(photoRenderer.getImage(rec.CreatedBy.Id)).append(feedBody).appendTo(parent);
-	}
+        var feedItemParent;
+        if (options && options.includeParent) {
+            feedItemParent = $j('<span style="font-weight:bold"></span>').text(rec.Parent.Name);
+            feedItemParent = $j('<a href="#"/>').attr('id', 'contact_' + htmlEncode(rec.Parent.Id)).append(feedItemParent);
+            feedItemParent[0].onclick = options.onClickParent;
+        }
+    
+        var feedBody = $j('<div class="feedBody"></div>').append(feedItemParent).append((feedItemParent) ? '&nbsp;-&nbsp;' : '')
+                        .append($j('<strong></strong>').text(rec.CreatedBy.Name)).append('&nbsp;') 
+                        .append($j('<span></span>').text(text)).append('<br/><span class="datetime">' +  $j.format.date(rec.CreatedDate, 'MMM dd, yyyy (at) hh:mm a') + '</span>');
+        $j('<li></li>').append(photoRenderer.getImage(rec.CreatedBy.Id)).append(feedBody).appendTo(parent);
+    }
 }
-		 
-						 
+         
+                         
 //Activity Feed renderer
 function generateTaskItem(rec, parent, photoRenderer, options) {
 
-	var feedItemParent;
+    var feedItemParent;
     if (options && options.includeParent) {
-    	feedItemParent = $j('<span style="font-weight:bold"></span>').text(rec.Who.Name);
-    	feedItemParent = $j('<a href="#"/>').attr('id', 'contact_' + htmlEncode(rec.Who.Id)).append(feedItemParent);
-    	feedItemParent[0].onclick = options.onClickParent;
+        feedItemParent = $j('<span style="font-weight:bold"></span>').text(rec.Who.Name);
+        feedItemParent = $j('<a href="#"/>').attr('id', 'contact_' + htmlEncode(rec.Who.Id)).append(feedItemParent);
+        feedItemParent[0].onclick = options.onClickParent;
     }
     
-	//var image = '<img class="feedImage" id="task_icon" src="' + staticRsrcUrl + '/images/icons/tasks.png' + '"/>';
-	var feedBody = $j('<div class="feedBody"></div>').append(feedItemParent).append((feedItemParent) ? '&nbsp;-&nbsp;' : '')
-					.append($j('<strong></strong>').text(rec.Owner.Name)).append(' ' + (rec.IsClosed ? 'completed' : 'owns') + ' the task<br/>')
-					.append($j('<span></span>').text(rec.Subject || '')).append('<br/><span class="datetime">' + (rec.ActivityDate ? 'Due on ' + $j.format.date(rec.ActivityDate, 'MMM dd, yyyy') : 'No Due Date.') + '</span>');	
+    //var image = '<img class="feedImage" id="task_icon" src="' + staticRsrcUrl + '/images/icons/tasks.png' + '"/>';
+    var feedBody = $j('<div class="feedBody"></div>').append(feedItemParent).append((feedItemParent) ? '&nbsp;-&nbsp;' : '')
+                    .append($j('<strong></strong>').text(rec.Owner.Name)).append(' ' + (rec.IsClosed ? 'completed' : 'owns') + ' the task<br/>')
+                    .append($j('<span></span>').text(rec.Subject || '')).append('<br/><span class="datetime">' + (rec.ActivityDate ? 'Due on ' + $j.format.date(rec.ActivityDate, 'MMM dd, yyyy') : 'No Due Date.') + '</span>');   
     $j('<li></li>').append(photoRenderer.getImage(rec.Owner.Id)).append(feedBody).appendTo(parent);
 }

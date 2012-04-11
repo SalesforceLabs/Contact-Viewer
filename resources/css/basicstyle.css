@@ -78,7 +78,6 @@ body a {
 
 .detailpane {
 	position: absolute; left: 0; right: 0; top:0; bottom: 0;
-	width:100%; height: 100%;
 	overflow:hidden;
 	color: rgb(42, 42, 42);
 	-webkit-box-shadow:-10px -20px 20px rgba(25, 25, 25, 0.7);
@@ -212,12 +211,12 @@ body a {
 	position:absolute; 
 	background-color: #E2E4E9; 
 	text-align: center;
+	overflow:hidden;
 }
 
 #app_settings .settings_body {
 	width: 100%; font-size: 16px; 
 	color: #2A2A2A; line-height: 30px;  
-	overflow:hidden;
 	position: absolute; top: 45px; bottom: 0;
 }
 
@@ -302,8 +301,8 @@ input[type="search"] { -webkit-appearance:none; }
 	display:none;
 }
 
-#searchbar>form>div.search-bg { background-position: 0px 0px; width: 14px; height: 15px; }
-#searchbar>form #closebutton.search-bg { background-position: -15px 0px; width: 19px; height: 19px; }
+#searchbar>form>div.search-bg { background-position: -320px 0px; width: 14px; height: 15px; }
+#searchbar>form #closebutton.search-bg { background-position: -335px 0px; width: 19px; height: 19px; }
 
 /**
  *
@@ -319,14 +318,13 @@ input[type="search"] { -webkit-appearance:none; }
 	font-size:14px;
 	color:white;
 }
-#pullDown .pullDownIcon {
+#pullDown .appleui.pullDownIcon {
 	display:block; float:left;
-	width:25px; height:35px; margin: 2px 5px;
-	-webkit-background-size:23px; background-size:23px;
+	width:23px; height:33px; margin: 2px 5px;
 	-webkit-transition-property:-webkit-transform;
 	-webkit-transition-duration:250ms;
 	-webkit-transform:rotate(0deg) translateZ(0);
-	background-position: 0px -40px;
+	background-position: -77px -80px;
 }
  
 #pullDown.flip .pullDownIcon {
@@ -337,9 +335,9 @@ input[type="search"] { -webkit-appearance:none; }
 	margin-left: 5px;
 }
 
-.appleui.back-arrow { background-position: 0px -29px; width: 12px; height: 29px; float: left; margin-top: 7px;}
-.appleui.arrow-next { background-position: 0px 0px; width: 9px; height: 13px; float: right; margin: 15px 0 0 10px;}
-.appleui.check { background-position: 0px -14px; width: 14px; height: 14px; float: right; margin: 15px 0 0 10px; }
+.appleui.back-arrow { background-position: -77px -29px; width: 12px; height: 29px; float: left; margin-top: 7px;}
+.appleui.arrow-next { background-position: -77px 0px; width: 9px; height: 13px; float: right; margin: 15px 0 0 10px;}
+.appleui.check { background-position: -77px -14px; width: 14px; height: 14px; float: right; margin: 15px 0 0 10px; }
 
 .header_button {
 	white-space: nowrap;

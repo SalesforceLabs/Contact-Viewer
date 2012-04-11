@@ -25,34 +25,58 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-//@RestResource(urlMapping='/oauth2')
+@RestResource(urlMapping='/oauth2/*')
 global with sharing class ContactsAppOAuthController {
     
-    private static final String PASS_KEY = 'pass';
-    private static final String TOKEN_ID_KEY = 'tokenId';
-    private static final String CLIENT_ID_KEY = 'clientId';
-    private static final String REF_TOKEN_KEY = 'encRefToken';
-    
-    private static final Integer MAX_FAILURE_COUNT = 5;
-    private static final Integer MIN_PASSCODE_LEN = 4;
+    /** SOME CONSTANTS TO BE USED IN THIS CLASS **/
+    private static final String PASS_KEY = 'pass'; // Key to store the passcode hash 
+    private static final String TOKEN_ID_KEY = 'tokenId'; // key to store the random token generated for user
+    private static final String INSTANCE_URL_KEY = 'instanceUrl'; // key to store the client record id 
+    private static final String REF_TOKEN_KEY = 'encRefToken'; // key to store the encrypted refresh token
+    private static final Integer MAX_FAILURE_COUNT = 5; // Maximum number of failed login attempts, i.e. wrong passcode
+    private static final Integer MIN_PASSCODE_LEN = 4; // Minimum required length of the passcode
         
-    private SfdcOAuthManager.OAuthResponse resp {get; set;}
-    public String encryptedRefreshToken {get; private set;}
-    public String clientId {get; private set;}
-    public Boolean isSuccess {get; private set;} {this.isSuccess = false;}
-    public Boolean isValidPasscode {get; private set;} {this.isValidPasscode = false;}
-    public String errorMsg {get; private set;}
-    public String errorCode {get; private set;}
-    public String username {get; private set;}
-    public String displayName {get; private set;}
-    public String instanceUrl {get; private set;}
-    public boolean eulaAccepted {get; private set;} {this.eulaAccepted = false;}
+    // API operation initiated by the user (refresh, authenticate)
+    public ApiResponse apiResp {get; private set;} { this.apiResp = new ApiResponse(); }
     
-    private AppClient__c client;
-    private AppUser__c appUser;
-    private String operation, passcode;
-    private Map<String, String> userInfo;
+    /** Class representing the API Response from this controller **/
+    global class ApiResponse {
+    	
+    	private ApiResponse() {} //Make constructor private.
+    	
+    	private Id clientId {get; set;} // Client identifier to pull the encryption key. This identifier is also sent to client side for future authentication.
+    	private String authToken {get; set;} // Encrypted token to be stored on client side for future access
+    	private String instanceUrl {get; set;}
+    	private String username {get; set;}
+    	private String displayName {get; set;}
+    	private boolean eulaAccepted {get; set;} {this.eulaAccepted = false;}
+    	private String errorCode {get; set;}
+    	private String errorMsg {get; set;}
+    	private String sessionToken {get; set;}
+    	private boolean success {get; set;} {this.success = false;} // Flag to check if request was successfull.
+    	
+    	global override String toString() {
+    		Map<String, Object> responseMap = new Map<String, Object>();
+	        responseMap.put('success', this.success);
+	        responseMap.put('clientId', this.clientId);
+	        responseMap.put('username', this.username);
+	        responseMap.put('displayName', this.displayName);
+	        responseMap.put('instanceUrl', this.instanceUrl);
+	        responseMap.put('eula', this.eulaAccepted);
+	        responseMap.put('error', this.errorMsg);
+	        responseMap.put('errorCode', this.errorCode);
+	        responseMap.put('sessionToken', this.sessionToken);
+	        
+	        if (this.authToken != null) 
+                responseMap.put('refreshToken', EncodingUtil.urlEncode(this.authToken, 'UTF-8'));
+            
+	        String respStr =  JSON.serialize(responseMap);
+	        System.debug('OAuth resp:' + respStr);
+	        return respStr;
+	    }
+    }
     
+    /** Class to handle any authentication errors **/
     private class AuthenticationException extends Exception {
     	public String errorCode {get; private set;}
     	public String message {get; private set;}
@@ -63,93 +87,154 @@ global with sharing class ContactsAppOAuthController {
     	}
     }
     
-    public ContactsAppOAuthController() {
-    	initalize();
+    /** 
+    * Handles all the API requests for OAuth based authentication
+    * Supports calls to:
+    * 1) /oauth/authenticate - To obtain access & refresh tokens using the oauth code.
+    *    Returns: JSON response containing basic user info, sessionToken for subsequent calls & refreshToken for obtaining a new sessionToken.
+    * 2) /oauth/refreshAccess - To obtain the session token given a refreshToken that was returned on /authenticate call
+    *    Returns: JSON response containing basic user info, sessionToken for subsequent calls.
+    **/
+    @HttpPost
+    global static void doPost() {
+    	
+    	ContactsAppOAuthController cont = new ContactsAppOAuthController();
+    	
+    	// Based on request type, choose the appropriate operation
+    	if (RestContext.request.requestURI.endsWith('/refreshAccess')) {
+    		cont.refreshAccess(RestContext.request);
+    		
+    	} else if (RestContext.request.requestURI.endsWith('/authenticate')) {
+    		cont.obtainAccess(RestContext.request);
+    		
+    	//To be used by only the container version of contact viewer to convert session info from container to contact viewer session
+    	} else if (RestContext.request.requestURI.endsWith('/prepareSession')) { 
+    		cont.prepareSession(RestContext.request);
+    		
+    	} else { // If none of the above operations, return a 404
+    		RestContext.response.statusCode = 404;
+    	}
+    	
+    	RestContext.response.responseBody = Blob.valueOf(cont.apiResp.toString());
+    } 
+    
+    @HttpGet
+    global static void doGet() {
+        String doAuthorize = RestContext.request.params.get('doAuthorize');
+        if (doAuthorize != null) {
+            String host = RestContext.request.params.get('host');
+            RestContext.response.statusCode = 302;
+            RestContext.response.addHeader('Location', SfdcOAuthManager.getAuthorizeUserUrl(host));
+        }
+    } 
+    
+    /**
+    * To be used by only the container version of contact viewer 
+    * to convert session info from container to contact viewer session.
+    **/
+    private void prepareSession(RestRequest req) {
+    	SessionManager sm = new SessionManager(req.headers);
+    	if (sm != null && sm.isValid()) setupResponse(sm.getOAuthResponse(), null);
     }
     
-    public void initalize() {
+    /** 
+    * Obtains a fresh user session provided a valid clientId, client side refreshToken 
+    * and the user passcode that was set during /authenticate call 
+    **/
+    private void refreshAccess(RestRequest req) {
+    	
+    	String clientId = req.params.get('cid'), 
+    	       passcode = req.params.get('pass'), 
+    	       clientSideRefToken = req.params.get('rt');
+    	
+    	System.debug('Encrypted token with Pass:' + clientSideRefToken);
         
-        String doRefresh = System.currentPageReference().getParameters().get('doRefresh');
-        if (doRefresh != null) {
-        	this.operation = 'refresh';
-        	
-        	String clientSideRefToken = System.currentPageReference().getParameters().get('rt');
-        	
-            System.debug('Encrypted token with Pass:' + clientSideRefToken);
-            
-            if (clientSideRefToken != null && clientSideRefToken.length() > 0) {
-            	
-            	try {
-	            	String encRefToken = validatePasscodeAndGetRefToken(clientSideRefToken);
-	            	
-	            	if (encRefToken != null) {
-		            	this.resp = SfdcOAuthManager.refreshAccessFromEncRefToken(encRefToken);
-		                this.resp.setOAuthCookies(true);
-		                this.isSuccess = true;
-	            	} else {
-	            		this.isSuccess = false;
-	            		this.errorMsg = 'Invalid passcode';
-	            	}
-            	} catch (AuthenticationException ae) {
-            		this.isSuccess = false;
-            		this.errorMsg = ae.message;
-            		this.errorCode = ae.errorCode;
-            	} catch (SfdcOAuthManager.OAuthException exp) {
-                    this.isSuccess = false;
-                    this.errorCode = exp.errorCode;
-                    this.errorMsg = exp.message;
-                }
-            }
-        }
+        AppClient__c client = getClientById(clientId);
         
-        String code = System.currentPageReference().getParameters().get('code');
-        if (code != null) {
-        	this.operation = 'authenticate';
-        	
-        	try {
-        	    this.resp = SfdcOAuthManager.authenticateUser(code);
+        if (client != null && clientSideRefToken != null && clientSideRefToken.length() > 0) {
             
-                if (this.resp != null) {
-	                this.client = new AppClient__c( token_id__c = String.valueOf(Crypto.getRandomLong()) );
-	                this.passcode = System.currentPageReference().getParameters().get('pass');
-	            
-	                if (this.passcode != null && this.passcode.trim().length() >= MIN_PASSCODE_LEN) {
-	            	    this.passcode = ContactsAppUtil.generateHash(this.passcode.trim());
-	            	    this.isValidPasscode = true;
-	                }
-	                this.resp.setOAuthCookies(this.isValidPasscode);
-	                this.isSuccess = true;
+            try {
+                SfdcOAuthManager.OAuthResponse oauthInfo = validateAndGetOAuthInfo(client, clientSideRefToken, passcode);
+                
+                if (oauthInfo != null) {
+                    setupResponse(oauthInfo, client);
+                } else {
+                    this.apiResp.success = false;
+                    this.apiResp.errorMsg = 'Invalid passcode';
                 }
+            } catch (AuthenticationException ae) {
+                this.apiResp.success = false;
+                this.apiResp.errorMsg = ae.message;
+                this.apiResp.errorCode = ae.errorCode;
             } catch (SfdcOAuthManager.OAuthException exp) {
-            	this.isSuccess = false;
-            	this.errorCode = exp.errorCode;
-            	this.errorMsg = exp.message;
+                this.apiResp.success = false;
+                this.apiResp.errorCode = exp.errorCode;
+                this.apiResp.errorMsg = exp.message;
             }
-        }
-        
-        if (this.isSuccess) {
-        	this.instanceUrl = this.resp.instanceUrl;
-        	
-            Http h = new Http();
-            HttpRequest req = new HttpRequest();
-            req.setHeader('Authorization', 'OAuth ' + this.resp.accessToken);
-            req.setCompressed(true);
-            req.setMethod('GET');
-            req.setEndpoint(this.resp.userInfoUri);
             
-            HttpResponse resp = h.send(req);
-            
-            if (resp.getStatusCode() == 200) {
-                this.userInfo = JSONObject.parseSimpleJson(resp.getBody());
-                this.username = this.userInfo.get('username');
-                this.displayName = this.userInfo.get('display_name');
-                System.debug(username);
-            }
+            upsertAppClient(client, req.headers.get('User-Agent'));
         }
     }
     
-    private static AppClient__c getClientById(String cId) {
-    	if (cId != null && cId.trim().length() > 0) {
+    /** 
+    * Obtains a fresh user session provided an oauth code that was returned by salesforce after oauth approval,
+    * and the user passcode that will be used to protect the refresh token for future authentication calls. 
+    **/
+    private void obtainAccess(RestRequest req) {
+    	
+    	String code = req.params.get('code'), 
+    	       passcode = req.params.get('pass'),
+    	       host = req.params.get('host');
+    	       
+    	if (code != null) {
+	            
+	        try {
+	            SfdcOAuthManager.OAuthResponse oauthInfo = SfdcOAuthManager.authenticateUser(host, code);
+	            if (oauthInfo != null) {
+	            	AppClient__c client = setupAppClient(passcode, oauthInfo);
+	                setupResponse(oauthInfo, client);
+	                upsertAppClient(client, req.headers.get('User-Agent'));
+	            }
+	        } catch (SfdcOAuthManager.OAuthException exp) {
+	            this.apiResp.success = false;
+	            this.apiResp.errorCode = exp.errorCode;
+	            this.apiResp.errorMsg = exp.message;
+	        }
+    	}
+    }
+    
+    private void setupResponse(SfdcOAuthManager.OAuthResponse oauthInfo, AppClient__c client) {
+    	this.apiResp.success = true;
+    	this.apiResp.instanceUrl = oauthInfo.instanceUrl;
+    	this.apiResp.sessionToken = oauthInfo.serialize();
+    	
+    	Map<String, String> userInfo = initializeUserInfo(oauthInfo);
+    	AppUser__c appUser = upsertAppUser(userInfo);
+    	if (appUser != null) {
+    		this.apiResp.eulaAccepted = appUser.EULA__c;
+    	    if (client != null && client.AppUser__c == null) client.AppUser__c = appUser.id;
+    	}
+    }
+    
+    /**
+    * Initialize user info after user authentication has been done.
+    **/
+    private Map<String, String> initializeUserInfo(SfdcOAuthManager.OAuthResponse oauthInfo) {
+    	
+    	BaseServiceController service = new BaseServiceController(oauthInfo);
+    	String userInfoJson = service.getApiClient().getUserInfo();
+        Map<String, String> userInfo = JSONObject.parseSimpleJson(userInfoJson);
+        this.apiResp.username = userInfo.get('username');
+        this.apiResp.displayName = userInfo.get('display_name');
+        
+        return userInfo;
+    }
+    
+    /**
+    * Query the Client info based on the provided client id.
+    **/
+    private static AppClient__c getClientById(Id cId) {
+    	if (cId != null) {
             List<AppClient__c> clients = [SELECT id, token_id__c, AppUser__c, Failure_Count__c, Encryption_Key__c FROM AppClient__c WHERE id = :cId];
             if (clients != null && !clients.isEmpty()) {
                 return clients[0];
@@ -158,65 +243,49 @@ global with sharing class ContactsAppOAuthController {
         return null;
     }
     
-    private String validatePasscodeAndGetRefToken(String clientSideString) {
+    /**
+    * Decrypt the client side ref token and validate user passcode. 
+    * If passcode is correct, return the oauth refresh token from the encrypted string.
+    **/
+    private SfdcOAuthManager.OAuthResponse validateAndGetOAuthInfo(AppClient__c client, String clientSideString, String passcode) {
     	
-    	String privatekey;
-    	this.clientId = System.currentPageReference().getParameters().get('cid');
-    	this.passcode = System.currentPageReference().getParameters().get('pass');
+    	String privatekey = (client != null) ? client.Encryption_Key__c : null;
     	
-        this.client = getClientById(this.clientId);
-        
-    	if (this.client != null) {
-            privatekey = this.client.Encryption_Key__c;
-            this.clientId = this.client.id;
-    	}
-    	
-    	if (this.client != null && privatekey != null && privatekey.length() > 0) {
+    	if (client != null && privatekey != null && privatekey.length() > 0) {
+    		
 	    	// Let's decrypt this first
 	    	String decryptedString = ContactsAppUtil.decrypt(privatekey, clientSideString);
 	        
 	        //Get all the parts
-	        Map<String, String> clientSideRefTokenParts = JSONObject.parseSimpleJson(decryptedString);
+	        Map<String, String> clientSideRefTokenParts = (Map<String, String>)JSON.deserialize(decryptedString, Map<String, String>.class);
 	        
 	        if (clientSideRefTokenParts != null && clientSideRefTokenParts.size() > 0) {
+	        	
 	        	String tokenId = clientSideRefTokenParts.get(TOKEN_ID_KEY);
 	        	String savedPasscode = clientSideRefTokenParts.get(PASS_KEY);
+	        	String instanceUrl = clientSideRefTokenParts.get(INSTANCE_URL_KEY);
 	        	String refToken = clientSideRefTokenParts.get(REF_TOKEN_KEY);
-	        	String savedClientId = clientSideRefTokenParts.get(CLIENT_ID_KEY);
 	        	
-	        	if (this.client.AppUser__c != null) {
-	        	   List<AppUser__c> appUserList = [SELECT id, EULA__c FROM AppUser__c WHERE Id = :this.client.AppUser__c];
-	                if (appUserList != null && appUserList.size() > 0) {
-		                this.appUser = appUserList[0];
-		                this.eulaAccepted = this.appUser.EULA__c;
-		            }
-	        	}
-	        	
-	            System.debug(this.client.token_id__c + ':' + tokenId);
-	            System.debug(this.clientId);
-	            
-	            if (this.client != null && (this.client.token_id__c == null || this.client.token_id__c == tokenId) && 
-	                (this.client.Failure_Count__c == null || this.client.Failure_Count__c < MAX_FAILURE_COUNT)) {
-	            	String passcodeHash = ContactsAppUtil.generateHash(this.passcode.trim());
+	            if ((client.token_id__c == null || client.token_id__c == tokenId) && 
+	                (client.Failure_Count__c == null || client.Failure_Count__c < MAX_FAILURE_COUNT)) {
+	                	
+	            	String passcodeHash = ContactsAppUtil.generateHash(passcode);
 	                if (savedPasscode != null && savedPasscode.length() > 0 
-	                    && (savedPasscode.equals(this.passcode.trim()) || savedPasscode.equals(passcodeHash))) {
-	                	this.client.Failure_Count__c = 0;
-	                    return refToken;
+	                    && (savedPasscode.equals(passcode) || savedPasscode.equals(passcodeHash))) {
+	                	client.Failure_Count__c = 0;
+	                	return SfdcOAuthManager.refreshAccessFromEncRefToken(instanceUrl, refToken);
 	                } else {
-	                	if (this.client.Failure_Count__c == null) this.client.Failure_Count__c = 0;
-	                	this.client.Failure_Count__c++;
-	                	if (this.client.Failure_Count__c == MAX_FAILURE_COUNT) {
-	                		this.client.Inactive__c = true;
-	                		this.client.Encryption_Key__c = null;
+	                	if (client.Failure_Count__c == null) client.Failure_Count__c = 0;
+	                	client.Failure_Count__c++;
+	                	if (client.Failure_Count__c == MAX_FAILURE_COUNT) {
+	                		client.Inactive__c = true;
+	                		client.Encryption_Key__c = null;
 	                	}
-	                    throw new AuthenticationException('WRONG_PASSCODE', 'Try again. Remaining attempts: ' + (MAX_FAILURE_COUNT - this.client.Failure_Count__c));
+	                    throw new AuthenticationException('WRONG_PASSCODE', 'Try again. Remaining attempts: ' + (MAX_FAILURE_COUNT - client.Failure_Count__c));
 	                }
 	            } else {
 	            	throw new AuthenticationException('INVALID_TOKEN', 'Invalid token. Please logout and relogin.');
 	            }
-	        	
-	        } else {
-	        	return clientSideString;
 	        }
     	} else {
     		throw new AuthenticationException('INVALID_TOKEN', 'Authentication Failure. Please relogin.');
@@ -225,66 +294,73 @@ global with sharing class ContactsAppOAuthController {
         return null;   
     }
     
-    public PageReference loadPage() {
+    /**
+    * Perform required post authentication operations to update the client info in database 
+    * and create encrypted client side refresh token. 
+    **/
+    private AppClient__c setupAppClient(String passcode, SfdcOAuthManager.OAuthResponse oauthInfo) {
+    	    
+        AppClient__c client = new AppClient__c( token_id__c = String.valueOf(Crypto.getRandomLong()) );
         
-        String doAuthorize = System.currentPageReference().getParameters().get('doAuthorize');
-        if (doAuthorize != null) {
-        	String host = System.currentPageReference().getParameters().get('host');
-            return new PageReference(SfdcOAuthManager.getAuthorizeUserUrl(host));
-        } else if (this.operation == 'refresh' && this.client != null) {
-        	upsertClientAndUser(); 
-        } else if (this.operation == 'authenticate' && this.isSuccess) {
+        System.debug('Checking valid passcode: ' + passcode);
+        if (passcode != null && passcode.trim().length() >= MIN_PASSCODE_LEN) {
+        	
+            String clientSideRefToken = JSON.serialize(new Map<String, String> {
+                PASS_KEY => ContactsAppUtil.generateHash(passcode.trim()), 
+                TOKEN_ID_KEY => client.token_id__c,
+                INSTANCE_URL_KEY => oauthInfo.instanceUrl,
+                REF_TOKEN_KEY => oauthInfo.encryptedRefreshToken
+            });
             
-            upsertClientAndUser();
-            this.clientId = this.client.Id;
-            
-            if (this.isValidPasscode) {
-	            String clientSideRefToken = JSONObject.createSimpleJson(new Map<String, String> {
-	                PASS_KEY => this.passcode, 
-	                TOKEN_ID_KEY => this.client.token_id__c,
-	                CLIENT_ID_KEY => this.client.id, 
-	                REF_TOKEN_KEY => this.resp.encryptedRefreshToken
-	            });
-	            
-	            this.client.Encryption_Key__c = EncodingUtil.base64Encode(Crypto.generateAesKey(128));
-	            this.encryptedRefreshToken = ContactsAppUtil.encrypt(this.client.Encryption_Key__c, clientSideRefToken);
-	            
-	            update new AppClient__c[]{this.client};
-            }
+            client.Encryption_Key__c = EncodingUtil.base64Encode(Crypto.generateAesKey(128));
+            this.apiResp.authToken = ContactsAppUtil.encrypt(client.Encryption_Key__c, clientSideRefToken);
         }
         
-        return null;
+        return client;
     }
     
-    
-    private void upsertClientAndUser() {
+    /**
+    * Log user and client info in the database.
+    **/
+    private AppUser__c upsertAppUser(Map<String, String> userInfo) {
     	
-    	if (this.userInfo != null) {
+    	AppUser__c appUser = null;
+    	
+    	if (userInfo != null) {
     		
-    		String userId = this.userInfo.get('user_id');
-    		String orgId = this.userInfo.get('organization_id');
+    		String userId = userInfo.get('user_id');
+    		String orgId = userInfo.get('organization_id');
     		
-    		if (this.appUser == null) {
-    			List<AppUser__c> users = [SELECT Eula__c FROM AppUser__c where UserID__c = :userId AND OrganizationID__c = :orgId];
-    			if (users != null && !users.isEmpty()) {
-    				this.appUser = users[0];
-    				this.eulaAccepted = this.appUser.EULA__c;
-    			} else {
-    			    this.appUser = new AppUser__c();
-    			}
-    		}
+    		List<AppUser__c> users = [SELECT Eula__c FROM AppUser__c where UserID__c = :userId AND OrganizationID__c = :orgId];
+			if (users != null && !users.isEmpty()) {
+				appUser = users[0];
+			} else {
+			    appUser = new AppUser__c();
+			}
     		
-	    	this.appUser.Name = this.userInfo.get('display_name');
-	        this.appUser.UserID__c = userId;
-	    	this.appUser.OrganizationID__c = orgId;
+	    	appUser.Name = userInfo.get('display_name');
+	    	appUser.Username__c = userInfo.get('username');
+	        appUser.UserID__c = userId;
+	    	appUser.OrganizationID__c = orgId;
+	        appUser.Email__c = userInfo.get('email');
 	        
-	        upsert new AppUser__c[] { this.appUser };
-	        
-	        this.client.AppUser__c = this.appUser.id;
-	        this.client.Last_Login__c = DateTime.now();
+	        upsert new AppUser__c[] { appUser };
     	}
-        
-        upsert new AppClient__c[]{this.client};
+        return appUser;
+    }
+    
+    private AppClient__c upsertAppClient(AppClient__c client, String userAgent) {
+    	
+        if (client != null) {
+        	client.UserAgent__c = (userAgent != null) ? userAgent.substring(0, Math.min(255, userAgent.length())) : null;
+            upsert new AppClient__c[]{client};
+            
+            if (this.apiResp.success)
+               upsert new AppLogin__c[]{new AppLogin__c(AppClient__c = client.Id)};
+            
+            this.apiResp.clientId = client.Id;
+        }
+        return client;
     }
 
 }

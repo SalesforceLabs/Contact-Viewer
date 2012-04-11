@@ -3,7 +3,7 @@
         <div id="header" class="header">
             <div id="title" style="width: 100%; ">Settings</div>
             <div id="left" style="position:absolute; margin-left: 10px; top: 0px; left: 0px; display: none;">
-                <span class="appleui back-arrow"/>
+                <span class="app-images appleui back-arrow"/>
                 <div class="header_button" style="border-bottom: 2px solid #206A82; background-color: #1667A5; background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.199219)), color-stop(0.6, rgba(255, 255, 255, 0)), to(transparent)); left: 12px; border-left-style: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding-left: 0px;">Contact Viewer Settings</div>
             </div>
             <div id="done" style="margin-right: 10px; right: 0px; display: block;" class="header_button">Done</div>
@@ -25,12 +25,12 @@
 	                <tbody><tr><td id="hostType" style="border-bottom: 1px solid silver;">
 	                    <div style="font-weight: bold; float: left;  padding-left: 10px;">Login Host</div>
 	                    <div style="color: #395483; float: right; padding-right: 10px;">
-	                       <span id="name"></span><span class="appleui arrow-next"/>
+	                       <span id="name"></span><span class="app-images appleui arrow-next"/>
 	                    </div>
 	                </td></tr><tr><td id="host_url" style="text-align: left;font-weight: bold;  padding:0 10px;">
 	                    <form>
 	                    <div style="float: left; width: 110px;">Custom Host</div>
-                        <div style="margin-left: 110px; margin-right: 10px;"><input style="margin: 10px 0; font-size: 15px; border: none;  color: #395483; -webkit-appearance:none; width: 100%" type="text"/></div>
+                        <div style="margin-left: 110px; margin-right: 10px;"><input style="margin: 10px 0; font-size: 15px; border: none;  color: #395483; -webkit-appearance:none; width: 100%; text-align: right; -webkit-tap-highlight-color:rgba(0,0,0,0);" type="text"/></div>
                         </form>	                    
 	                </td></tr></tbody>
 	            </table>
@@ -38,11 +38,11 @@
 	            <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">Help</div>
                 <table id="help" style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
                     <tbody><tr><td id="help_about" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
-                        About Contact Viewer<span class="appleui arrow-next"/>
+                        About Contact Viewer<span class="app-images appleui arrow-next"/>
                     </td></tr><tr><td id="help_faq" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
-                        FAQ<span class="appleui arrow-next"/>
+                        FAQ<span class="app-images appleui arrow-next"/>
                     </td></tr><tr><td id="help_eula" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
-                        End User License Agreement<span class="appleui arrow-next"/>
+                        End User License Agreement<span class="app-images appleui arrow-next"/>
                     </td></tr><tr><td id="help_ask" style="text-align: left; font-weight: bold;  padding-left: 10px;">
                         <a href="http://success.salesforce.com/answers" style="color: #2A2A2A;" target="_blank">
                         <div style="font-weight: bold; float: left; padding-right:10px;">Ask the Community</div>
@@ -58,7 +58,7 @@
                 <div class="content">
                 <table style="margin-top: 20px; width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
                     <tbody><tr><td id="host_production" style="border-bottom: 1px solid silver; text-align: left; padding: 0 10px; font-weight: bold;">
-                        <span>Production</span><span id="check" class="appleui check"/>
+                        <span>Production</span><span id="check" class="app-images appleui check"/>
                     </td></tr><tr><td id="host_sandbox" style="border-bottom: 1px solid silver; text-align: left; padding: 0 10px; font-weight: bold;">
                         <span>Sandbox</span>
                     </td></tr><tr><td id="host_custom" style="text-align: left; padding: 0 10px; font-weight: bold;">
@@ -69,7 +69,7 @@
             </div>
             <div id="about" class="page" style="visibility:hidden">
                 <div style="padding-top: 20px; line-height: 18px; font-size: 14px;" class="content">
-                    <img id="check" src="{!URLFOR($Resource.ContactAppRsrcs, 'images/flask.png')}" style="float:left; padding: 0px 10px 0 0;" height="100px"/>
+                    <div id="flaskImg" class="app-images" style="float:left; padding: 0px 10px 0 0; background-position: -549px 0px; width: 81px; height: 100px;"/>
                     <span>
                     Contact Viewer is a free open-source app from Force.com Labs. Contact Viewer is the easiest way to browse your Contacts in any Salesforce environment and see the related activity feed.<br/><br/>
                     Force.com Labs is a program that enables salesforce.com engineers, professional services staff, and other salesforce.com employees to share applications they've created with the salesforce.com customer community. Inspired by employees' work with customers of all sizes and industries, these apps range from simple utilities to entire vertical solutions.<br/><br/>

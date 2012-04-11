@@ -24,72 +24,77 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
- 
-function checkLocalStorage()
-{
-    if (typeof(localStorage) == 'undefined') {
-        return false;
+
+var StorageManager = (function() { 
+
+    return {
+        checkLocalStorage: function()
+        {
+            if (typeof(localStorage) == 'undefined') {
+                return false;
+            }
+            return true;
+        },
+        
+        checkSessionStorage: function()
+        {
+            if (typeof(sessionStorage) == 'undefined') {
+                return false;
+            }
+            return true;
+        },
+         
+        clearAll: function()
+        {
+            if (this.checkLocalStorage()) {
+                localStorage.clear();
+            }
+            if (this.checkSessionStorage()) {
+                sessionStorage.clear();
+            }
+        },
+         
+         
+        setLocalValue: function(key, value)
+        {
+            if (this.checkLocalStorage()) {
+                localStorage.setItem(key, value);
+            }
+        },
+        
+        getLocalValue: function(key)
+        {
+            if (this.checkLocalStorage()) {
+                return localStorage.getItem(key);
+            }
+        },
+         
+        clearLocalValue: function(key)
+        {
+            if (this.checkLocalStorage()) {
+                localStorage.removeItem(key);
+            }
+        },
+        
+        setSessionValue: function(key, value)
+        {
+            if (this.checkSessionStorage()) {
+                sessionStorage.setItem(key, value);
+            }
+        },
+        
+        getSessionValue: function(key)
+        {
+            if (this.checkSessionStorage()) {
+                return sessionStorage.getItem(key);
+            }
+        },
+         
+        clearSessionValue: function(key)
+        {
+            if (this.checkSessionStorage()) {
+                sessionStorage.removeItem(key);
+            }
+        }
     }
-    return true;
-}
-
-function checkSessionStorage()
-{
-    if (typeof(sessionStorage) == 'undefined') {
-        return false;
-    }
-    return true;
-}
- 
-function clearAll()
-{
-	if (checkLocalStorage()) {
-	    localStorage.clear();
-	}
-	if (checkSessionStorage()) {
-		sessionStorage.clear();
-	}
-}
- 
- 
-function setLocalValue(key, value)
-{
-	if (checkLocalStorage()) {
-		localStorage.setItem(key, value);
-	}
-}
-
-function getLocalValue(key)
-{
-	if (checkLocalStorage()) {
-		return localStorage.getItem(key);
-	}
-}
- 
-function clearLocalValue(key)
-{
-	if (checkLocalStorage()) {
-		localStorage.removeItem(key);
-	}
-}
-
-function setSessionValue(key, value)
-{
-	if (checkSessionStorage()) {
-		sessionStorage.setItem(key, value);
-	}
-}
-
-function getSessionValue(key)
-{
-	if (checkSessionStorage()) {
-		return sessionStorage.getItem(key);
-	}
-}
- 
-function clearSessionValue(key)
-{
-	if (checkSessionStorage()) {
-		sessionStorage.removeItem(key);
-	}
-}
+})();

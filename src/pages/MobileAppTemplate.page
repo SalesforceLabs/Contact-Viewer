@@ -1,4 +1,4 @@
-<apex:page showHeader="false"  standardStylesheets="false" cache="false">
+<apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactsAppController">
 
 <!-- 
  * Copyright (c) 2011, salesforce.com <http://salesforce.com> , inc.
@@ -30,11 +30,10 @@
     <script>
         var siteUrl = '{!$Site.CurrentSiteUrl}';
         if (Math.min(window.screen.availHeight, window.screen.availWidth) < 500) {
-            if (!(/\/ContactsAppMobile\/?$/).test(window.location.pathname) && window.location.search.length == 0)
-                window.location = siteUrl + 'ContactsAppMobile';
-        } else {
-            if (window.location.pathname != '{!$Site.Prefix}' && window.location.pathname != '{!$Site.Prefix}/' && window.location.search.length == 0)
-                window.location = siteUrl;
+            if (!(/\/ContactsAppMobile\/?$/).test(window.location.pathname))
+                window.location = siteUrl + 'ContactsAppMobile' + window.location.search;
+        } else if (window.location.pathname.match('{!$Site.Prefix}/?$') == null) {
+            window.location = siteUrl;
         }
     </script>
     
@@ -46,22 +45,40 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no"/>
     
+    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}"/>
+    <apex:outputPanel rendered="{!debug}">
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/applib.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/appSettings.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/manageUserSession.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/listViewManager.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/splitViewManager.js')}"/>
+	    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/feedRenderer.js')}"/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!!debug}">
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.min.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-plugins.min.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/appCommon.min.js')}"/>
+    </apex:outputPanel>
+    
     <body style="background-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/bg.png')}'); width:100%; height:100%">
         <apex:insert name="body"/>
         <c:PasscodeManager />
-        <div id="cache_update" style="position:absolute; bottom:0; width:100%; height:40px; line-height:40px; color:white; font-size:14px; font-weight:bold; text-align:center; background-color:rgb(180,0,0); display:none;">
-        </div>
     </body>
     
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.6.1.min.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/applib.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ContactAppRsrcs, 'js/appSettings.js')}"/>
+    <style type="text/css">
+        .app-images { background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/all-images.png')}'); }
+        #searchbar>form { -webkit-border-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/search/border.png')}') 0 17 0 17; }
+        .cellselected { background-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/leftgradient.png')}'); color: white; }
+        #pullDown.loading .pullDownIcon { background:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/loading.gif')}') 0 0 no-repeat; margin: 5px 5px; }
+        #listpage #listheader{ background:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/titlebar_bk.png')}'); }
+        #app_settings .cellselected{ background:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/CellSelection.png')}'); color: white; }
+    </style>
     
     <script>
         var staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
@@ -69,9 +86,9 @@
         
         document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
         
-        if ('standalone' in navigator && !navigator.standalone && (/iphone|ipod|ipad/gi).test(navigator.platform) && (/Safari/i).test(navigator.appVersion) && location.search.length == 0) {
-            document.write('<link rel="stylesheet" href="{!URLFOR($Resource.ContactAppRsrcs, 'css/add2home.css')}">');
-            document.write('<script type="application\/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/add2home.js')}"><\/script>');
+        if ('standalone' in navigator && !navigator.standalone && (/iphone|ipod|ipad/gi).test(navigator.platform) && (/Safari/i).test(navigator.appVersion)) {
+            document.write('<link rel="stylesheet" href="' + staticRsrcUrl + '/css/add2home.css">');
+            document.write('<script type="application\/javascript" src="' + staticRsrcUrl + '/js/add2home.js"><\/script>');
         }
         
         function checkCacheAndPrepareSession() {
@@ -90,10 +107,10 @@
                         location.reload();
                         break;
                     default:
-                        prepareSession();
+                        prepareSession(true);
                 }
             } else {
-                prepareSession();
+                prepareSession(true);
             }
         }
         

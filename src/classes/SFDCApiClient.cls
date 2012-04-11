@@ -61,11 +61,12 @@ public with sharing class SFDCApiClient {
 		if (resp.getStatusCode() == 200) {
 			this.requestRetryCount = 0;
 			return resp.getBody();
-		} else if (resp.getStatusCode() == 401) {
-			if (this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
-			    this.sm.refreshSession();
-			    makeRequest(req);
-			}
+		} else if (resp.getStatusCode() == 302 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
+            req.setEndpoint(resp.getHeader('Location'));
+            return makeRequest(req);
+		} if (resp.getStatusCode() == 401 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
+		    this.sm.refreshSession();
+		    return makeRequest(req);
 		} else if (resp.getStatusCode() == 403) {
 			throw new ApiException('NO_API_ACCESS', 'API is not accessible to current user.');
 		}

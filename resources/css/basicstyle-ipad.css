@@ -106,15 +106,15 @@ body a {
 
 #detailpage #leftnav div.dsIcons { margin-bottom: 15px; margin-left: 18px; }
 
-#detailpage #leftnav div#info.dsIcons {  background-position: 0 0; width: 38px; height: 37px; }
-#detailpage #leftnav div#rss.dsIcons {  background-position: -43px 0; width: 38px; height: 37px; }
-#detailpage #leftnav div#chatter.dsIcons {  background-position: -86px 0; width: 38px; height: 37px; }
-#detailpage #leftnav div#salesforce.dsIcons {  background-position: -129px 0; width: 38px; height: 37px; }
+#detailpage #leftnav div#info.dsIcons {  background-position: -640px 0px; width: 38px; height: 37px; }
+#detailpage #leftnav div#rss.dsIcons {  background-position: -683px 0; width: 38px; height: 37px; }
+#detailpage #leftnav div#chatter.dsIcons {  background-position: -726px 0; width: 38px; height: 37px; }
+#detailpage #leftnav div#salesforce.dsIcons {  background-position: -769px 0; width: 38px; height: 37px; }
 
-#detailpage #leftnav div#info.selected {  background-position: 0 -42px; }
-#detailpage #leftnav div#rss.selected {  background-position: -43px -42px; }
-#detailpage #leftnav div#chatter.selected {  background-position: -86px -42px; }
-#detailpage #leftnav div#salesforce.selected {  background-position: -129px -42px; }
+#detailpage #leftnav div#info.selected {  background-position: -640px -42px; }
+#detailpage #leftnav div#rss.selected {  background-position: -683px -42px; }
+#detailpage #leftnav div#chatter.selected {  background-position: -726px -42px; }
+#detailpage #leftnav div#salesforce.selected {  background-position: -769px -42px; }
 
 #detailpage #detail #summary #call_contact a>div { margin: 10px 20px; float: left; }
 #detailpage #detail #summary #call_contact a#email>div { background-position: 0 0; width: 40px; height: 46px; }
@@ -122,8 +122,8 @@ body a {
 #detailpage #detail #summary #call_contact a#facetime>div { background-position: 0 -102px; width: 61px; height: 46px; }
 #detailpage #detail #summary #call_contact a#directions>div { background-position: 0 -153px; width: 67px; height: 46px; }
 
-#listpage #footer>div#home { background-position: 0 0; width: 35px; height: 35px; }
-#listpage #footer>div#gear { background-position: -40px 0; width: 33px; height: 33px; }
+#listpage #footer>div#home { background-position: -163px 0; width: 35px; height: 35px; }
+#listpage #footer>div#gear { background-position: -203px 0; width: 33px; height: 33px; }
 
 
 .detailpane {
@@ -142,6 +142,7 @@ body a {
 .header {
 /*	position:absolute; z-index:2;
 	top:0;*/
+	position: relative;
 	width:100%;
 	height:45px;
 	line-height:45px;
@@ -229,7 +230,7 @@ body a {
 	padding-left: 20px;
 	height:40px;
 	line-height:40px;
-	font-size:14px; overflow: hidden;
+	font-size:14px; overflow: hidden; text-overflow: ellipsis;
 	border-top: 1px solid rgba(225, 225, 225, 0.2);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 }
@@ -277,6 +278,8 @@ body a {
 .feedImage {
 	float: left;
 	-webkit-border-radius: 5px;
+	width:64px; height:64px;
+	background-position: -364px 0px;
 }
 
 .feedBody {
@@ -291,7 +294,7 @@ body a {
 #app_settings {
 	width: 540px; font-size: 16px; position:absolute; 
 	background-color: #E2E4E9; text-align: center; 
-	-webkit-border-radius: 5px;
+	-webkit-border-radius: 5px; overflow: hidden;
 }
 
 @media only screen and (min-height: 576px) {
@@ -310,7 +313,6 @@ body a {
 	width: 100%; font-size: 16px; 
 	color: #2A2A2A; line-height: 30px;  
 	position:absolute; top: 45px; bottom: 0;
-	overflow:hidden;
 }
 
 #app_settings .settings_body .page {
@@ -399,14 +401,14 @@ input[type="search"] { -webkit-appearance:none; }
 	display:none;
 }
 
-#searchbar>form>div.search-bg { background-position: 0px 0px; width: 14px; height: 15px; }
-#searchbar>form #closebutton.search-bg { background-position: -15px 0px; width: 19px; height: 19px; }
+#searchbar>form>div.search-bg { background-position: -320px 0px; width: 14px; height: 15px; }
+#searchbar>form #closebutton.search-bg { background-position: -335px 0px; width: 19px; height: 19px; }
 
 .rc_div { width: 10px; height: 10px; position: absolute; }
-.rc_top_left { top: 0; left: 0; background-position: 0px 0px; }
-.rc_top_right { top: 0; right: 0; background-position: -10px 0px; }
-.rc_bottom_left { bottom: 0; left: 0; background-position: 0px -10px; }
-.rc_bottom_right { bottom: 0; right: 0; background-position: -10px -10px; }
+.rc_top_left { top: 0; left: 0; background-position: -133px 0px; }
+.rc_top_right { top: 0; right: 0; background-position: -143px 0px; }
+.rc_bottom_left { bottom: 0; left: 0; background-position: -133px -10px; }
+.rc_bottom_right { bottom: 0; right: 0; background-position: -143px -10px; }
 
 /**
  *
@@ -422,14 +424,13 @@ input[type="search"] { -webkit-appearance:none; }
 	font-size:14px;
 	color:white;
 }
-#pullDown .pullDownIcon {
+#pullDown .appleui.pullDownIcon {
 	display:block; float:left;
-	width:25px; height:35px; margin: 2px 5px;
-	-webkit-background-size:23px; background-size:23px;
+	width:23px; height:33px; margin: 2px 5px;
 	-webkit-transition-property:-webkit-transform;
 	-webkit-transition-duration:250ms;
 	-webkit-transform:rotate(0deg) translateZ(0);
-	background-position: 0px -40px;
+	background-position: -77px -80px;
 }
  
 #pullDown.flip .pullDownIcon {
@@ -440,9 +441,9 @@ input[type="search"] { -webkit-appearance:none; }
 	margin-left: 5px;
 }
 
-.appleui.back-arrow { background-position: 0px -29px; width: 12px; height: 29px; float: left; margin-top: 7px;}
-.appleui.arrow-next { background-position: 0px 0px; width: 9px; height: 13px; float: right; margin: 15px 0 0 10px;}
-.appleui.check { background-position: 0px -14px; width: 14px; height: 14px; float: right; margin: 15px 0 0 10px; }
+.appleui.back-arrow { background-position: -77px -29px; width: 12px; height: 29px; float: left; margin-top: 7px;}
+.appleui.arrow-next { background-position: -77px 0px; width: 9px; height: 13px; float: right; margin: 15px 0 0 10px;}
+.appleui.check { background-position: -77px -14px; width: 14px; height: 14px; float: right; margin: 15px 0 0 10px; }
 
 .header_button {
 /*	-webkit-border-radius: 3px;
@@ -462,21 +463,35 @@ input[type="search"] { -webkit-appearance:none; }
 	color: white; font-size: 12px; font-weight: bold;
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.3)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent));
 	line-height: 26px;
-	position: absolute; top: 7px;
+	position: absolute; top: 0px;
+	margin-top: 7px;
 	border: 1px solid #206A82;
 	padding: 0 10px;
 	border-top: 2px solid #206A82;
 }
 
+#detail #summary dl {
+	max-width: 30%; margin: 0px; padding: 20px 15px; 
+	border-right: 1px solid #206A82; 
+	-webkit-box-flex: 1;
+}
+
 #detail #summary .fieldLbl {
 	font-size: 12px;
-	white-space: nowrap;
+	white-space: nowrap; margin: 0px;
+	overflow: hidden; text-overflow: ellipsis;
 }
 
 #detail #summary .fieldVal {
 	font-weight: bold;
 	font-size: 17px;
-	white-space: nowrap;
+	white-space: nowrap; margin: 0px;
+	overflow: hidden; text-overflow: ellipsis;
+}
+
+#detail #summary #photo_div #userImg {
+	width: 101px; height: 98px;
+	background-position: -438px 0px;
 }
 
 #detail #info table td {
@@ -518,10 +533,10 @@ input[type="search"] { -webkit-appearance:none; }
         height: 700px;
         -webkit-transition: opacity 200ms linear; opacity: 1;
     }
-    .popover-view.up {
+    .appleui.popover-view.up {
         width: 37px; height: 20px;
         -webkit-transform: translate3d(40px, 40px, 0px); 
-        background-position: 0px -59px;
+        background-position: -77px -59px;
     }
     #listpage {
        -webkit-transform: translate3d(20px, 58px, 0); 

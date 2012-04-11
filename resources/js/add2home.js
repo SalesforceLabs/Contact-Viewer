@@ -1,17 +1,8 @@
-/**
- * 
- * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *
- * Copyright (c) 2011 Matteo Spinelli, http://cubiq.org/
- * Released under MIT license
- * http://cubiq.org/dropbox/mit-license.txt
- * 
- * Version 1.0.7 - Last updated: 2011.05.24
- * 
- * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * 
+/*!
+ * Add to Homescreen v1.0.8 ~ Copyright (c) 2011 Matteo Spinelli, http://cubiq.org
+ * Released under MIT license, http://cubiq.org/license
  */
-;(function(){
+(function(){
 var nav = navigator,
 	isIDevice = (/iphone|ipod|ipad/gi).test(nav.platform),
 	isIPad = (/ipad/gi).test(nav.platform),
@@ -22,8 +13,9 @@ var nav = navigator,
 	OSVersion = nav.appVersion.match(/OS \d+_\d+/g),
 	platform = nav.platform.split(' ')[0],
 	language = nav.language.replace('-', '_'),
-	startY = startX = 0,
-	expired = localStorage.getItem('_addToHome'),
+	startY = 0,
+	startX = 0,
+	expired = 'localStorage' in window && typeof localStorage.getItem === 'function' ? localStorage.getItem('_addToHome') : null,
 	theInterval, closeTimeout, el, i, l,
 	options = {
 		animationIn: 'drop',		// drop || bubble || fade
@@ -45,6 +37,7 @@ var nav = navigator,
 		el_gr: 'Εγκαταστήσετε αυτήν την Εφαρμογή στήν συσκευή σας %device: %icon μετά πατάτε <strong>Προσθήκη σε Αφετηρία</strong>.',
 		en_us: 'Install this web app on your %device: tap %icon and then <strong>Add to Home Screen</strong>.',
 		es_es: 'Para instalar esta app en su %device, pulse %icon y seleccione <strong>Añadir a pantalla de inicio</strong>.',
+		fi_fi: 'Asenna tämä web-sovellus laitteeseesi %device: paina %icon ja sen jälkeen valitse <strong>Lisää Koti-valikkoon</strong>.',
 		fr_fr: 'Ajoutez cette application sur votre %device en cliquant sur %icon, puis <strong>Ajouter à l\'écran d\'accueil</strong>.',
 		he_il: '<span dir="rtl">התקן אפליקציה זו על ה-%device שלך: הקש %icon ואז <strong>הוסף למסך הבית</strong>.</span>',
 		hu_hu: 'Telepítse ezt a web-alkalmazást az Ön %device-jára: nyomjon a %icon-ra majd a <strong>Főképernyőhöz adás</strong> gombra.',
@@ -79,9 +72,12 @@ if (!options.expire || expired < new Date().getTime()) {
 }
 
 /* Bootstrap */
-if (hasHomescreen && !expired && !isStandalone && isSafari) {
-	document.addEventListener('DOMContentLoaded', ready, false);
-	window.addEventListener('load', loaded, false);
+var addToHomeLaunch = function() {
+	if (hasHomescreen && !expired && !isStandalone && isSafari) {
+		//document.addEventListener('DOMContentLoaded', ready, false);
+		//window.addEventListener('load', loaded, false);
+		ready(); loaded();
+	}
 }
 
 
@@ -151,7 +147,7 @@ function loaded () {
 		startX = isIPad ? window.scrollX : Math.round((window.innerWidth - el.offsetWidth)/2) + window.scrollX;
 
 		el.style.top = isIPad ? startY + options.bottomOffset + 'px' : startY - el.offsetHeight - options.bottomOffset + 'px';
-		el.style.left = isIPad ? startX + 208 - Math.round(el.offsetWidth/2) + 'px' : startX + 'px';
+		el.style.left = isIPad ? startX + (OSVersion >=5 ? 160 : 208) - Math.round(el.offsetWidth/2) + 'px' : startX + 'px';
 
 		switch (options.animationIn) {
 			case 'drop':
@@ -211,11 +207,9 @@ function setPosition () {
 
 	clearInterval(theInterval);
 	el.removeEventListener('webkitTransitionEnd', transitionEnd, false);
-//	el.style.webkitTransitionDuration = '0';
 
 	setTimeout(function () {
 		el.addEventListener('webkitTransitionEnd', transitionEnd, false);
-//		el.style.webkitTransitionDuration = '0.2s';
 		el.style.webkitTransform = 'translate3d(' + posX + 'px,' + posY + 'px,0)';
 	}, 0);
 }
@@ -268,6 +262,7 @@ function addToHomeClose () {
 	el.style.webkitTransform = 'translate3d(' + posX + 'px,' + posY + 'px,0)';
 }
 
-/* Public function */
-window.addToHomeClose = addToHomeClose;
+/* Public functions */
+window.addToHomeLaunch = addToHomeLaunch;	
+window.addToHomeClose = addToHomeClose;	
 })();

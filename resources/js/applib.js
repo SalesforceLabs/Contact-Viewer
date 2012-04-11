@@ -48,9 +48,14 @@ if (sforce.Client === undefined) {
      *                  PhoneGap etc
      * @constructor
      */
-    sforce.Client = function() {}
+    sforce.Client = function() {
+    	this.sessionHeader = null;
+    	
+    	this.SESSION_HEADER = 'App-Session';
+    }
     
     sforce.Client.prototype.ajax = function(type, url, data, success, error, complete) {
+    	var that = this;
     	$j.ajax({
             type: type,
             url: url,
@@ -59,8 +64,24 @@ if (sforce.Client === undefined) {
             dataType: 'json',
             success: success,
             error: error,
-            complete: complete
+            complete: complete,
+            beforeSend: function(xhr) {
+            	if (that.sessionHeader)
+	                xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
+            }
         });
+    }
+    
+    sforce.Client.prototype.setSessionHeader = function(token) {
+    	this.sessionHeader = token;
+    }
+    
+	/**
+     * Get OAuth authorize URL.
+     * @param host Instance against which authentication needs to be performed
+     */
+    sforce.Client.prototype.getAuthorizeUrl = function(host) {
+        return getBaseUrl() + '/services/apexrest/oauth2/?doAuthorize&host=' + host;
     }
 
     /**
@@ -69,9 +90,8 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.refreshAccessToken = function(passcode, clientId, refToken, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppOAuth';
-        this.ajax('GET', url, 'doRefresh=true&rt='+refToken+'&pass='+passcode+'&cid='+clientId, success, error, complete);
+        var url = getBaseUrl() + '/services/apexrest/oauth2/refreshAccess';
+        this.ajax('POST', url, 'rt='+refToken+'&pass='+passcode+'&cid='+clientId, success, error, complete);
     }
     
     /**
@@ -79,10 +99,21 @@ if (sforce.Client === undefined) {
      * @param success function to call on success
      * @param error function to call on failure
      */
-    sforce.Client.prototype.obtainAccessToken = function(passcode, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppOAuth' + location.search;
-        this.ajax('GET', url, (passcode) ? ('pass='+passcode) : '', success, error, complete);
+    sforce.Client.prototype.obtainAccessToken = function(host, authCode, passcode, success, error, complete) {
+        var url = getBaseUrl() + '/services/apexrest/oauth2/authenticate';
+        var data = 'code=' + authCode + (passcode ? ('&pass='+passcode) : '') + (host ? ('&host=' + host) : '');
+        this.ajax('POST', url, data, success, error, complete);
+    }
+    
+    /**
+     * Refresh existing session.
+     * @param success function to call on success
+     * @param error function to call on failure
+     * @param complete function to call on ajax call completion
+     */
+    sforce.Client.prototype.prepareSession = function(success, error, complete) {
+        var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession';
+        this.ajax('POST', url, null, success, error, complete);
     }
     
     /**
@@ -91,8 +122,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.queryContactsViaApex = function(filter, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppService';
+        var url = getBaseUrl() + '/services/apexrest/cvapi';
         this.ajax('GET', url, 'action=fetchContacts&filter=' + filter, success, error, complete);
     }
     
@@ -102,8 +132,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.retrieveContactViaApex = function(contactId, fields, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppService';
+        var url = getBaseUrl() + '/services/apexrest/cvapi';
         this.ajax('GET', url, 'action=retrieveContact&id=' + contactId + '&fields=' + fields, success, error, complete);
     }
     
@@ -113,8 +142,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.searchContactsViaApex = function(text, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppService';
+        var url = getBaseUrl() + '/services/apexrest/cvapi';
         this.ajax('GET', url, 'action=searchContacts&text=' + text, success, error, complete);
     }
     
@@ -124,8 +152,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.fetchChatterViaApex = function(contactIdArr, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppService';
+        var url = getBaseUrl() + '/services/apexrest/cvapi';
         this.ajax('GET', url, 'action=fetchChatter&ids=' + contactIdArr, success, error, complete);
     }
     
@@ -135,8 +162,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.fetchActivitiesViaApex = function(contactIdArr, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppService';
+        var url = getBaseUrl() + '/services/apexrest/cvapi';
         this.ajax('GET', url, 'action=fetchActivities&ids=' + contactIdArr, success, error, complete);
     }
     
@@ -146,8 +172,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.getUsersInfoViaApex = function(uids, fetchPhotos, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppService';
+        var url = getBaseUrl() + '/services/apexrest/cvapi';
         this.ajax('GET', url, 'action=getUsersInfo&id=' + uids + '&fetchPhotos=' + fetchPhotos, success, error, complete);
     }
     
@@ -158,8 +183,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.describeContactViaApex = function(success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactsAppService';
+        var url = getBaseUrl() + '/services/apexrest/cvapi';
         this.ajax('GET', url, 'action=describeContact', success, error, complete);
     }
     
@@ -169,6 +193,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.getContactDetailsViaApex = function(contactId, recordTypeId, success, error, complete) {
+    	var that = this;
         var url = getBaseUrl() + '/ContactDetails';
         var timezoneOffset = new Date().getTimezoneOffset();
         $j.ajax({
@@ -177,7 +202,11 @@ if (sforce.Client === undefined) {
             data: 'id=' + contactId + '&rtid=' + (recordTypeId || '') + '&tzOffset=' + timezoneOffset,
             success: success,
             error: error,
-            complete: complete
+            complete: complete,
+            beforeSend: function(xhr) {
+            	if (that.sessionHeader)
+	                xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
+            }
         });
     }
     
@@ -203,7 +232,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.submitEulaResponse = function(clientId, response, success, error, complete) {
-        var url = getBaseUrl() + '/ContactsAppService';
+        var url = getBaseUrl() + '/services/apexrest/cvapi';
         this.ajax('GET', url, 'action=manageEula&clientId='+ clientId + '&eulaResponse=' + response, success, error, complete);
     }
 }

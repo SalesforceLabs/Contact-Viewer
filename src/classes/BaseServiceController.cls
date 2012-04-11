@@ -26,12 +26,29 @@
  */
 
 public virtual with sharing class BaseServiceController {
-	
+    
     protected SFDCApiClient client {get; private set;}
     protected SessionManager sm {get; private set;}
     
-    public BaseServiceController() {
-        this.sm = SessionManager.getInstance();
+    public BaseServiceController(RestRequest req) {
+    	this(req.headers);
+    }
+    
+    public BaseServiceController(Map<String, String> headers) {
+        this.sm = new SessionManager(headers);
         this.client = new SFDCApiClient(this.sm);
+    }
+    
+    public BaseServiceController(SfdcOAuthManager.OAuthResponse authData) {
+        this.sm = new SessionManager(authData);
+        this.client = new SFDCApiClient(this.sm);
+    }
+    
+    public SFDCApiClient getApiClient() {
+    	return this.client;
+    }
+    
+    public SessionManager getSession() {
+        return this.sm;
     }
 }

@@ -2,9 +2,11 @@
 
 <apex:repeat value="{!sections}" var="section">
     <apex:variable var="cols" value="{!section.columns}" />
-    
-    <div style="font-weight: bold; font-size: 16px; margin: 20px 0 10px 25px;">{!section.heading}</div>
-    <div style=" height: 1px; padding-left: 25px; border: 1px solid rgb(220, 220, 220); width: 100%;"><div style="width: 105px;  background-color: #1797C0; height: 1px;"></div></div>
+<section>    
+    <header>
+      <h4 style="font-weight: bold; font-size: 16px;  border-bottom: 3px solid #1797C0;padding: 0 0 8px; margin: 20px 25px 8px;display: inline-block;">{!section.heading}</h4>
+      <hr style="height: 1px; padding-left: 25px; border: 1px solid rgb(220, 220, 220); width: 100%;margin-top: -11px;"/>
+    </header>
     
     <table cellspacing="0" style="width: 100%; margin: 5px 0 0 25px; font-size: 12px;">
 	  <apex:repeat value="{!section.dataRows}" var="item">
@@ -25,7 +27,7 @@
 	     <apex:variable var="cols" value="{!section.columns}" rendered="{!cols == 0}"/>
 	  </apex:repeat>
 	</table>
-    
+</section>    
 </apex:repeat>
 
 </apex:page>

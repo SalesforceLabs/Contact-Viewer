@@ -13,6 +13,7 @@
         <members>SFDCPartnerSoapFault</members>
         <members>SessionManager</members>
         <members>SfdcOAuthManager</members>
+        <members>TestContactsAppUtil</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -25,25 +26,15 @@
     <types>
         <members>ContactDetails</members>
         <members>ContactsApp</members>
-        <members>ContactsAppAddCSS</members>
         <members>ContactsAppEULA</members>
         <members>ContactsAppManifest</members>
         <members>ContactsAppMobile</members>
-        <members>ContactsAppOAuth</members>
-        <members>ContactsAppService</members>
         <members>MobileAppTemplate</members>
         <name>ApexPage</name>
     </types>
     <types>
-        <members>AppClient__c</members>
-        <members>AppUser__c</members>
-        <members>ContactsAppSettings__c</members>
+        <members>*</members>
         <name>CustomObject</name>
-    </types>
-    <types>
-        <members>SFDCLogin</members>
-        <members>SalesforceSandbox</members>
-        <name>RemoteSiteSetting</name>
     </types>
     <types>
         <members>ContactAppRsrcs</members>

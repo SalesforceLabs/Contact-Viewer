@@ -29,6 +29,7 @@ public with sharing class ContactsAppController {
 	
 	private String userAgent {get; set;}
 	public String device { get; private set; }
+	public boolean debug {get; private set;} {this.debug = false;}
 	
 	public boolean isIPhone {get {
 		    return userAgent.contains('iPhone') || device == 'mobile';

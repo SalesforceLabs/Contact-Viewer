@@ -25,18 +25,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-public with sharing class ContactsAppServiceController extends BaseServiceController {
+@RestResource(urlMapping='/cvapi')
+global with sharing class ContactsAppServiceController extends BaseServiceController {
     
     public String resultSet {get; private set;}
+    private RestRequest restReq;
     
-    public ContactsAppServiceController() {
-    	super();
+    public ContactsAppServiceController(RestRequest req, RestResponse res) {
+        super(req);
+        this.restReq = req;
+    }
+    
+    @HttpGet
+    global static void doGet() {
+    	ContactsAppServiceController cont = new ContactsAppServiceController(RestContext.request, RestContext.response);
+        cont.loadPage();
+        System.debug(cont.resultSet);
+        RestContext.response.responseBody = Blob.valueOf(cont.resultSet);
     }
     
     public void loadPage() {
     	if (this.sm.isValid()) {
     		try {
-	           String action = System.currentPageReference().getParameters().get('action');
+	           String action = getRequestParam('action');
 	           if (action == 'fetchContacts') {
 	                this.resultSet = getContactsList();
 	           } else if (action == 'retrieveContact') {
@@ -62,6 +73,15 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     			this.resultSet = ae.errorCode;
     		} catch (Exception e) {}
     	}
+    }
+    
+    private String getRequestParam(String param) {
+    	if (this.restReq != null) {
+    		return this.restReq.params.get(param);
+    	} else if (System.currentPageReference() != null) {
+    		return System.currentPageReference().getParameters().get(param);
+    	}
+    	return null;
     }
 
     private List<Id> stripIdListFromJson(String propName, String json) {
@@ -114,7 +134,7 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     }
     
     private String getContactsList() {
-    	String filter = System.currentPageReference().getParameters().get('filter');
+    	String filter = getRequestParam('filter');
     	String addWhereClause = '';
     	
     	if (filter != null && filter.length() > 0) {
@@ -139,8 +159,8 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     
     private String retrieveContact() {
         
-        String cid = System.currentPageReference().getParameters().get('id');
-        String fields = System.currentPageReference().getParameters().get('fields');
+        String cid = getRequestParam('id');
+        String fields = getRequestParam('fields');
         String[] fieldArray = fields.split(',');
         
         return client.details('Contact', cid, fieldArray); 
@@ -148,7 +168,7 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     
     private String fetchChatter() {
         
-        String cids = System.currentPageReference().getParameters().get('ids');
+        String cids = getRequestParam('ids');
         String[] cidArray = String.escapeSingleQuotes(cids.trim()).split(',');
         
         String filter = 'parentId IN (' + (cidArray.size() > 0 ? ContactsAppUtil.createCSVFromList(cidArray, true) : '\'\'') + ')';
@@ -161,10 +181,10 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     
     private String getUsersInfo() {
         
-        String fetchPhototsParam = System.currentPageReference().getParameters().get('fetchPhotos');
+        String fetchPhototsParam = getRequestParam('fetchPhotos');
         boolean addPhotos = (fetchPhototsParam != null && fetchPhototsParam.trim().equalsIgnoreCase('true'));
         
-        String uids = System.currentPageReference().getParameters().get('id');
+        String uids = getRequestParam('id');
         uids = String.escapeSingleQuotes(uids.trim()).replaceAll(',', '\',\'');
         String jsonResp = client.query('Select id, name' + ((addPhotos) ? ', smallPhotoUrl' : '') + ' from User where id IN (\'' + uids + '\')');
         
@@ -177,7 +197,7 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     }
     
     private String searchContacts() {
-    	String text = System.currentPageReference().getParameters().get('text');
+    	String text = getRequestParam('text');
     	String response = null;
     	
     	if (text != null && text.trim().length() > 0) {
@@ -192,7 +212,7 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     }
     
     private String fetchActivities() {
-        String cids = System.currentPageReference().getParameters().get('ids');
+        String cids = getRequestParam('ids');
         String[] cidArray = String.escapeSingleQuotes(cids.trim()).split(',');
         
         String tasks, events;
@@ -226,8 +246,8 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     
     private String manageEula() {
     	
-    	String clientId = System.currentPageReference().getParameters().get('clientId');
-    	String eulaResponse = System.currentPageReference().getParameters().get('eulaResponse');
+    	String clientId = getRequestParam('clientId');
+    	String eulaResponse = getRequestParam('eulaResponse');
     	
     	Map<String, String> response = new Map<String, String>();
     	response.put('success', 'false');
@@ -261,5 +281,4 @@ public with sharing class ContactsAppServiceController extends BaseServiceContro
     	
     	return JSONObject.createSimpleJson(response);
     }
-    
 }

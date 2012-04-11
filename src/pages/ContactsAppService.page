@@ -1,3 +1,0 @@
-<apex:page showHeader="false"  standardStylesheets="false" cache="false" controller="ContactsAppServiceController" contenttype="application/json" action="{!loadPage}">
-{!resultSet}
-</apex:page>
