@@ -51,6 +51,11 @@
         <name>CustomObjectTranslation</name>
     </types>
     <types>
+        <members>AppClient__c</members>
+        <members>AppUser__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
         <members>SFDCLogin</members>
         <members>SalesforceSandbox</members>
         <name>RemoteSiteSetting</name>

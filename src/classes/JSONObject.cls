@@ -34,7 +34,7 @@ public with sharing class JSONObject {
     private String[] arrayValues;
     
     private JSONObject() {
-    	this.subs = new Map<Integer, String>();
+        this.subs = new Map<Integer, String>();
     }
     
     private JSONObject(Map<Integer, String> subs, Map<String, String> jsonValueMap) {
@@ -64,16 +64,16 @@ public with sharing class JSONObject {
     }
     
     public static Map<String, String> parseSimpleJson(String jsonStr) {
-    	
-    	Pattern jsonPattern = Pattern.compile('\\s*"([^"]+?)"\\s*:\\s*("[^"]*?"|[a-zA-Z0-9]+|\\$[0-9]+\\$|\\[[\\$0-9,]*\\])\\s*[,\\}]');
+        
+        Pattern jsonPattern = Pattern.compile('\\s*"([^"]+?)"\\s*:\\s*("[^"]*?"|[a-zA-Z0-9]+|\\$[0-9]+\\$|\\[[\\$0-9,]*\\])\\s*[,\\}]');
         Matcher respMatcher = jsonPattern.matcher(jsonStr);
         
         Map<String, String> jsonMap = new Map<String, String>();
         
         while (respMatcher.find()) {
             if (respMatcher.groupCount() == 2) {
-            	String val = respMatcher.group(2);
-            	val = ('null'.equals(val) ? null : val.replaceFirst('"(.*)"', '$1'));
+                String val = respMatcher.group(2);
+                val = ('null'.equals(val) ? null : val.replaceFirst('"(.*)"', '$1'));
                 jsonMap.put(respMatcher.group(1), val);
             }
         }
@@ -82,26 +82,26 @@ public with sharing class JSONObject {
     }
     
     public static JSONObject newInstance(String jsonStr) {
-    	
-    	if (jsonStr == null) return null;
-    	
-    	Integer idx = 0;
-    	
-    	JSONObject obj = new JSONObject();
+        
+        if (jsonStr == null) return null;
+        
+        Integer idx = 0;
+        
+        JSONObject obj = new JSONObject();
         
         Pattern jsonPattern = Pattern.compile('\\{[^\\{\\}]*\\}');
         Matcher jsonMatcher = jsonPattern.matcher(jsonStr);
         
         while (!jsonMatcher.matches()) {
-        	while (jsonMatcher.find()) {
-        		Integer startLoc = jsonMatcher.start();
+            while (jsonMatcher.find()) {
+                Integer startLoc = jsonMatcher.start();
                 Integer endLoc = jsonMatcher.end();
                 obj.subs.put(idx, jsonStr.substring(startLoc, endLoc));
-	            jsonStr = jsonStr.substring(0, startLoc)  + '$'+ idx++ + '$' + jsonStr.substring(endLoc);
-	            jsonMatcher.reset(jsonStr);
+                jsonStr = jsonStr.substring(0, startLoc)  + '$'+ idx++ + '$' + jsonStr.substring(endLoc);
+                jsonMatcher.reset(jsonStr);
                 jsonMatcher.region(startLoc, jsonStr.length()-1);
-	        }
-	        jsonMatcher.reset(jsonStr);
+            }
+            jsonMatcher.reset(jsonStr);
         }
         
         obj.jsonValueMap = parseSimpleJson(jsonStr);
@@ -111,41 +111,41 @@ public with sharing class JSONObject {
     
     
     private JSONObject getObjectForToken(String token) {
-    	try {
-	    	Integer idx = Integer.valueOf(token.substring(1, token.length()-1));
-	        String subJson = this.subs.get(idx);
-	    
-	        if(subJson != null) {
-	            System.debug('sub:' + subJson);
-	            return new JSONObject(this.subs, parseSimpleJson(subJson));
-	        }
-    	} catch (Exception e) {
-    		return new JSONObject(token);
-    	}
+        try {
+            Integer idx = Integer.valueOf(token.substring(1, token.length()-1));
+            String subJson = this.subs.get(idx);
+        
+            if(subJson != null) {
+                System.debug('sub:' + subJson);
+                return new JSONObject(this.subs, parseSimpleJson(subJson));
+            }
+        } catch (Exception e) {
+            return new JSONObject(token);
+        }
         return null;
     }
     
     public JSONObject get(String key) {
-    	String val = (jsonValueMap != null) ? jsonValueMap.get(key) : null;
-    	if (val == null) {
-    		return new JSONObject();
-    	} else if (val.startsWith('$') && val.endsWith('$')) {
-    		return getObjectForToken(val);
-    	} else if (val.startsWith('[') && val.endsWith(']')) {
-    		val = val.substring(1, val.length()-1);
-    		return new JSONObject(this.subs, val.split(','));
-    	}
-    	
-    	return new JSONObject('null'.equals(val) ? null : val.replaceFirst('"(.*)"', '$1'));
+        String val = (jsonValueMap != null) ? jsonValueMap.get(key) : null;
+        if (val == null) {
+            return new JSONObject();
+        } else if (val.startsWith('$') && val.endsWith('$')) {
+            return getObjectForToken(val);
+        } else if (val.startsWith('[') && val.endsWith(']')) {
+            val = val.substring(1, val.length()-1);
+            return new JSONObject(this.subs, val.split(','));
+        }
+        
+        return new JSONObject('null'.equals(val) ? null : val.replaceFirst('"(.*)"', '$1'));
     }
     
     public String value() {
-    	if (this.value != null) {
-    		return this.value.replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t');
-    	} else if (this.jsonValueMap != null) {
-    		return createSimpleJson(this.jsonValueMap);
-    	}
-    	return null;
+        if (this.value != null) {
+            return this.value.replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t');
+        } else if (this.jsonValueMap != null) {
+            return createSimpleJson(this.jsonValueMap);
+        }
+        return null;
     }
     
     public JSONObject[] getArray(String key) {
@@ -156,12 +156,12 @@ public with sharing class JSONObject {
             val = val.substring(1, val.length()-1);
             List<JSONObject> objs = new List<JSONObject>();
             for(String item : val.split(',')) {
-            	if (item.startsWith('$') && item.endsWith('$'))
-            	   objs.add(getObjectForToken(item));
-            	else {
-            		item = ('null'.equals(item) ? null : item.replaceFirst('"(.*)"', '$1'));
-            		objs.add(new JSONObject(item));
-            	}
+                if (item.startsWith('$') && item.endsWith('$'))
+                   objs.add(getObjectForToken(item));
+                else {
+                    item = ('null'.equals(item) ? null : item.replaceFirst('"(.*)"', '$1'));
+                    objs.add(new JSONObject(item));
+                }
             }
             return objs;
         }
@@ -169,14 +169,14 @@ public with sharing class JSONObject {
     }
     
     public static testmethod void testJSONParser() {
-    	String jsonStr = '{"boolean":true,"string":"text","nullValue":null,"array":[1,2,3],"object":{"prop":"value"}}';
-    	JSONObject obj = JSONObject.newInstance(jsonStr);
-    	
-    	System.assertEquals('true', obj.get('boolean').value());
-    	System.assertEquals('text', obj.get('string').value());
-    	System.assertEquals(null, obj.get('nullValue').value());
-    	System.assertEquals(3, obj.get('array').arrayValues.size());
-    	System.assertEquals(3, obj.getArray('array').size());
-    	System.assertEquals('value', obj.get('object').get('prop').value());
+        String jsonStr = '{"boolean":true,"string":"text","nullValue":null,"array":[1,2,3],"object":{"prop":"value"}}';
+        JSONObject obj = JSONObject.newInstance(jsonStr);
+        
+        System.assertEquals('true', obj.get('boolean').value());
+        System.assertEquals('text', obj.get('string').value());
+        System.assertEquals(null, obj.get('nullValue').value());
+        System.assertEquals(3, obj.get('array').arrayValues.size());
+        System.assertEquals(3, obj.getArray('array').size());
+        System.assertEquals('value', obj.get('object').get('prop').value());
     }
 }

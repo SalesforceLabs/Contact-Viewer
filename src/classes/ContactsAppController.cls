@@ -26,49 +26,49 @@
  */
 
 public with sharing class ContactsAppController {
-	
-	private String userAgent {get; set;}
-	public String device { get; private set; }
-	public boolean debug {get; private set;} {this.debug = false;}
-	
-	public boolean isIPhone {get {
-		    return userAgent.contains('iPhone') || device == 'mobile';
-    	}
-	}
-	
-	public boolean isWebkit {get {
+    
+    private String userAgent {get; set;}
+    public String device { get; private set; }
+    public boolean debug {get; private set;} {this.debug = false;}
+    
+    public boolean isIPhone {get {
+            return userAgent.contains('iPhone') || device == 'mobile';
+        }
+    }
+    
+    public boolean isWebkit {get {
             return userAgent.toLowerCase().contains('applewebkit');
-	   }
-	}
-	
-	public boolean isIPad {get {
+       }
+    }
+    
+    public boolean isIPad {get {
             return userAgent.contains('iPad') || (isWebkit && device != 'mobile');
         }
-	}
-	
-	public boolean addManifest { get {
-		  return System.currentPageReference().getParameters().size() == 0;
-	   }
-	}
-	
-	public String tabletManifestHeader { get {
+    }
+    
+    public boolean addManifest { get {
+          return System.currentPageReference().getParameters().size() == 0;
+       }
+    }
+    
+    public String tabletManifestHeader { get {
            return '<html manifest="' + Site.getCurrentSiteUrl() + 'ContactsAppManifest?device=tablet">';
        }
     }
     
-	public String mobileManifestHeader { get {
-	       return '<html manifest="' + Site.getCurrentSiteUrl() + 'ContactsAppManifest?device=mobile">';
-	   }
-	}
-	
-	public String maifestFooter { get {
+    public String mobileManifestHeader { get {
+           return '<html manifest="' + Site.getCurrentSiteUrl() + 'ContactsAppManifest?device=mobile">';
+       }
+    }
+    
+    public String maifestFooter { get {
            return '</html>';
        }
     }
-	
-	public ContactsAppController() {
-		this.userAgent = System.currentPageReference().getHeaders().get('User-Agent');
-		this.device = System.currentPageReference().getParameters().get('device');
-	}
+    
+    public ContactsAppController() {
+        this.userAgent = System.currentPageReference().getHeaders().get('User-Agent');
+        this.device = System.currentPageReference().getParameters().get('device');
+    }
 
 }

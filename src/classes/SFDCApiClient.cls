@@ -26,18 +26,18 @@
  */
 
 public with sharing class SFDCApiClient {
-	
-	private static final String API_VERSION = '22.0';
-	private SessionManager sm;
-	
-	private Integer requestRetryCount = 0;
-	private static final Integer MAX_REQUEST_RETRIES = 2;
-	
-	public SFDCApiClient(SessionManager sm) {
-		this.sm = sm;
-	}
-	
-	public class ApiException extends Exception {
+    
+    private static final String API_VERSION = '22.0';
+    private SessionManager sm;
+    
+    private Integer requestRetryCount = 0;
+    private static final Integer MAX_REQUEST_RETRIES = 2;
+    
+    public SFDCApiClient(SessionManager sm) {
+        this.sm = sm;
+    }
+    
+    public class ApiException extends Exception {
         public String errorCode {get; private set;}
         public String message {get; private set;}
         private ApiException(String errorCode, String msg) {
@@ -46,66 +46,66 @@ public with sharing class SFDCApiClient {
             this.message = msg;
         }
     }
-	
-	private HttpRequest initializeRequest() {
-		HttpRequest req = new HttpRequest();
+    
+    private HttpRequest initializeRequest() {
+        HttpRequest req = new HttpRequest();
         req.setHeader('Authorization', 'OAuth ' + sm.accessToken);
         req.setCompressed(true);
         return req;
-	}
-	
-	private String makeRequest(HttpRequest req) {
-		Http h = new Http();
-		HttpResponse resp = h.send(req);
-		
-		if (resp.getStatusCode() == 200) {
-			this.requestRetryCount = 0;
-			return resp.getBody();
-		} else if (resp.getStatusCode() == 302 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
+    }
+    
+    private String makeRequest(HttpRequest req) {
+        Http h = new Http();
+        HttpResponse resp = h.send(req);
+        
+        if (resp.getStatusCode() == 200) {
+            this.requestRetryCount = 0;
+            return resp.getBody();
+        } else if (resp.getStatusCode() == 302 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
             req.setEndpoint(resp.getHeader('Location'));
             return makeRequest(req);
-		} if (resp.getStatusCode() == 401 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
-		    this.sm.refreshSession();
-		    return makeRequest(req);
-		} else if (resp.getStatusCode() == 403) {
-			throw new ApiException('NO_API_ACCESS', System.Label.APIIsNotAccessibleToCurrentUser);
-		}
-		return null;
-	}
-	
-	private String doGet(String path, Map<String,String> params) {
-		HttpRequest req = initializeRequest();
-		req.setMethod('GET');
-		
-		String url = sm.instanceUrl + '/services/data/v' + API_VERSION + path;
-		if (params != null && params.size() > 0) {
-			url += '?';
-			Integer idx = 1;
-			for (String key : params.keySet()) {
-				url += (key + '=' + EncodingUtil.urlEncode(params.get(key), 'UTF-8'));
-				if (idx++ < params.size()) {
-					url += '&';
-				}
-			}
-		}
-		req.setEndpoint(url);
-		
-		return makeRequest(req);
-	}
-	
-	public String getUserInfo() {
-		HttpRequest req = initializeRequest();
+        } if (resp.getStatusCode() == 401 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
+            this.sm.refreshSession();
+            return makeRequest(req);
+        } else if (resp.getStatusCode() == 403) {
+            throw new ApiException('NO_API_ACCESS', System.Label.APIIsNotAccessibleToCurrentUser);
+        }
+        return null;
+    }
+    
+    private String doGet(String path, Map<String,String> params) {
+        HttpRequest req = initializeRequest();
+        req.setMethod('GET');
+        
+        String url = sm.instanceUrl + '/services/data/v' + API_VERSION + path;
+        if (params != null && params.size() > 0) {
+            url += '?';
+            Integer idx = 1;
+            for (String key : params.keySet()) {
+                url += (key + '=' + EncodingUtil.urlEncode(params.get(key), 'UTF-8'));
+                if (idx++ < params.size()) {
+                    url += '&';
+                }
+            }
+        }
+        req.setEndpoint(url);
+        
+        return makeRequest(req);
+    }
+    
+    public String getUserInfo() {
+        HttpRequest req = initializeRequest();
         req.setMethod('GET');
         req.setEndpoint(this.sm.userInfoUri);
         
-		return makeRequest(req);
-	}
-	
-	public String query(String query) {
-		return doGet('/query', new Map<String, String>{ 'q' => query });
-	}
-	
-	public String details(String sobjectType, Id oid, String[] fieldset) {
+        return makeRequest(req);
+    }
+    
+    public String query(String query) {
+        return doGet('/query', new Map<String, String>{ 'q' => query });
+    }
+    
+    public String details(String sobjectType, Id oid, String[] fieldset) {
         return doGet('/sobjects/'+ sobjectType+ '/'+ oid, new Map<String, String>{ 'fields' => ContactsAppUtil.createCSVFromList(fieldset) });
     }
     
@@ -122,11 +122,11 @@ public with sharing class SFDCApiClient {
     }
     
     public SFDCPartnerSoap.DescribeLayoutResult describeLayout(String sObjectType, Id[] recordTypeIds) {
-    	SFDCPartnerSoap.Soap soapClient = new SFDCPartnerSoap.Soap();
-    	soapClient.setInstanceUrl(sm.instanceUrl);
-    	soapClient.setSessionId(sm.accessToken);
-    	
-    	return soapClient.describeLayout(sObjectType, recordTypeIds);
+        SFDCPartnerSoap.Soap soapClient = new SFDCPartnerSoap.Soap();
+        soapClient.setInstanceUrl(sm.instanceUrl);
+        soapClient.setSessionId(sm.accessToken);
+        
+        return soapClient.describeLayout(sObjectType, recordTypeIds);
     }
     
     public SFDCPartnerSoap.DescribeSObjectResult describeSObjectSOAP(String sObjectType) {

@@ -5,9 +5,9 @@
     <div id="loggedin" style="display: none; width:100%; height:100%; position:absolute; top:0px; left:0px; overflow:hidden">
         
         <div id="listpage">
-	        <div style="position:relative; height:100%; width:100%">
-	         <div id="header">
-	             <div id="listheader" style="position:relative;">
+            <div style="position:relative; height:100%; width:100%">
+             <div id="header">
+                 <div id="listheader" style="position:relative;">
                       <div id="titlebar">
                           <span>
                               <span id="title">{!$Label.RecentlyViewed}</span>&nbsp;<span style="font-size: 12px;">▼</span>
@@ -21,47 +21,47 @@
                           </form>
                       </div>
                  </div>
-	             <div style="overflow:hidden">
-	              <div id="listselect" style="display:none;">
+                 <div style="overflow:hidden">
+                  <div id="listselect" style="display:none;">
                          <button id="owner">{!$Label.My} {!$Label.Contacts}</button>
                          <button id="follow">{!$Label.Contacts} {!$Label.IFollow}</button>
                          <button id="recent">{!$Label.RecentlyViewed}</button>
-	              </div>
-	          </div>
-	         </div>
-	         
-	         <div id="listscroller">
-	             <div id="scroller">
-	                 <ul id="contactlist">
-	                 </ul>
-	                 <div id="resultCount" style="text-align:center;padding:10px;"></div>
-	             </div>
-	         </div>
-	         <div id="footer">
-	           <div id="home" class="app-images" style="float:left; margin: 8px 10px" />
-	           <div id="gear" class="app-images" style="float:right; margin: 8px 10px" />
-	         </div>
-	        </div>
-	    </div>
-	            
-	    <div id="rightsection">
-	     <div id="detailpage" style="visibility:hidden" class="detailpane transformTransition">
-	        <div class="header"><button id="contactlist_button" class="header_button" style="left: 0px; margin-left: 10px; display:none;"></button><span></span></div>
-	        <div id="contactInfo" style="position: absolute; top: 45px; bottom: 0; width: 100%">
-	           <div id="leftnav">
-	                <div id="info" class="app-images dsIcons"/>
-	                <div style="border:1px solid rgb(190,190,190); height:0px;margin:0px 25px 15px 25px;"></div>
-	                <div id="rss" class="app-images dsIcons"/>
-	                <div style="border:1px solid rgb(190,190,190); height:0px;margin:0px 25px 15px 25px;"></div>
-	                <div id="chatter" class="app-images dsIcons"/>
-	                <div id="salesforce" class="app-images dsIcons"/>
-	            </div>
-	            <div class="contentpage">
-	              <div id="detail">
-	              <div id="summary" style="height: 142px; width: 100%; background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/highlights-gradient.png')}'); position: relative; border-bottom: 1px solid #2B2B2B; -webkit-box-shadow: 0px 2px 2px rgba(43, 43, 43, 0.5);">
-	                <div id="photo_div" style="position: absolute;  -webkit-border-radius: 5px; margin: 15px 20px 0 0; right: 0; ">
-	                   <div id="userImg" class="app-images"/>
-	                   <div id="name" style="font-size: 12px; color: grey; text-align: center; width: 101px;"></div>
+                  </div>
+              </div>
+             </div>
+             
+             <div id="listscroller">
+                 <div id="scroller">
+                     <ul id="contactlist">
+                     </ul>
+                     <div id="resultCount" style="text-align:center;padding:10px;"></div>
+                 </div>
+             </div>
+             <div id="footer">
+               <div id="home" class="app-images" style="float:left; margin: 8px 10px" />
+               <div id="gear" class="app-images" style="float:right; margin: 8px 10px" />
+             </div>
+            </div>
+        </div>
+                
+        <div id="rightsection">
+         <div id="detailpage" style="visibility:hidden" class="detailpane transformTransition">
+            <div class="header"><button id="contactlist_button" class="header_button" style="left: 0px; margin-left: 10px; display:none;"></button><span></span></div>
+            <div id="contactInfo" style="position: absolute; top: 45px; bottom: 0; width: 100%">
+               <div id="leftnav">
+                    <div id="info" class="app-images dsIcons"/>
+                    <div style="border:1px solid rgb(190,190,190); height:0px;margin:0px 25px 15px 25px;"></div>
+                    <div id="rss" class="app-images dsIcons"/>
+                    <div style="border:1px solid rgb(190,190,190); height:0px;margin:0px 25px 15px 25px;"></div>
+                    <div id="chatter" class="app-images dsIcons"/>
+                    <div id="salesforce" class="app-images dsIcons"/>
+                </div>
+                <div class="contentpage">
+                  <div id="detail">
+                  <div id="summary" style="height: 142px; width: 100%; background-image: url('{!URLFOR($Resource.ContactAppRsrcs, 'images/highlights-gradient.png')}'); position: relative; border-bottom: 1px solid #2B2B2B; -webkit-box-shadow: 0px 2px 2px rgba(43, 43, 43, 0.5);">
+                    <div id="photo_div" style="position: absolute;  -webkit-border-radius: 5px; margin: 15px 20px 0 0; right: 0; ">
+                       <div id="userImg" class="app-images"/>
+                       <div id="name" style="font-size: 12px; color: grey; text-align: center; width: 101px;"></div>
                     </div>
                     
                     <div style="width: 100%; height: 100%; font-size: 12px;">
@@ -88,15 +88,15 @@
                     </div>
                   </div>
                   
-	              <span>
-	              <div id="infoscroller" class="detailscroller">
-	                <section id="info" style="width:100%; padding: 15px 0;">
-	                  <header>
-		                  <h4 style="font-weight: bold; font-size: 16px;  border-bottom: 3px solid #1797C0;padding: 0 0 8px; margin: 20px 25px 8px;display: inline-block;">{!$Label.BasicDetails}</h4>
-		                  <hr style="height: 1px; padding-left: 25px; border: 1px solid rgb(220, 220, 220); width: 100%;margin-top: -11px;"/>
-	                  </header>
-	                  
-	                  <table cellspacing="0" style="width: 100%; margin: 5px 0 0 25px; font-size: 12px;">
+                  <span>
+                  <div id="infoscroller" class="detailscroller">
+                    <section id="info" style="width:100%; padding: 15px 0;">
+                      <header>
+                          <h4 style="font-weight: bold; font-size: 16px;  border-bottom: 3px solid #1797C0;padding: 0 0 8px; margin: 20px 25px 8px;display: inline-block;">{!$Label.BasicDetails}</h4>
+                          <hr style="height: 1px; padding-left: 25px; border: 1px solid rgb(220, 220, 220); width: 100%;margin-top: -11px;"/>
+                      </header>
+                      
+                      <table cellspacing="0" style="width: 100%; margin: 5px 0 0 25px; font-size: 12px;">
                         <tbody><tr>
                             <td id="Account" width="50%">
                                 <div class="fieldLbl">{!$Label.Company}</div>
@@ -137,18 +137,18 @@
                             <h4 style="font-weight: bold; font-size: 16px;  border-bottom: 3px solid #1797C0;padding: 0 0 8px; margin: 20px 25px 8px;display: inline-block;">{!$Label.Map}</h4>
                             <hr style="height: 1px; padding-left: 25px; border: 1px solid rgb(220, 220, 220); width: 100%;margin-top: -11px;"/>
                           </header>
-	                      
-		                  <div id="map_div" style="position:relative; top:0px; height:180px; margin:20px 25px; background-color: #CCC;">
-		                    <div id="google_map_canvas" style="height:100%; position:absolute; top:0px; width: 100%;"></div>
-							<div id="right" style="height: 100%; position: absolute; top: 0px; width: 10px; background-image: -webkit-gradient(linear, 100% 0, 0 0, color-stop(0, rgba(50, 50, 50, 0.5)), color-stop(0.3, rgba(100, 100, 100, 0.3)), color-stop(1, rgba(150, 150, 150, 0)));   right: 0px; "></div>
-							<div id="top" style="height: 20px; position: absolute; top: 0px; width: 100%; background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(25, 25, 25, 0.7)), color-stop(0.3, rgba(50, 50, 50, 0.4)), color-stop(1, rgba(150, 150, 150, 0)));   "></div>
+                          
+                          <div id="map_div" style="position:relative; top:0px; height:180px; margin:20px 25px; background-color: #CCC;">
+                            <div id="google_map_canvas" style="height:100%; position:absolute; top:0px; width: 100%;"></div>
+                            <div id="right" style="height: 100%; position: absolute; top: 0px; width: 10px; background-image: -webkit-gradient(linear, 100% 0, 0 0, color-stop(0, rgba(50, 50, 50, 0.5)), color-stop(0.3, rgba(100, 100, 100, 0.3)), color-stop(1, rgba(150, 150, 150, 0)));   right: 0px; "></div>
+                            <div id="top" style="height: 20px; position: absolute; top: 0px; width: 100%; background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(25, 25, 25, 0.7)), color-stop(0.3, rgba(50, 50, 50, 0.4)), color-stop(1, rgba(150, 150, 150, 0)));   "></div>
                             <div id="recenter" style=" position: absolute; top: 0px; right: 0; background-color: rgba(255, 255, 255, 0.5); color: #1797C0; padding: 8px 50px; border: 1px solid silver; -webkit-border-radius: 5px; font-weight: bold;">{!$Label.Recenter}</div>
-							<div id="bottom" style="height: 10px; position: absolute; bottom: 0px; width: 100%; background-image: -webkit-gradient(linear, 0 100%, 0 0, color-stop(0, rgba(50, 50, 50, 0.5)), color-stop(0.2, rgba(100, 100, 100, 0.3)), color-stop(1, rgba(150, 150, 150, 0)));   "></div>
-							<div id="left" style="height: 100%; position: absolute; top: 0px; width: 20px; background-image: -webkit-gradient(linear, 0 0, 100% 0, color-stop(0, rgba(25, 25, 25, 0.7)), color-stop(0.3, rgba(50, 50, 50, 0.4)), color-stop(1, rgba(150, 150, 150, 0)));   left: 0px; "></div>
-							<div class="app-images rc_div rc_top_left"/><div class="app-images rc_div rc_top_right"/>
-							<div class="app-images rc_div rc_bottom_left"/><div class="app-images rc_div rc_bottom_right"/>
-							<div id="error" style="width:100%; padding-top: 100px; text-align:center; display:none;"></div>
-	                      </div>
+                            <div id="bottom" style="height: 10px; position: absolute; bottom: 0px; width: 100%; background-image: -webkit-gradient(linear, 0 100%, 0 0, color-stop(0, rgba(50, 50, 50, 0.5)), color-stop(0.2, rgba(100, 100, 100, 0.3)), color-stop(1, rgba(150, 150, 150, 0)));   "></div>
+                            <div id="left" style="height: 100%; position: absolute; top: 0px; width: 20px; background-image: -webkit-gradient(linear, 0 0, 100% 0, color-stop(0, rgba(25, 25, 25, 0.7)), color-stop(0.3, rgba(50, 50, 50, 0.4)), color-stop(1, rgba(150, 150, 150, 0)));   left: 0px; "></div>
+                            <div class="app-images rc_div rc_top_left"/><div class="app-images rc_div rc_top_right"/>
+                            <div class="app-images rc_div rc_bottom_left"/><div class="app-images rc_div rc_bottom_right"/>
+                            <div id="error" style="width:100%; padding-top: 100px; text-align:center; display:none;"></div>
+                          </div>
                       </section>
                       <section id="detailsLayout" style="width:100%;">
                         <div id="viewMoreBtn" style="text-align: center; font-size: 13px;  border: 1px solid #9d9d9d; line-height: 32px;  margin: 20px; -webkit-border-radius: 3px; background-color: #f0f3f4;  color: #54565C; text-shadow: 0px -1px 0px rgb(200, 200, 200); font-weight: bold; -webkit-user-select: none;">
@@ -167,14 +167,14 @@
                   </div>
                   </span>
                   </div>
-	           </div>
-	         </div>
-	         <div id="contactNews" style="position: absolute; top: 45px; bottom: 0; width: 100%; display: none">
-	             <div class="contentpage" style="margin-left: 0px;"></div>
+               </div>
              </div>
-	     </div>
-	    </div>
-	    <div id="popover" class="popover-view" style="display:none">
+             <div id="contactNews" style="position: absolute; top: 45px; bottom: 0; width: 100%; display: none">
+                 <div class="contentpage" style="margin-left: 0px;"></div>
+             </div>
+         </div>
+        </div>
+        <div id="popover" class="popover-view" style="display:none">
             <div class="app-images appleui popover-view up"></div>
         </div>
     </div>

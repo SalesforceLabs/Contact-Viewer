@@ -31,7 +31,7 @@ public virtual with sharing class BaseServiceController {
     protected SessionManager sm {get; private set;}
     
     public BaseServiceController(RestRequest req) {
-    	this(req.headers);
+        this(req.headers);
     }
     
     public BaseServiceController(Map<String, String> headers) {
@@ -45,7 +45,7 @@ public virtual with sharing class BaseServiceController {
     }
     
     public SFDCApiClient getApiClient() {
-    	return this.client;
+        return this.client;
     }
     
     public SessionManager getSession() {

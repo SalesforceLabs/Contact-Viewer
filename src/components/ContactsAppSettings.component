@@ -12,30 +12,30 @@
         <div class="settings_body">
             <div id="main" class="page">
                 <div class="content">
-	            <div style="text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Account}</div>
-	            <table style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
-	                <tbody><tr><td style="">
-	                    <div style="font-weight: bold; float: left; padding: 0 10px;">{!$Label.LoggedInAs}</div>
-	                    <div id="username" style="color: #395483; position: relative; left: 0px; text-align: right; right: 0px; height: 44px; overflow: hidden; margin-right: 10px"></div>
-	                </td></tr></tbody>
-	            </table>
-	            
-	            <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Connection}</div>
-	            <table id="connection" style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
-	                <tbody><tr><td id="hostType" style="border-bottom: 1px solid silver;">
-	                    <div style="font-weight: bold; float: left;  padding-left: 10px;">{!$Label.LoginHost}</div>
-	                    <div style="color: #395483; float: right; padding-right: 10px;">
-	                       <span id="name"></span><span class="app-images appleui arrow-next"/>
-	                    </div>
-	                </td></tr><tr><td id="host_url" style="text-align: left;font-weight: bold;  padding:0 10px;">
-	                    <form>
-	                    <div style="float: left; width: 110px;">{!$Label.CustomHost}</div>
+                <div style="text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Account}</div>
+                <table style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
+                    <tbody><tr><td style="">
+                        <div style="font-weight: bold; float: left; padding: 0 10px;">{!$Label.LoggedInAs}</div>
+                        <div id="username" style="color: #395483; position: relative; left: 0px; text-align: right; right: 0px; height: 44px; overflow: hidden; margin-right: 10px"></div>
+                    </td></tr></tbody>
+                </table>
+                
+                <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Connection}</div>
+                <table id="connection" style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
+                    <tbody><tr><td id="hostType" style="border-bottom: 1px solid silver;">
+                        <div style="font-weight: bold; float: left;  padding-left: 10px;">{!$Label.LoginHost}</div>
+                        <div style="color: #395483; float: right; padding-right: 10px;">
+                           <span id="name"></span><span class="app-images appleui arrow-next"/>
+                        </div>
+                    </td></tr><tr><td id="host_url" style="text-align: left;font-weight: bold;  padding:0 10px;">
+                        <form>
+                        <div style="float: left; width: 110px;">{!$Label.CustomHost}</div>
                         <div style="margin-left: 110px; margin-right: 10px;"><input style="margin: 10px 0; font-size: 15px; border: none;  color: #395483; -webkit-appearance:none; width: 100%; text-align: right; -webkit-tap-highlight-color:rgba(0,0,0,0);" type="text"/></div>
-                        </form>	                    
-	                </td></tr></tbody>
-	            </table>
-	            
-	            <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Help}</div>
+                        </form>                        
+                    </td></tr></tbody>
+                </table>
+                
+                <div style="margin-top: 10px; text-align: left; padding-left: 10px; font-weight: bold; color: rgb(77, 87, 107);">{!$Label.Help}</div>
                 <table id="help" style="width: 100%; -webkit-border-radius: 10px; border: 1px solid silver;  line-height: 44px;  float: center; background-color: white;" cellspacing="0" cellpadding="0">
                     <tbody><tr><td id="help_about" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
                         {!$Label.AboutContactViewer}<span class="app-images appleui arrow-next"/>
@@ -50,9 +50,9 @@
                         </a>
                     </td></tr></tbody>
                 </table>
-	            <button id="loginbtn" style="width: 100%; height: 40px; font-size: 16px;  -webkit-border-radius: 10px;  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent)); margin-top: 25px; color: white; font-weight: bold; background-color: rgb(40, 180, 40);">{!$Label.AddAccount}</button>
-	            <button id="logoutbtn" style="width: 100%; height: 40px; font-size: 16px;  -webkit-border-radius: 10px;  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent)); margin-top: 25px; color: white; font-weight: bold; background-color: #B42828;">{!$Label.Logout}</button>
-	            </div>
+                <button id="loginbtn" style="width: 100%; height: 40px; font-size: 16px;  -webkit-border-radius: 10px;  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent)); margin-top: 25px; color: white; font-weight: bold; background-color: rgb(40, 180, 40);">{!$Label.AddAccount}</button>
+                <button id="logoutbtn" style="width: 100%; height: 40px; font-size: 16px;  -webkit-border-radius: 10px;  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.85, rgba(255, 255, 255, 0)), color-stop(1, transparent)); margin-top: 25px; color: white; font-weight: bold; background-color: #B42828;">{!$Label.Logout}</button>
+                </div>
             </div>
             <div id="hosts" class="page" style="visibility:hidden">
                 <div class="content">

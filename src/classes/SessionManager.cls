@@ -26,18 +26,18 @@
  */
 
 public with sharing class SessionManager {
-	
-	private SfdcOAuthManager.OAuthResponse authData;
-	
-	public String accessToken {get { return authData.accessToken; }}
-	public String instanceUrl {get { return authData.instanceUrl; }}
-	public String userId {get { return authData.userId; }}
-	public String userInfoUri {get { return authData.userInfoUri; }}
-	
-	public SessionManager(Map<String, String> headers) {
-		String sessionToken = headers.get('App-Session');
-		// If we have the App-Session header then re-surrect the OAuthResponse from it's serialized state
-		if (sessionToken != null) 
+    
+    private SfdcOAuthManager.OAuthResponse authData;
+    
+    public String accessToken {get { return authData.accessToken; }}
+    public String instanceUrl {get { return authData.instanceUrl; }}
+    public String userId {get { return authData.userId; }}
+    public String userInfoUri {get { return authData.userInfoUri; }}
+    
+    public SessionManager(Map<String, String> headers) {
+        String sessionToken = headers.get('App-Session');
+        // If we have the App-Session header then re-surrect the OAuthResponse from it's serialized state
+        if (sessionToken != null) 
             this.authData = SfdcOAuthManager.initialize(sessionToken);
         // Note: Used by container app. User can provide a Oauth value map that can be used to create a new OAuthResponse instance.   
         else  
@@ -47,17 +47,17 @@ public with sharing class SessionManager {
     public SessionManager(SfdcOAuthManager.OAuthResponse authData) {
         this.authData = authData;
     }
-	
-	public void refreshSession() {
-		this.authData = SfdcOAuthManager.refreshAccessFromEncRefToken(instanceUrl, this.authData.encryptedRefreshToken);
-	}
-	
-	public boolean isValid() {
-		return authData != null && accessToken != null && instanceUrl != null && userInfoUri != null;
-	}
-	
-	public SfdcOAuthManager.OAuthResponse getOAuthResponse() {
-		return this.authData;
-	}
+    
+    public void refreshSession() {
+        this.authData = SfdcOAuthManager.refreshAccessFromEncRefToken(instanceUrl, this.authData.encryptedRefreshToken);
+    }
+    
+    public boolean isValid() {
+        return authData != null && accessToken != null && instanceUrl != null && userInfoUri != null;
+    }
+    
+    public SfdcOAuthManager.OAuthResponse getOAuthResponse() {
+        return this.authData;
+    }
 
 }

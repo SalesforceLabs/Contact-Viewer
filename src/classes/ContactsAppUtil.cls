@@ -26,8 +26,8 @@
  */
 
 public with sharing class ContactsAppUtil {
-	
-	public static String encrypt(String key, String value) {
+    
+    public static String encrypt(String key, String value) {
         String encryptedValue = '';
         if (value != null) {
             Blob keyBlob = EncodingUtil.base64Decode(key);
@@ -50,11 +50,11 @@ public with sharing class ContactsAppUtil {
     }
     
     public static String generateHash(String text) {
-    	Blob hash = Crypto.generateDigest('MD5', Blob.valueOf(text));
-    	if (hash != null) {
-    		return EncodingUtil.base64Encode(hash);
-    	}
-    	return null;
+        Blob hash = Crypto.generateDigest('MD5', Blob.valueOf(text));
+        if (hash != null) {
+            return EncodingUtil.base64Encode(hash);
+        }
+        return null;
     }
     
     public static String createCSVFromList(List<Object> objList) {
@@ -65,10 +65,10 @@ public with sharing class ContactsAppUtil {
         String csv;
         
         if (objList != null && objList.size() > 0) {
-        	csv = '';
+            csv = '';
             for (Object obj : objList) {
-            	if (addQuotes) obj = ('\'' + obj + '\'');
-            	csv += (obj + ',');
+                if (addQuotes) obj = ('\'' + obj + '\'');
+                csv += (obj + ',');
             }
             csv = csv.subString(0, csv.length() - 1);
         }

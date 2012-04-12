@@ -38,54 +38,54 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
     
     @HttpGet
     global static void doGet() {
-    	ContactsAppServiceController cont = new ContactsAppServiceController(RestContext.request, RestContext.response);
+        ContactsAppServiceController cont = new ContactsAppServiceController(RestContext.request, RestContext.response);
         cont.loadPage();
         System.debug(cont.resultSet);
         RestContext.response.responseBody = Blob.valueOf(cont.resultSet);
     }
     
     public void loadPage() {
-    	if (this.sm.isValid()) {
-    		try {
-	           String action = getRequestParam('action');
-	           if (action == 'fetchContacts') {
-	                this.resultSet = getContactsList();
-	           } else if (action == 'retrieveContact') {
-	                this.resultSet = retrieveContact();
-	           } else if (action == 'fetchChatter') {
-	                this.resultSet = fetchChatter();
-	           } else if (action == 'getUsersInfo') {
-	                this.resultSet = getUsersInfo();
-	           } else if (action == 'searchContacts') {
-	                this.resultSet = searchContacts();
-	           } else if (action == 'fetchActivities') {
-	                this.resultSet = fetchActivities();
-	           } else if (action == 'describeContact') {
-	        	    this.resultSet = getContactDescribe();
-	           } else if (action == 'manageEula') {
-	        	    this.resultSet = manageEula();
-	           }
-	        
-	           if (this.resultSet == null) {
+        if (this.sm.isValid()) {
+            try {
+               String action = getRequestParam('action');
+               if (action == 'fetchContacts') {
+                    this.resultSet = getContactsList();
+               } else if (action == 'retrieveContact') {
+                    this.resultSet = retrieveContact();
+               } else if (action == 'fetchChatter') {
+                    this.resultSet = fetchChatter();
+               } else if (action == 'getUsersInfo') {
+                    this.resultSet = getUsersInfo();
+               } else if (action == 'searchContacts') {
+                    this.resultSet = searchContacts();
+               } else if (action == 'fetchActivities') {
+                    this.resultSet = fetchActivities();
+               } else if (action == 'describeContact') {
+                    this.resultSet = getContactDescribe();
+               } else if (action == 'manageEula') {
+                    this.resultSet = manageEula();
+               }
+            
+               if (this.resultSet == null) {
                     this.resultSet = '{}';
                }
-    		} catch (SFDCApiClient.ApiException ae) {
-    			this.resultSet = ae.errorCode;
-    		} catch (Exception e) {}
-    	}
+            } catch (SFDCApiClient.ApiException ae) {
+                this.resultSet = ae.errorCode;
+            } catch (Exception e) {}
+        }
     }
     
     private String getRequestParam(String param) {
-    	if (this.restReq != null) {
-    		return this.restReq.params.get(param);
-    	} else if (System.currentPageReference() != null) {
-    		return System.currentPageReference().getParameters().get(param);
-    	}
-    	return null;
+        if (this.restReq != null) {
+            return this.restReq.params.get(param);
+        } else if (System.currentPageReference() != null) {
+            return System.currentPageReference().getParameters().get(param);
+        }
+        return null;
     }
 
     private List<Id> stripIdListFromJson(String propName, String json) {
-    	Pattern cPattern = Pattern.compile('\"' + propName + '\":\"([^\"]*?)"');
+        Pattern cPattern = Pattern.compile('\"' + propName + '\":\"([^\"]*?)"');
         Matcher cMatcher = cPattern.matcher(json);
         
         List<Id> idList = new List<Id>();
@@ -97,21 +97,21 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
     }
     
     private List<Id> getRecentContacts() {
-    	String jsonResp = client.sobject('Contact');
-    	
-    	Pattern riPattern = Pattern.compile('\"recentItems\":\\[([^\\]]*)\\]');
+        String jsonResp = client.sobject('Contact');
+        
+        Pattern riPattern = Pattern.compile('\"recentItems\":\\[([^\\]]*)\\]');
         Matcher riMatcher = riPattern.matcher(jsonResp);
         
         if (riMatcher.find()) {
-        	return stripIdListFromJson('Id', riMatcher.group(1));
+            return stripIdListFromJson('Id', riMatcher.group(1));
         }
         return null;
     }
     
     private List<Id> getFollowedContacts() {
-    	String jsonResp = client.query('SELECT ParentId FROM EntitySubscription WHERE parent.type = \'Contact\' AND SubscriberID = \'' + sm.userId + '\' limit 200');
-    	
-    	Pattern cPattern = Pattern.compile('\"records\":\\[([^\\]]*)\\]');
+        String jsonResp = client.query('SELECT ParentId FROM EntitySubscription WHERE parent.type = \'Contact\' AND SubscriberID = \'' + sm.userId + '\' limit 200');
+        
+        Pattern cPattern = Pattern.compile('\"records\":\\[([^\\]]*)\\]');
         Matcher cMatcher = cPattern.matcher(jsonResp);
         
         if (cMatcher.find()) {
@@ -121,37 +121,37 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
     }
     
     private String createIdFilterStringFromList(List<Id> ids) {
-    	String filter = 'ID IN (';
-    	if (ids != null && ids.size() > 0) {
-    		for (Id cid : ids) {
-    			filter += ('\'' + cid + '\',');
-    		}
-	        filter = filter.subString(0, filter.length() - 1);
-	    } else {
-	    	filter += '\'\'';
-	    }
-	    return filter + ')';
+        String filter = 'ID IN (';
+        if (ids != null && ids.size() > 0) {
+            for (Id cid : ids) {
+                filter += ('\'' + cid + '\',');
+            }
+            filter = filter.subString(0, filter.length() - 1);
+        } else {
+            filter += '\'\'';
+        }
+        return filter + ')';
     }
     
     private String getContactsList() {
-    	String filter = getRequestParam('filter');
-    	String addWhereClause = '';
-    	
-    	if (filter != null && filter.length() > 0) {
-    		addWhereClause += 'where ';
-    		if (filter.equalsIgnoreCase('owner')) {
-    			addWhereClause += 'ownerId = \'' + sm.userId + '\'';
-    		} else if (filter.equalsIgnoreCase('follow')) {
-    			addWhereClause += createIdFilterStringFromList(getFollowedContacts());
-    		} else if (filter.equalsIgnoreCase('recent')) {
+        String filter = getRequestParam('filter');
+        String addWhereClause = '';
+        
+        if (filter != null && filter.length() > 0) {
+            addWhereClause += 'where ';
+            if (filter.equalsIgnoreCase('owner')) {
+                addWhereClause += 'ownerId = \'' + sm.userId + '\'';
+            } else if (filter.equalsIgnoreCase('follow')) {
+                addWhereClause += createIdFilterStringFromList(getFollowedContacts());
+            } else if (filter.equalsIgnoreCase('recent')) {
                 addWhereClause += createIdFilterStringFromList(getRecentContacts());
             }
             addWhereClause += ' order by LastName asc';
-    	}
-    	
-    	addWhereClause += ' limit 500';
-    	
-    	System.debug(addWhereClause);
+        }
+        
+        addWhereClause += ' limit 500';
+        
+        System.debug(addWhereClause);
 
         return client.query('SELECT Id, FirstName, LastName, Name ' + 
                             'FROM   Contact ' + addWhereClause );
@@ -189,7 +189,7 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
         String jsonResp = client.query('Select id, name' + ((addPhotos) ? ', smallPhotoUrl' : '') + ' from User where id IN (\'' + uids + '\')');
         
         if (addPhotos) {
-        	jsonResp = jsonResp.replaceAll('\"SmallPhotoUrl\":\"/([^\"]*?)"', '\"SmallPhotoUrl\":\"' + this.sm.instanceUrl + '/$1\"')
+            jsonResp = jsonResp.replaceAll('\"SmallPhotoUrl\":\"/([^\"]*?)"', '\"SmallPhotoUrl\":\"' + this.sm.instanceUrl + '/$1\"')
                        .replaceAll('\"SmallPhotoUrl\":\"([^\"]*?)"', '\"SmallPhotoUrl\":\"$1?oauth_token=' + this.sm.accessToken + '\"');
         }
         
@@ -197,18 +197,18 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
     }
     
     private String searchContacts() {
-    	String text = getRequestParam('text');
-    	String response = null;
-    	
-    	if (text != null && text.trim().length() > 0) {
-    		text = String.escapeSingleQuotes(text.trim()).replaceAll('([{}])', '\\$1');
-	    	String sosl = 'Find {' + text + '* } IN NAME FIELDS ' +
-	    	              'RETURNING Contact (Id, FirstName, LastName, Name, Account.Name LIMIT 200)';
-	        response = client.search(sosl);
-    	}
-    	
-    	if (response == null) response = '[]';
-    	return response;
+        String text = getRequestParam('text');
+        String response = null;
+        
+        if (text != null && text.trim().length() > 0) {
+            text = String.escapeSingleQuotes(text.trim()).replaceAll('([{}])', '\\$1');
+            String sosl = 'Find {' + text + '* } IN NAME FIELDS ' +
+                          'RETURNING Contact (Id, FirstName, LastName, Name, Account.Name LIMIT 200)';
+            response = client.search(sosl);
+        }
+        
+        if (response == null) response = '[]';
+        return response;
     }
     
     private String fetchActivities() {
@@ -218,51 +218,51 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
         String tasks, events;
         
         if (cids.trim().length() > 0 && cidArray.size() > 0) {
-	        String filter = 'whoId IN (' + ContactsAppUtil.createCSVFromList(cidArray, true) + ')';
-	        
-	        tasks = client.query('Select id, subject, status, IsClosed, ActivityDate, Owner.Id, Owner.name, Who.Id, Who.name, lastmodifieddate from Task where ' + filter + ' order by ActivityDate desc, id desc limit 50');
-	        events = client.query('Select id, subject, location, ActivityDate, Owner.Id, Owner.name, Who.Id, Who.name, lastmodifieddate from Event where ' + filter + ' order by ActivityDate desc, id desc limit 50');
+            String filter = 'whoId IN (' + ContactsAppUtil.createCSVFromList(cidArray, true) + ')';
+            
+            tasks = client.query('Select id, subject, status, IsClosed, ActivityDate, Owner.Id, Owner.name, Who.Id, Who.name, lastmodifieddate from Task where ' + filter + ' order by ActivityDate desc, id desc limit 50');
+            events = client.query('Select id, subject, location, ActivityDate, Owner.Id, Owner.name, Who.Id, Who.name, lastmodifieddate from Event where ' + filter + ' order by ActivityDate desc, id desc limit 50');
         } else {
-        	tasks = events = '{}';
+            tasks = events = '{}';
         }
         
         return '{"tasks":' + tasks + ', "events":' + events + '}';
     }
     
     private String getContactDescribe() {
-    	String val = client.describe('Contact');
-    	
-    	String accDesc = client.sobject('Account');
-    	accDesc = accDesc.split('"label"\\s*:\\s*"', 2)[1];
-    	String accLabel = accDesc.substring(0, accDesc.indexOf('"'));
-    	
-    	Integer idx = val.indexOf('"relationshipName":"Account"');
-    	if (idx > 0) {
-    		val = val.subString(0, idx) + '"relationshipLabel":"' + accLabel + '",' + val.subString(idx);
-    	}
-    	
-    	return val;
+        String val = client.describe('Contact');
+        
+        String accDesc = client.sobject('Account');
+        accDesc = accDesc.split('"label"\\s*:\\s*"', 2)[1];
+        String accLabel = accDesc.substring(0, accDesc.indexOf('"'));
+        
+        Integer idx = val.indexOf('"relationshipName":"Account"');
+        if (idx > 0) {
+            val = val.subString(0, idx) + '"relationshipLabel":"' + accLabel + '",' + val.subString(idx);
+        }
+        
+        return val;
     }
     
     private String manageEula() {
-    	
-    	String clientId = getRequestParam('clientId');
-    	String eulaResponse = getRequestParam('eulaResponse');
-    	
-    	Map<String, String> response = new Map<String, String>();
-    	response.put('success', 'false');
-    	response.put('errorCode', 'INVALID_CLIENT');
+        
+        String clientId = getRequestParam('clientId');
+        String eulaResponse = getRequestParam('eulaResponse');
+        
+        Map<String, String> response = new Map<String, String>();
+        response.put('success', 'false');
+        response.put('errorCode', 'INVALID_CLIENT');
         response.put('error', System.Label.NotValidClientPleaseRelogin);
-    	
-    	if (clientId != null && clientId.trim().length() > 0) {
-    	   List<AppClient__c> appClients = [SELECT id, AppUser__c FROM AppClient__c WHERE id = :clientId.trim()];
-    	   if (appClients != null && !appClients.isEmpty()) {
-    	       List<AppUser__c> appUserList = [SELECT id, UserID__c, OrganizationID__c, EULA__c FROM AppUser__c where id = :appClients[0].AppUser__c];
-    	       if (appUserList != null && !appUserList.isEmpty()) {
-    	           String userInfoStr = client.getUserInfo();
-    	           JSONObject userInfo = JSONObject.newInstance(client.getUserInfo());
-    	           if(userInfo != null && userInfo.get('user_id').value() == appUserList[0].UserID__c && 
-    	               userInfo.get('organization_id').value() == appUserList[0].OrganizationID__c) {
+        
+        if (clientId != null && clientId.trim().length() > 0) {
+           List<AppClient__c> appClients = [SELECT id, AppUser__c FROM AppClient__c WHERE id = :clientId.trim()];
+           if (appClients != null && !appClients.isEmpty()) {
+               List<AppUser__c> appUserList = [SELECT id, UserID__c, OrganizationID__c, EULA__c FROM AppUser__c where id = :appClients[0].AppUser__c];
+               if (appUserList != null && !appUserList.isEmpty()) {
+                   String userInfoStr = client.getUserInfo();
+                   JSONObject userInfo = JSONObject.newInstance(client.getUserInfo());
+                   if(userInfo != null && userInfo.get('user_id').value() == appUserList[0].UserID__c && 
+                       userInfo.get('organization_id').value() == appUserList[0].OrganizationID__c) {
                        if(eulaResponse != null && eulaResponse.trim().equalsIgnoreCase('accept')) {
                             appUserList[0].Eula__c = true;
                             appUserList[0].EULA_Acceptance_Date__c = DateTime.now();
@@ -274,11 +274,11 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
                             response.put('errorCode', 'INVALID_RESPONSE');
                             response.put('error', System.Label.NotValidResponse);
                        }
-    	           }
-    	       }
-    	   }
-    	}
-    	
-    	return JSONObject.createSimpleJson(response);
+                   }
+               }
+           }
+        }
+        
+        return JSONObject.createSimpleJson(response);
     }
 }

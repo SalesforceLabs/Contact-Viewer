@@ -71,12 +71,12 @@ public with sharing class SfdcOAuthManager {
         }
         
         public String encryptedRefreshToken {
-        	get {
-        		if (this.encryptedRefreshToken == null && this.refreshToken != null) {
-        			return ContactsAppUtil.encrypt(PRIVATE_KEY, this.refreshToken);
-        		}
-        		return this.encryptedRefreshToken;
-        	}
+            get {
+                if (this.encryptedRefreshToken == null && this.refreshToken != null) {
+                    return ContactsAppUtil.encrypt(PRIVATE_KEY, this.refreshToken);
+                }
+                return this.encryptedRefreshToken;
+            }
             private set;
         }
         
@@ -111,7 +111,7 @@ public with sharing class SfdcOAuthManager {
     }
     
     private static String getLoginHostUrl(String host) {
-    	if (host != null && host.trim().length() > 0) {
+        if (host != null && host.trim().length() > 0) {
             host = host.trim().toLowerCase();
             if (host.startsWith('http://') || host.startsWith('https://')) {
                 host = host.replaceFirst('http[s]?://', '');
@@ -177,7 +177,7 @@ public with sharing class SfdcOAuthManager {
                     String errorMsg = error.get('error_description').value();
                     String errorCode = error.get('error').value();
                     if ('invalid_grant'.equalsIgnoreCase(errorCode)) {
-                    	errorMsg = System.Label.SessionExpiredPleaselogoutAndRelogin;
+                        errorMsg = System.Label.SessionExpiredPleaselogoutAndRelogin;
                     }
                     throw new OAuthException(errorCode, errorMsg);
                 } else
