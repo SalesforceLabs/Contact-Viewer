@@ -31,6 +31,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 1. Grab the Contact Viewer source code: `git clone https://github.com/ForceDotComLabs/Contact-Viewer.git`
 2. Deploy the force.com metadata under Contact-Viewer/src folder to your destination org. You can deploy that using [Force.com Migration Tool](http://wiki.developerforce.com/index.php/Force.com_Migration_Tool) or by using [Force.com IDE](http://wiki.developerforce.com/index.php/Force.com_IDE)
+    - Note: Please ensure that the "Translation Workbench" is enabled for your organization before deploying this app. To enable "Translation Workbench", go to Setup -> Administration Setup -> Tranlation Workbench -> Translation Settings, and then click "Enable" button.
 3. Login into your destination org and setup following:
     1. Force.com sites: Under Setup -> Develop -> Sites, setup a domain name and create a new site. Use the **ContactsApp** as the Active site home page. Also enable all the Visualforce pages, which are part of this project, on this new site.
     2. Remote access: Under Setup -> Develop -> Remote Access, create new remote access settings with **Callback URL** as the URL of the site created in step 3(1).
