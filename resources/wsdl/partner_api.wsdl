@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ 
+<!--
+Salesforce.com Partner Web Services API Version 22.0
+Generated on 2011-08-17 18:06:52 +0000.
+ 
+Copyright 1999-2011 salesforce.com, inc.
+All Rights Reserved
+--> 
+ 
+<definitions targetNamespace="urn:partner.soap.sforce.com"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:fns="urn:fault.partner.soap.sforce.com"
+             xmlns:tns="urn:partner.soap.sforce.com"> 
+    <types> 
+ 
+        <schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:partner.soap.sforce.com"> 
+ 
+            <!-- Our simple ID Type -->
+            <simpleType name="ID">
+                <restriction base="xsd:string">
+                    <length value="18"/>
+                    <pattern value='[a-zA-Z0-9]{18}'/>
+                </restriction>
+            </simpleType> 
+            
+            <!-- Describe Message Types --> 
+            <element name="describeSObject"> 
+                <complexType> 
+                    <sequence> 
+                        <element name="sObjectType" type="xsd:string"/> 
+                    </sequence> 
+                </complexType> 
+            </element> 
+            <element name="describeSObjectResponse"> 
+                <complexType> 
+                    <sequence> 
+                        <element name="result" type="tns:DescribeSObjectResult" nillable="true"/> 
+                    </sequence> 
+                </complexType> 
+            </element> 
+            
+            <complexType name="DescribeSObjectResult"> 
+                <sequence> 
+                    <element name="activateable"        type="xsd:boolean"/> 
+                    <element name="childRelationships"  type="tns:ChildRelationship" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="createable"          type="xsd:boolean"/> 
+                    <element name="custom"              type="xsd:boolean"/> 
+                    <element name="customSetting"       type="xsd:boolean"/> 
+                    <element name="deletable"           type="xsd:boolean"/> 
+                    <element name="deprecatedAndHidden" type="xsd:boolean"/> 
+                    <element name="feedEnabled"         type="xsd:boolean"/> 
+                    <element name="fields"              type="tns:Field" nillable="true" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="keyPrefix"           type="xsd:string" nillable="true"/> 
+                    <element name="label"               type="xsd:string"/> 
+                    <element name="labelPlural"         type="xsd:string"/> 
+                    <element name="layoutable"          type="xsd:boolean"/> 
+                    <element name="mergeable"           type="xsd:boolean"/> 
+                    <element name="name"                type="xsd:string"/> 
+                    <element name="queryable"           type="xsd:boolean"/> 
+                    <element name="recordTypeInfos"     type="tns:RecordTypeInfo" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="replicateable"       type="xsd:boolean"/> 
+                    <element name="retrieveable"        type="xsd:boolean"/> 
+                    <element name="searchable"          type="xsd:boolean" /> 
+                    <element name="triggerable"         type="xsd:boolean" minOccurs="0"/> 
+                    <element name="undeletable"         type="xsd:boolean"/> 
+                    <element name="updateable"          type="xsd:boolean"/> 
+                    <element name="urlDetail"           type="xsd:string" nillable="true"/> 
+                    <element name="urlEdit"             type="xsd:string" nillable="true"/> 
+                    <element name="urlNew"              type="xsd:string" nillable="true"/> 
+                </sequence> 
+            </complexType> 
+            
+            <complexType name="ChildRelationship"> 
+                <sequence> 
+                    <element name="cascadeDelete"    type="xsd:boolean"/> 
+                    <element name="childSObject"     type="xsd:string"/> 
+                    <element name="deprecatedAndHidden" type="xsd:boolean"/> 
+                    <element name="field"            type="xsd:string"/> 
+                    <element name="relationshipName" type="xsd:string" minOccurs="0"/> 
+                </sequence> 
+            </complexType> 
+            
+            <complexType name="Field"> 
+                <sequence> 
+                    <element name="autoNumber"         type="xsd:boolean"/> 
+                    <element name="byteLength"         type="xsd:int"/> 
+                    <element name="calculated"         type="xsd:boolean"/> 
+                    <element name="calculatedFormula"  type="xsd:string" minOccurs="0"/> 
+                    <element name="caseSensitive"      type="xsd:boolean"/> 
+                    <element name="controllerName"     type="xsd:string" minOccurs="0"/> 
+                    <element name="createable"         type="xsd:boolean"/> 
+                    <element name="custom"             type="xsd:boolean"/> 
+                    <element name="defaultValueFormula" type="xsd:string" minOccurs="0"/> 
+                    <element name="defaultedOnCreate"  type="xsd:boolean"/> 
+                    <element name="dependentPicklist"  type="xsd:boolean" minOccurs="0"/> 
+                    <element name="deprecatedAndHidden" type="xsd:boolean"/> 
+                    <element name="digits"             type="xsd:int"/> 
+                    <element name="externalId"         type="xsd:boolean" minOccurs="0"/> 
+                    <element name="filterable"         type="xsd:boolean"/> 
+                    <element name="groupable"          type="xsd:boolean"/> 
+                    <element name="htmlFormatted"      type="xsd:boolean" minOccurs="0"/> 
+                    <element name="idLookup"           type="xsd:boolean"/> 
+                    <element name="inlineHelpText"     type="xsd:string" minOccurs="0"/> 
+                    <element name="label"              type="xsd:string"/> 
+                    <element name="length"             type="xsd:int"/> 
+                    <element name="name"               type="xsd:string"/> 
+                    <element name="nameField"          type="xsd:boolean"/> 
+                    <element name="namePointing"       type="xsd:boolean" minOccurs="0"/> 
+                    <element name="nillable"           type="xsd:boolean"/> 
+                    <element name="picklistValues"     type="tns:PicklistEntry" nillable="true" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="precision"          type="xsd:int"/> 
+                    <element name="referenceTo"        type="xsd:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="relationshipName"   type="xsd:string" minOccurs="0"/> 
+                    <element name="relationshipOrder"  type="xsd:int" minOccurs="0"/> 
+                    <element name="restrictedPicklist" type="xsd:boolean"/> 
+                    <element name="scale"              type="xsd:int"/> 
+                    <element name="soapType"           type="tns:soapType"/> 
+                    <element name="sortable"           type="xsd:boolean" minOccurs="0"/> 
+                    <element name="type"               type="tns:fieldType"/> 
+                    <element name="unique"             type="xsd:boolean"/> 
+                    <element name="updateable"         type="xsd:boolean"/> 
+                    <element name="writeRequiresMasterRead" type="xsd:boolean" minOccurs="0"/> 
+                </sequence> 
+            </complexType>
+            
+            <simpleType name="soapType"> 
+                <restriction base="xsd:string"> 
+                    <enumeration value="tns:ID"/> 
+                    <enumeration value="xsd:base64Binary"/> 
+                    <enumeration value="xsd:boolean"/> 
+                    <enumeration value="xsd:double"/> 
+                    <enumeration value="xsd:int"/> 
+                    <enumeration value="xsd:string"/> 
+                    <enumeration value="xsd:date"/> 
+                    <enumeration value="xsd:dateTime"/> 
+                    <enumeration value="xsd:time"/> 
+                    <enumeration value="xsd:anyType"/> <!-- can be id, booolean, double, int, string, date, dateTime --> 
+                </restriction> 
+            </simpleType> 
+            
+            <simpleType name="fieldType"> 
+                <restriction base="xsd:string"> 
+                    <enumeration value="string"/> 
+                    <enumeration value="picklist"/> 
+                    <enumeration value="multipicklist"/> 
+                    <enumeration value="combobox"/> 
+                    <enumeration value="reference"/> 
+                    <enumeration value="base64"/> 
+                    <enumeration value="boolean"/> 
+                    <enumeration value="currency"/> 
+                    <enumeration value="textarea"/> 
+                    <enumeration value="int"/> 
+                    <enumeration value="double"/> 
+                    <enumeration value="percent"/> 
+                    <enumeration value="phone"/> 
+                    <enumeration value="id"/> 
+                    <enumeration value="date"/> 
+                    <enumeration value="datetime"/> 
+                    <enumeration value="time"/> 
+                    <enumeration value="url"/> 
+                    <enumeration value="email"/> 
+                    <enumeration value="encryptedstring"/> 
+                    <enumeration value="datacategorygroupreference"/> 
+                    <enumeration value="anyType"/> <!-- can be string, picklist, reference, boolean, currency, int, double, percent, id, date, datetime, url, email --> 
+                </restriction> 
+            </simpleType> 
+            
+            <complexType name="DescribeLayoutResult"> 
+                <sequence> 
+                    <element name="layouts"            type="tns:DescribeLayout" maxOccurs="unbounded"/> 
+                    <element name="recordTypeMappings" type="tns:RecordTypeMapping" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="recordTypeSelectorRequired" type="xsd:boolean" /> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="DescribeLayout"> 
+                <sequence> 
+                    <element name="buttonLayoutSection"  type="tns:DescribeLayoutButtonSection" minOccurs="0"/> 
+                    <element name="detailLayoutSections" type="tns:DescribeLayoutSection" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="editLayoutSections"   type="tns:DescribeLayoutSection" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="id"                   type="tns:ID"/> 
+                    <element name="relatedLists"         type="tns:RelatedList" minOccurs="0" maxOccurs="unbounded"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="DescribeLayoutSection"> 
+                <sequence> 
+                    <element name="columns"                 type="xsd:int"/> 
+                    <element name="heading"                 type="xsd:string"/> 
+                    <element name="layoutRows"              type="tns:DescribeLayoutRow" maxOccurs="unbounded"/> 
+                    <element name="rows"                    type="xsd:int"/> 
+                    <element name="useCollapsibleSection"   type="xsd:boolean"/> 
+                    <element name="useHeading"              type="xsd:boolean"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="DescribeLayoutButtonSection"> 
+                <sequence> 
+                    <element name="detailButtons"         type="tns:DescribeLayoutButton" maxOccurs="unbounded"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="DescribeLayoutRow"> 
+                <sequence> 
+                    <element name="layoutItems"      type="tns:DescribeLayoutItem" maxOccurs="unbounded"/> 
+                    <element name="numItems"         type="xsd:int"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="DescribeLayoutItem"> 
+                <sequence> 
+                    <element name="editable"         type="xsd:boolean"/> 
+                    <element name="label"            type="xsd:string" nillable="true"/> 
+                    <element name="layoutComponents" type="tns:DescribeLayoutComponent" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="placeholder"      type="xsd:boolean"/> 
+                    <element name="required"         type="xsd:boolean"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="DescribeLayoutButton"> 
+                <sequence> 
+                    <element name="custom"           type="xsd:boolean"/> 
+                    <element name="label"            type="xsd:string" nillable="true"/> 
+                    <element name="name"             type="xsd:string" nillable="true"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="DescribeLayoutComponent"> 
+                <sequence> 
+                    <element name="displayLines"      type="xsd:int"/> 
+                    <element name="tabOrder"          type="xsd:int"/> 
+                    <element name="type"              type="tns:layoutComponentType"/> 
+                    <element name="value"             type="xsd:string"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <simpleType name="layoutComponentType"> 
+                <restriction base="xsd:string"> 
+                    <enumeration value="Field"/> 
+                    <enumeration value="Separator"/> 
+                    <enumeration value="SControl"/> 
+                    <enumeration value="EmptySpace"/> 
+                </restriction> 
+            </simpleType> 
+            
+            <complexType name="RelatedList"> 
+                <sequence> 
+                    <element name="columns"         type="tns:RelatedListColumn" maxOccurs="unbounded"/> 
+                    <element name="custom"          type="xsd:boolean"/> 
+                    <element name="field"           type="xsd:string" nillable="true"/> 
+                    <element name="label"           type="xsd:string"/> 
+                    <element name="limitRows"       type="xsd:int"/> 
+                    <element name="name"            type="xsd:string"/> 
+                    <element name="sobject"         type="xsd:string" nillable="true"/> 
+                    <element name="sort"            type="tns:RelatedListSort" minOccurs="0" maxOccurs="unbounded"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="RelatedListColumn"> 
+                <sequence> 
+                    <element name="field"           type="xsd:string" nillable="true"/> 
+                    <element name="format"          type="xsd:string" nillable="true"/> 
+                    <element name="label"           type="xsd:string"/> 
+                    <element name="name"            type="xsd:string"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="RelatedListSort"> 
+                <sequence> 
+                    <element name="ascending"       type="xsd:boolean"/> 
+                    <element name="column"          type="xsd:string"/> 
+                </sequence> 
+            </complexType> 
+            
+            <complexType name="RecordTypeInfo"> 
+                <sequence> 
+                    <element name="available"                 type="xsd:boolean"/> 
+                    <element name="defaultRecordTypeMapping"  type="xsd:boolean"/> 
+                    <element name="name"                      type="xsd:string"/> 
+                    <element name="recordTypeId"              type="tns:ID" nillable="true"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="RecordTypeMapping"> 
+                <sequence> 
+                    <element name="available"                 type="xsd:boolean"/> 
+                    <element name="defaultRecordTypeMapping"  type="xsd:boolean"/> 
+                    <element name="layoutId"                  type="tns:ID"/> 
+                    <element name="name"                      type="xsd:string"/> 
+                    <element name="picklistsForRecordType"    type="tns:PicklistForRecordType" nillable="true" minOccurs="0" maxOccurs="unbounded"/> 
+                    <element name="recordTypeId"              type="tns:ID" nillable="true"/> 
+                </sequence> 
+            </complexType> 
+ 
+            <complexType name="PicklistForRecordType"> 
+                <sequence> 
+                    <element name="picklistName"      type="xsd:string"/> 
+                    <element name="picklistValues"    type="tns:PicklistEntry" nillable="true" minOccurs="0" maxOccurs="unbounded"/> 
+                </sequence> 
+            </complexType> 
+            
+            <complexType name="PicklistEntry"> 
+                <sequence> 
+                    <element name="active"       type="xsd:boolean"/> 
+                    <element name="defaultValue" type="xsd:boolean"/> 
+                    <element name="label"        type="xsd:string" nillable="true"/> 
+                    <element name="validFor"     type="xsd:base64Binary" minOccurs="0"/> 
+                    <element name="value"        type="xsd:string"/> 
+                </sequence> 
+            </complexType> 
+ 
+ 
+ 
+            <!-- Header Elements --> 
+            <element name="SessionHeader"> 
+                <complexType> 
+                    <sequence> 
+                        <element name="sessionId" type="xsd:string"/> 
+                    </sequence> 
+                </complexType> 
+            </element> 
+ 
+ 
+            <element name="CallOptions"> 
+                <complexType> 
+                    <sequence> 
+                        <element name="client"            type="xsd:string" nillable="true"/> 
+                        <element name="defaultNamespace"  type="xsd:string" nillable="true"/> 
+ 
+                    </sequence> 
+                </complexType> 
+            </element> 
+ 
+            
+            
+            <element name="describeLayout"> 
+                <complexType> 
+                    <sequence> 
+                        <element name="sObjectType" type="xsd:string"/> 
+                        <element name="recordTypeIds" type="tns:ID" minOccurs="0" maxOccurs="unbounded"/> 
+                    </sequence> 
+                </complexType> 
+            </element> 
+            <element name="describeLayoutResponse"> 
+                <complexType> 
+                    <sequence> 
+                        <element name="result" type="tns:DescribeLayoutResult" nillable="true"/> 
+                    </sequence> 
+                </complexType> 
+            </element> 
+            
+            
+        </schema> 
+ 
+        <schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:fault.partner.soap.sforce.com" xmlns:fns="urn:fault.partner.soap.sforce.com"> 
+ 
+            <simpleType name="ExceptionCode"> 
+                <restriction base="xsd:string"> 
+                    <enumeration value="API_CURRENTLY_DISABLED"/> 
+                    <enumeration value="API_DISABLED_FOR_ORG"/> 
+                    <enumeration value="EXCEEDED_QUOTA"/> 
+                    <enumeration value="FUNCTIONALITY_NOT_ENABLED"/> 
+                    <enumeration value="FUNCTIONALITY_TEMPORARILY_UNAVAILABLE"/> 
+                    <enumeration value="INACTIVE_OWNER_OR_USER"/> 
+                    <enumeration value="INSUFFICIENT_ACCESS"/> 
+                    <enumeration value="INVALID_CROSS_REFERENCE_KEY"/> 
+                    <enumeration value="INVALID_OPERATION"/> 
+                    <enumeration value="INVALID_SESSION_ID"/> 
+                    <enumeration value="INVALID_SOAP_HEADER"/> 
+                    <enumeration value="INVALID_TYPE"/> 
+                    <enumeration value="INVALID_TYPE_FOR_OPERATION"/> 
+                    <enumeration value="LIMIT_EXCEEDED"/> 
+                    <enumeration value="MALFORMED_ID"/> 
+                    <enumeration value="MISSING_ARGUMENT"/> 
+                    <enumeration value="OPERATION_TOO_LARGE"/> 
+                    <enumeration value="ORG_IN_MAINTENANCE"/> 
+                    <enumeration value="ORG_IS_DOT_ORG"/> 
+                    <enumeration value="ORG_LOCKED"/> 
+                    <enumeration value="ORG_NOT_OWNED_BY_INSTANCE"/> 
+                    <enumeration value="REQUEST_LIMIT_EXCEEDED"/> 
+                    <enumeration value="REQUEST_RUNNING_TOO_LONG"/> 
+                    <enumeration value="SERVER_UNAVAILABLE"/> 
+                    <enumeration value="UNKNOWN_EXCEPTION"/> 
+                    <enumeration value="UNSUPPORTED_API_VERSION"/> 
+                    <enumeration value="XML_PARSER_ERROR"/> 
+                </restriction> 
+            </simpleType> 
+            <!-- For convenience these QNames are returned in the standard soap faultcode element --> 
+            <simpleType name="FaultCode"> 
+                <restriction base="xsd:QName"> 
+                    <enumeration value="fns:API_CURRENTLY_DISABLED"/> 
+                    <enumeration value="fns:API_DISABLED_FOR_ORG"/> 
+                    <enumeration value="fns:EXCEEDED_QUOTA"/> 
+                    <enumeration value="fns:FUNCTIONALITY_NOT_ENABLED"/> 
+                    <enumeration value="fns:FUNCTIONALITY_TEMPORARILY_UNAVAILABLE"/> 
+                    <enumeration value="fns:INACTIVE_OWNER_OR_USER"/> 
+                    <enumeration value="fns:INSUFFICIENT_ACCESS"/> 
+                    <enumeration value="fns:INVALID_CROSS_REFERENCE_KEY"/> 
+                    <enumeration value="fns:INVALID_OPERATION"/> 
+                    <enumeration value="fns:INVALID_SESSION_ID"/> 
+                    <enumeration value="fns:INVALID_SOAP_HEADER"/> 
+                    <enumeration value="fns:INVALID_TYPE"/> 
+                    <enumeration value="fns:INVALID_TYPE_FOR_OPERATION"/> 
+                    <enumeration value="fns:LIMIT_EXCEEDED"/> 
+                    <enumeration value="fns:MALFORMED_ID"/> 
+                    <enumeration value="fns:MISSING_ARGUMENT"/> 
+                    <enumeration value="fns:OPERATION_TOO_LARGE"/> 
+                    <enumeration value="fns:ORG_IN_MAINTENANCE"/> 
+                    <enumeration value="fns:ORG_IS_DOT_ORG"/> 
+                    <enumeration value="fns:ORG_LOCKED"/> 
+                    <enumeration value="fns:ORG_NOT_OWNED_BY_INSTANCE"/> 
+                    <enumeration value="fns:REQUEST_LIMIT_EXCEEDED"/> 
+                    <enumeration value="fns:REQUEST_RUNNING_TOO_LONG"/> 
+                    <enumeration value="fns:SERVER_UNAVAILABLE"/> 
+                    <enumeration value="fns:UNKNOWN_EXCEPTION"/> 
+                    <enumeration value="fns:UNSUPPORTED_API_VERSION"/> 
+                    <enumeration value="fns:XML_PARSER_ERROR"/> 
+                </restriction> 
+            </simpleType>             
+            
+            <complexType name="ApiFault"> 
+                <sequence> 
+                    <element name="exceptionCode"    type="fns:ExceptionCode"/> 
+                    <element name="exceptionMessage" type="xsd:string"/> 
+ 
+                </sequence> 
+            </complexType> 
+ 
+            <element name="fault" type="fns:ApiFault" /> 
+            
+            <complexType name="ApiQueryFault"> 
+                <complexContent> 
+                    <extension base="fns:ApiFault"> 
+                        <sequence> 
+                        <element name="row" type="xsd:int"/> 
+                        <element name="column" type="xsd:int"/> 
+                        </sequence> 
+                    </extension> 
+                </complexContent> 
+            </complexType>
+            
+            <complexType name="InvalidIdFault"> 
+                <complexContent> 
+                    <extension base="fns:ApiFault"/> 
+                </complexContent> 
+            </complexType> 
+            <element name="InvalidIdFault" type="fns:InvalidIdFault"/>
+            
+            <complexType name="UnexpectedErrorFault"> 
+                <complexContent> 
+                    <extension base="fns:ApiFault"/> 
+                </complexContent> 
+            </complexType> 
+            <element name="UnexpectedErrorFault" type="fns:UnexpectedErrorFault"/>
+            
+            <complexType name="InvalidSObjectFault"> 
+                <complexContent> 
+                    <extension base="fns:ApiQueryFault"/> 
+                </complexContent> 
+            </complexType> 
+            <element name="InvalidSObjectFault" type="fns:InvalidSObjectFault"/>
+ 
+ 
+        </schema> 
+    </types> 
+ 
+    <!-- Header Message --> 
+    <message name="Header"> 
+        <part element="tns:SessionHeader"                name="SessionHeader"/>  
+        <part element="tns:CallOptions"                  name="CallOptions"/> 
+    </message> 
+ 
+    <!-- Fault Messages --> 
+ 
+    <message name="ApiFault"> 
+        <part name="fault" element="fns:fault"/> 
+    </message> 
+    
+    <message name="describeSObjectRequest">
+        <part element="tns:describeSObject" name="parameters"/>
+    </message>
+    <message name="describeSObjectResponse">
+        <part element="tns:describeSObjectResponse" name="parameters"/>
+    </message>
+
+    <message name="describeLayoutRequest">
+        <part element="tns:describeLayout" name="parameters"/>
+    </message>
+    <message name="describeLayoutResponse">
+        <part element="tns:describeLayoutResponse" name="parameters"/>
+    </message>
+ 	<message name="InvalidSObjectFault"> 
+        <part name="fault" element="fns:InvalidSObjectFault"/> 
+    </message> 
+    <message name="UnexpectedErrorFault"> 
+        <part name="fault" element="fns:UnexpectedErrorFault"/> 
+    </message> 
+    <message name="InvalidIdFault"> 
+        <part name="fault" element="fns:InvalidIdFault"/> 
+    </message> 
+    
+ 
+    <!-- Soap PortType --> 
+    <portType name="Soap"> 
+	
+		<operation name="describeSObject">
+            <documentation>Describe an sObject</documentation>
+            <input  message="tns:describeSObjectRequest"/>
+            <output message="tns:describeSObjectResponse"/>
+            <fault  message="tns:InvalidSObjectFault" name="InvalidSObjectFault"/>
+            <fault  message="tns:UnexpectedErrorFault" name="UnexpectedErrorFault"/>
+        </operation>
+
+        <operation name="describeLayout">
+            <documentation>Describe the layout of an sObject</documentation>
+            <input  message="tns:describeLayoutRequest"/>
+            <output message="tns:describeLayoutResponse"/>
+            <fault  message="tns:InvalidSObjectFault" name="InvalidSObjectFault"/>
+            <fault  message="tns:UnexpectedErrorFault" name="UnexpectedErrorFault"/>
+            <fault  message="tns:InvalidIdFault" name="InvalidIdFault"/>
+        </operation>
+    </portType> 
+ 
+    <!-- Soap Binding --> 
+    <binding name="SoapBinding" type="tns:Soap"> 
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/> 
+
+        <operation name="describeSObject">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:header use="literal" message="tns:Header" part="SessionHeader"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="InvalidSObjectFault">
+                <soap:fault name="InvalidSObjectFault" use="literal"/>
+            </fault>
+            <fault name="UnexpectedErrorFault">
+                <soap:fault name="UnexpectedErrorFault" use="literal"/>
+            </fault>
+        </operation>
+
+        <operation name="describeLayout">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:header use="literal" message="tns:Header" part="SessionHeader"/>
+                <soap:header use="literal" message="tns:Header" part="CallOptions"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="InvalidSObjectFault">
+                <soap:fault name="InvalidSObjectFault" use="literal"/>
+            </fault>
+            <fault name="UnexpectedErrorFault">
+                <soap:fault name="UnexpectedErrorFault" use="literal"/>
+            </fault>
+            <fault name="InvalidIdFault">
+                <soap:fault name="InvalidIdFault" use="literal"/>
+            </fault>
+        </operation>
+ 
+    </binding> 
+ 
+    <!-- Soap Service Endpoint --> 
+    <service name="SforceService"> 
+        <documentation>Sforce SOAP API</documentation> 
+        <port binding="tns:SoapBinding" name="Soap"> 
+            <soap:address location="https://login.salesforce.com/services/Soap/u/22.0"/> 
+        </port> 
+    </service> 
+</definitions>
