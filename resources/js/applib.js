@@ -33,11 +33,6 @@ if (sforce === undefined) {
 
 if (sforce.Client === undefined) {
 
-    // We use $j rather than $ for jQuery so it works in Visualforce
-    if (window.$j === undefined) {
-        $j = $.noConflict();
-    }
-
     /**
      * The Client provides a convenient wrapper for the Force.com REST API, 
      * allowing JavaScript in Visualforce pages to use the API via the Ajax
@@ -49,14 +44,14 @@ if (sforce.Client === undefined) {
      * @constructor
      */
     sforce.Client = function() {
-    	this.sessionHeader = null;
-    	
-    	this.SESSION_HEADER = 'App-Session';
+        this.sessionHeader = null;
+        
+        this.SESSION_HEADER = 'App-Session';
     }
     
     sforce.Client.prototype.ajax = function(type, url, data, success, error, complete) {
-    	var that = this;
-    	$j.ajax({
+        var that = this;
+        $j.ajax({
             type: type,
             url: url,
             processData: true,
@@ -66,17 +61,17 @@ if (sforce.Client === undefined) {
             error: error,
             complete: complete,
             beforeSend: function(xhr) {
-            	if (that.sessionHeader)
-	                xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
+                if (that.sessionHeader)
+                    xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
             }
         });
     }
     
     sforce.Client.prototype.setSessionHeader = function(token) {
-    	this.sessionHeader = token;
+        this.sessionHeader = token;
     }
     
-	/**
+    /**
      * Get OAuth authorize URL.
      * @param host Instance against which authentication needs to be performed
      */
@@ -114,6 +109,30 @@ if (sforce.Client === undefined) {
     sforce.Client.prototype.prepareSession = function(success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession';
         this.ajax('POST', url, null, success, error, complete);
+    }
+    
+    /**
+     * Prepare an app session from oauth values.
+     * @param success function to call on success
+     * @param error function to call on failure
+     * @param complete function to call on ajax call completion
+     */
+    sforce.Client.prototype.prepareSessionFromOAuth = function(accessToken, instanceUrl, userIdentityUrl, success, error, complete) {
+        var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession';
+        var data = 'accessToken=' + accessToken + '&instanceUrl=' + instanceUrl + '&identityUrl=' + userIdentityUrl;
+        this.ajax('POST', url, data, success, error, complete);
+    }
+    
+    /**
+     * Revokes existing session.
+     * @param success function to call on success
+     * @param error function to call on failure
+     * @param complete function to call on ajax call completion
+     */
+    sforce.Client.prototype.revokeSession = function(clientId, refToken, success, error, complete) {
+        var url = getBaseUrl() + '/services/apexrest/oauth2/revokeSession';
+        var data = (clientId && refToken) ? ('cid=' + clientId  + '&rt=' + refToken) : '';
+        this.ajax('POST', url, data, success, error, complete);
     }
     
     /**
@@ -193,7 +212,7 @@ if (sforce.Client === undefined) {
      * @param error function to call on failure
      */
     sforce.Client.prototype.getContactDetailsViaApex = function(contactId, recordTypeId, success, error, complete) {
-    	var that = this;
+        var that = this;
         var url = getBaseUrl() + '/ContactDetails';
         var timezoneOffset = new Date().getTimezoneOffset();
         $j.ajax({
@@ -204,8 +223,8 @@ if (sforce.Client === undefined) {
             error: error,
             complete: complete,
             beforeSend: function(xhr) {
-            	if (that.sessionHeader)
-	                xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
+                if (that.sessionHeader)
+                    xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
             }
         });
     }

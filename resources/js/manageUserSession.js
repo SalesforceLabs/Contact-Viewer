@@ -42,31 +42,31 @@ var ManageUserSession = (function() {
     }
     
     function prepareSession(response) {
-    	sessionAlive = true;
-		username = response.username;
-		instanceUrl = response.instanceUrl;
-		eulaAccepted = response.eula;
-		sf.setSessionHeader(response.sessionToken);
-		StorageManager.setSessionValue(session_token_storage_key, response.sessionToken);
+        sessionAlive = true;
+        username = response.username;
+        instanceUrl = response.instanceUrl;
+        eulaAccepted = response.eula;
+        sf.setSessionHeader(response.sessionToken);
+        StorageManager.setSessionValue(session_token_storage_key, response.sessionToken);
     }
     
     function resurrectSession(sessionToken, onSuccess) {
-    	sf.setSessionHeader(sessionToken);
-    	
-    	var errorCallback = function() {
-    		sf.setSessionHeader(null);
-    		StorageManager.clearSessionValue(session_token_storage_key);
-    		ManageUserSession.initialize(onSuccess);
-    	}
-    	
-    	var successCallback = function(response) {
-    		if (response.success) {
-    			prepareSession(response);
-    			if (typeof onSuccess == 'function') onSuccess();
-    		} else errorCallback();
-    	};
-    	
-    	sf.prepareSession(successCallback, errorCallback);
+        sf.setSessionHeader(sessionToken);
+        
+        var errorCallback = function() {
+            sf.setSessionHeader(null);
+            StorageManager.clearSessionValue(session_token_storage_key);
+            ManageUserSession.initialize(onSuccess);
+        }
+        
+        var successCallback = function(response) {
+            if (response.success) {
+                prepareSession(response);
+                if (typeof onSuccess == 'function') onSuccess();
+            } else errorCallback();
+        };
+        
+        sf.prepareSession(successCallback, errorCallback);
     }
 
     function authenticate(callback) {
@@ -84,7 +84,7 @@ var ManageUserSession = (function() {
                 var checkResponse = function(response) {
                 
                     if (response.success) {
-                    	prepareSession(response);
+                        prepareSession(response);
                         
                         if (typeof pmcallback == 'function') pmcallback(true);
                         if (typeof callback == 'function') callback();
@@ -150,7 +150,7 @@ var ManageUserSession = (function() {
             }
             
             sf.obtainAccessToken(ManageUserSession.getLoginHostUrl(),
-            					authCode, passcode, 
+                                authCode, passcode, 
                                 function(response) {
                                     indicator.hide();
                                     if (response.success) {
@@ -174,14 +174,14 @@ var ManageUserSession = (function() {
     
     return {
     
-    	isActive: function() { return sessionAlive == true; },
-    	
-    	isEulaAccepted: function() { return eulaAccepted == true; },
-    	
-		updateEula: function(accepted) { eulaAccepted = accepted; },
-    	
-    	getClientId: function() { return (sessionAlive) ? StorageManager.getLocalValue(sfdc_clientId_storage_key) : null; },
-    	
+        isActive: function() { return sessionAlive == true; },
+        
+        isEulaAccepted: function() { return eulaAccepted == true; },
+        
+        updateEula: function(accepted) { eulaAccepted = accepted; },
+        
+        getClientId: function() { return (sessionAlive) ? StorageManager.getLocalValue(sfdc_clientId_storage_key) : null; },
+        
         getUsername: function() { if (sessionAlive) return username; return null; },
         
         getApiClient: function() { if (sessionAlive) return sf; return null; },
@@ -190,21 +190,25 @@ var ManageUserSession = (function() {
         
         getLoginHostUrl: getLoginHostUrl,
         
-        setLoginHostType: function(host) { StorageManager.setLocalValue(login_host_storage_key, host); },
+        setLoginHostType: function(host) { 
+            if (host != ManageUserSession.getLoginHostType()) {
+                StorageManager.setLocalValue(login_host_storage_key, host);
+            }
+        },
         
         setLoginHostUrl: function(hostUrl) { 
-			var hostType = 'host_custom';
-			
-			hostUrl = hostUrl.toLowerCase();
-			switch(hostUrl) {
-				case 'login.salesforce.com' : hostType = 'host_production'; break;
-				case 'test.salesforce.com' : hostType = 'host_sandbox'; break;
-			}
-			
-			StorageManager.setLocalValue(login_host_url_storage_key, hostUrl); 
-			ManageUserSession.setLoginHostType(hostType);
-		},
-		
+            hostUrl = hostUrl.toLowerCase();
+            if (getLoginHostUrl() != hostUrl) {
+                var hostType = 'host_custom';
+                switch(hostUrl) {
+                    case 'login.salesforce.com' : hostType = 'host_production'; break;
+                    case 'test.salesforce.com' : hostType = 'host_sandbox'; break;
+                }
+                StorageManager.setLocalValue(login_host_url_storage_key, hostUrl); 
+                ManageUserSession.setLoginHostType(hostType);
+            }
+        },
+        
         initialize: function(callback, clearSettings) {
         
             if (!sf) sf = new sforce.Client();
@@ -215,7 +219,7 @@ var ManageUserSession = (function() {
             if (sessionAlive) { //Check if we are already initialized
                 callback();
             } else if (sessionToken && sessionToken.length > 0) {
-            	resurrectSession(sessionToken, callback);
+                resurrectSession(sessionToken, callback);
             } else if (refreshToken && refreshToken.length > 0) { 
                 //Authenticate if we have the refresh token
                 authenticate(callback);
@@ -223,20 +227,34 @@ var ManageUserSession = (function() {
                 // If nothing, the start the oauth process
                 var isOAuthCallback = window.location.search.indexOf('code=');
                 if (isOAuthCallback > 0) { //Are we coming back from an oauth process flow
-                	var authCode = /code=([^&]*)&?/.exec(window.location.search)[1];
+                    var authCode = /code=([^&]*)&?/.exec(window.location.search)[1];
                     obtainOAuthTokensAndSetupPasscode(authCode, function() { history.pushState(null, null, window.location.pathname); callback(); });
                 } else {
-                	if (typeof clearSettings == 'boolean' && clearSettings) StorageManager.clearAll();
-                	authorizeUser();
+                    if (typeof clearSettings == 'boolean' && clearSettings) StorageManager.clearAll();
+                    authorizeUser();
                 }
             }
         },
         
-        kill: function(postLogout) {
-            StorageManager.clearAll();
+        invalidate: function (revokeSession, postInvalidate) {
+            if (revokeSession && sessionAlive) sf.revokeSession(null, null, null, null, postInvalidate);
+            
+            StorageManager.clearSessionValue(session_token_storage_key);
             sf = sessionAlive = username = undefined;
-            postLogout();
+        },
+        
+        kill: function(postLogout) {
+        
+            var clientId = StorageManager.getLocalValue(sfdc_clientId_storage_key);
+            var refToken = StorageManager.getLocalValue(sfdc_token_storage_key);
+            
+            var onRevoke = function() {
+                ManageUserSession.invalidate(); 
+                StorageManager.clearAll();
+                if (typeof postLogout == 'function') postLogout();
+            }
+            
+            sf.revokeSession(clientId, refToken, null, null, onRevoke);
         }
     }
-
 })();

@@ -1178,36 +1178,24 @@ if (sforce.ListView === undefined) {
 
 var ManageUserSession = (function() {
 
-    var sfdc_token_storage_key = 'SFDC-OAUTH-TOKEN';
-    var sfdc_clientId_storage_key = 'SFDC-CLIENT-ID';
-    var login_host_storage_key = 'SFDC-LOGIN-HOST';
-    var login_host_url_storage_key = 'SFDC-LOGIN-HOST-URL';
-    var session_token_storage_key = 'SFDC-SESSION-TOKEN';
-    
-    var sf, sessionAlive, username, instanceUrl, eulaAccepted;
-    var isStandalone = ('standalone' in navigator && navigator.standalone);
-
-    function storeOAuthValues(cid, rt) {
-        if (cid && cid.length > 0) StorageManager.setLocalValue(sfdc_clientId_storage_key, cid);
-        if (rt && rt.length > 0) StorageManager.setLocalValue(sfdc_token_storage_key, rt);
-    }
+    var sf, sessionAlive, username, instanceUrl, loginHostUrl;
     
     function prepareSession(response) {
         sessionAlive = true;
         username = response.username;
         instanceUrl = response.instanceUrl;
-        eulaAccepted = response.eula;
         sf.setSessionHeader(response.sessionToken);
-        StorageManager.setSessionValue(session_token_storage_key, response.sessionToken);
     }
     
-    function resurrectSession(sessionToken, onSuccess) {
-        sf.setSessionHeader(sessionToken);
-        
-        var errorCallback = function() {
-            sf.setSessionHeader(null);
-            StorageManager.clearSessionValue(session_token_storage_key);
-            ManageUserSession.initialize(onSuccess);
+    function authenticate(onSuccess) {
+    
+    	var oauthProperties = new OAuthProperties(remoteAccessConsumerKey, 
+												  oauthRedirectURI, 
+												  ['api'], true);
+		
+		var errorCallback = function() {
+			var errorMsg = 'Authentication failed. Do you want to retry?';
+			if (confirm(errorMsg)) ManageUserSession.initialize(onSuccess);
         }
         
         var successCallback = function(response) {
@@ -1216,436 +1204,83 @@ var ManageUserSession = (function() {
                 if (typeof onSuccess == 'function') onSuccess();
             } else errorCallback();
         };
-        
-        sf.prepareSession(successCallback, errorCallback);
-    }
-
-    function authenticate(callback) {
-
-        var validatePasscodeAndRefreshSession = function(passcode, pmcallback) {
-        
-            // Logout Action
-            if (passcode == -1) {
-                var resp = confirm('Logout user?');
-                if (resp) logout(true);
-                else if (typeof pmcallback == 'function') pmcallback(false);
-            } else {
-                var ind = $j(document).showActivityInd(loadingImg, 'Authenticating...', false);
-                
-                var checkResponse = function(response) {
-                
-                    if (response.success) {
-                        prepareSession(response);
-                        
-                        if (typeof pmcallback == 'function') pmcallback(true);
-                        if (typeof callback == 'function') callback();
-                        
-                    } else {
-                        if (response.errorCode == 'INVALID_TOKEN') StorageManager.clearAll();
-                        if (typeof pmcallback == 'function') pmcallback(response.success, response.error);
-                    }
-                }
-            
-                var errorCallback = function(jqXHR, statusText) {
-                    var msg;
-                    if (statusText == 'error') {
-                        msg = 'Server Unavailable. Check network connection or try again later.';
-                    } else if (statusText = 'timeout') {
-                        msg = 'Request timed out. Please try again.';
-                    }
-                    if (typeof pmcallback == 'function') pmcallback(false, msg);
-                }
-        
-                var clientId = StorageManager.getLocalValue(sfdc_clientId_storage_key);
-                var refToken = StorageManager.getLocalValue(sfdc_token_storage_key);
-        
-                sf.refreshAccessToken(passcode, clientId, refToken, checkResponse, errorCallback, ind.hide);
-            }
+		
+		var loginSuccess = function(oauthInfo) {
+			sf.prepareSessionFromOAuth(oauthInfo.accessToken, 
+									   oauthInfo.instanceUrl, 
+									   oauthInfo.identityUrl, 
+									   successCallback, errorCallback);
+		}
+		
+		// Error callback for the SalesforceOAuthPlugin.authenticate() method.
+        function loginFailure(result) {
+            SFHybridApp.logError("loginFailure: " + result);
+            errorCallback();
         }
-    
-        PasscodeManager.checkPasscode(validatePasscodeAndRefreshSession);
-    }
-    
-    function getLoginHostUrl() {
-        var domain;
-        
-        switch(ManageUserSession.getLoginHostType()) {
-            case 'host_production' : domain = 'login.salesforce.com'; break;
-            case 'host_sandbox': domain = 'test.salesforce.com'; break;
-            case 'host_custom': domain = StorageManager.getLocalValue(login_host_url_storage_key); break;
-        }
-        if (!domain || domain.length == 0) {
-            domain = 'login.salesforce.com';
-        }
-        return domain;
-    }
-
-    function authorizeUser() {
-        window.location = sf.getAuthorizeUrl(ManageUserSession.getLoginHostUrl());
-    }
-    
-    function obtainOAuthTokensAndSetupPasscode(authCode, callback) {
-    
-        var fetchTokens = function(passcode, pmcallback) {
-    
-            passcode = (passcode == -1) ? undefined : passcode;
-            var indMsg = (passcode) ? 'Setting Passcode...' : 'Authenticating...';
-            var indicator = $j(document).showActivityInd(loadingImg, indMsg, false);
-            
-            var onSuccess = function(response) {
-                prepareSession(response);
-                storeOAuthValues(response.clientId, (passcode) ? response.refreshToken : null);
-                
-                // Callback the parent function which initiated the authentication.
-                if (typeof callback == 'function') callback();
-            }
-            
-            sf.obtainAccessToken(ManageUserSession.getLoginHostUrl(),
-                                authCode, passcode, 
-                                function(response) {
-                                    indicator.hide();
-                                    if (response.success) {
-                                        onSuccess(response);
-                                    } else {
-                                        alert(response.error);
-                                    }
-                                    if (typeof pmcallback == 'function') pmcallback();
-                                }, 
-                                function() {
-                                    if (confirm('Failed to obtain access. Try again!')) authorizeUser();
-                                });
-        };
-            
-        if (isStandalone) {
-            PasscodeManager.setupPasscode(fetchTokens);
-        } else {
-            fetchTokens();
-        }
+		SalesforceOAuthPlugin.authenticate(loginSuccess, loginFailure, oauthProperties);
     }
     
     return {
     
         isActive: function() { return sessionAlive == true; },
         
-        isEulaAccepted: function() { return eulaAccepted == true; },
+        isEulaAccepted: function() { /* Since we are inside container, EULA is accepted on install. */ return true; },
         
-        updateEula: function(accepted) { eulaAccepted = accepted; },
-        
-        getClientId: function() { return (sessionAlive) ? StorageManager.getLocalValue(sfdc_clientId_storage_key) : null; },
+        updateEula: function(accepted) { /* NOOP */ },
         
         getUsername: function() { if (sessionAlive) return username; return null; },
         
         getApiClient: function() { if (sessionAlive) return sf; return null; },
         
-        getLoginHostType: function() { return StorageManager.getLocalValue(login_host_storage_key); },
+        getLoginHostType: function() { 
+        	if (loginHostUrl.toLowerCase().indexOf('login.') == 0)
+        		return 'host_production';
+        	else if (loginHostUrl.toLowerCase().indexOf('test.') == 0)
+        		return 'host_sandbox';
+        	else return 'host_custom';
+        },
         
-        getLoginHostUrl: getLoginHostUrl,
+        getLoginHostUrl: function() { return loginHostUrl; },
         
         setLoginHostType: function(host) { 
-            if (host != ManageUserSession.getLoginHostType()) {
-                StorageManager.setLocalValue(login_host_storage_key, host);
-            }
+        	if (host.toLowerCase() == 'host_production')
+        		ManageUserSession.setLoginHostUrl('login.salesforce.com');
+        	else if (host.toLowerCase() == 'host_sandbox')
+        		ManageUserSession.setLoginHostUrl('test.salesforce.com');
+        	else if (host.toLowerCase() == 'host_custom')
+        		loginHostUrl = '';
         },
         
         setLoginHostUrl: function(hostUrl) { 
-            hostUrl = hostUrl.toLowerCase();
-            if (getLoginHostUrl() != hostUrl) {
-                var hostType = 'host_custom';
-                switch(hostUrl) {
-                    case 'login.salesforce.com' : hostType = 'host_production'; break;
-                    case 'test.salesforce.com' : hostType = 'host_sandbox'; break;
-                }
-                StorageManager.setLocalValue(login_host_url_storage_key, hostUrl); 
-                ManageUserSession.setLoginHostType(hostType);
-            }
+        	var msg = 'Changing login host will logout the current logged in user. Are you sure you want to continue?';
+        	hostUrl = hostUrl.toLowerCase();
+        	if (!sessionAlive || (loginHostUrl != hostUrl && confirm(msg))) {
+	        	loginHostUrl = hostUrl;
+    	    	SalesforceOAuthPlugin.setLoginDomain(null, null, loginHostUrl);
+    	    	if (sessionAlive) ManageUserSession.kill();
+    	    }
         },
         
-        initialize: function(callback, clearSettings) {
-        
-            if (!sf) sf = new sforce.Client();
-            
-            var sessionToken = StorageManager.getSessionValue(session_token_storage_key);        
-            var refreshToken = StorageManager.getLocalValue(sfdc_token_storage_key);
-        
-            if (sessionAlive) { //Check if we are already initialized
-                callback();
-            } else if (sessionToken && sessionToken.length > 0) {
-                resurrectSession(sessionToken, callback);
-            } else if (refreshToken && refreshToken.length > 0) { 
-                //Authenticate if we have the refresh token
-                authenticate(callback);
-            } else {
-                // If nothing, the start the oauth process
-                var isOAuthCallback = window.location.search.indexOf('code=');
-                if (isOAuthCallback > 0) { //Are we coming back from an oauth process flow
-                    var authCode = /code=([^&]*)&?/.exec(window.location.search)[1];
-                    obtainOAuthTokensAndSetupPasscode(authCode, function() { history.pushState(null, null, window.location.pathname); callback(); });
-                } else {
-                    if (typeof clearSettings == 'boolean' && clearSettings) StorageManager.clearAll();
-                    authorizeUser();
-                }
-            }
+        initialize: function(callback) {
+            if (sessionAlive)
+            	callback();
+            else {
+        	    authenticate(callback);
+    	        SalesforceOAuthPlugin.getLoginDomain(function(val) { loginHostUrl = val.toLowerCase(); });
+	            if (!sf) sf = new sforce.Client();
+        	}
         },
         
         invalidate: function (revokeSession, postInvalidate) {
             if (revokeSession && sessionAlive) sf.revokeSession(null, null, null, null, postInvalidate);
-            
-            StorageManager.clearSessionValue(session_token_storage_key);
             sf = sessionAlive = username = undefined;
         },
         
-        kill: function(postLogout) {
-        
-            var clientId = StorageManager.getLocalValue(sfdc_clientId_storage_key);
-            var refToken = StorageManager.getLocalValue(sfdc_token_storage_key);
-            
-            var onRevoke = function() {
-                ManageUserSession.invalidate(); 
-                StorageManager.clearAll();
-                if (typeof postLogout == 'function') postLogout();
-            }
-            
-            sf.revokeSession(clientId, refToken, null, null, onRevoke);
-        }
-    }
-})();
-
-var PasscodeManager = (function () {
-
-    var props, initialized;
-    
-    var _positionCenter = function() {
-        var topLoc = ($j(window).height()/2 - props.passcodeElem.outerHeight()/2);
-        var leftLoc = ($j(window).width()/2 - props.passcodeElem.outerWidth()/2);
-        
-        props.passcodeElem.css('top', topLoc + 'px').css('left', leftLoc + 'px');
-    };
-    
-    var _positionBottom = function() {
-        var transX, transY, transform;
-        
-        if (window.orientation == 90 || window.orientation == -90) {
-/*          switch(window.orientation) {
-                case 90: transX = ($j(window).width() - props.passcodeElem.height()/2 - props.passcodeElem.width()/2); break;
-                case -90: transX = (props.passcodeElem.height()/2 - props.passcodeElem.width()/2); break;
-            }
-            transY = ($j(window).height()/2 - props.passcodeElem.height()/2);
-            */
-            transX = ($j(window).width()/2 - props.passcodeElem.width()/2);
-            transY = ($j(window).height() - props.passcodeElem.height());
-            transform = 'translate3d(' + transX + 'px, ' + transY + 'px, 0)';
-        } else {
-            transY = ($j(window).height() - props.passcodeElem.outerHeight());
-            transform = 'translate3d(0px, ' + transY + 'px, 0)';
-        }
-        
-        props.passcodeElem.css('-webkit-transition-property', 'none').css('-webkit-transform', transform);
-    };
-    
-    var _positionForIphone = function() {
-        if (window.innerHeight > window.innerWidth) {
-            var cssTransform = {top:($j(window).height() - $j('#passcode table').outerHeight()) + 'px'};
-                
-            props.passcodeElem.css('visibility', 'hidden').css('opacity', '1').css(vendor + 'Transform', 'translateY('+ $j(window).height() + 'px)').show();
-            props.passcodeElem.addClass('passcodeTransition').css('visibility', '').css(vendor + 'TransitionProperty', '-' + vendor.toLowerCase() + '-transform');
-            props.passcodeElem.css(vendor + 'Transform', 'translateY('+ cssTransform.top + ')');
-        } else {
-            props.passcodeElem.css('visibility', 'hidden');
-            setTimeout(function() { alert('Please switch to portrait mode to enter the passcode.'); }, 0);
-        }
-    };
-    
-    var _displayPasscodeWidget = function() {
-        
-        var displayWidget = function () {
-            var that = this;
-            var cssTransform;
-        
-            var windowSmallDimension = Math.min(window.innerWidth, window.innerHeight);
-            
-            if ((/ipad/gi).test(navigator.platform) || windowSmallDimension > $j('#passcode table').outerHeight()) {
-                
-                props.passcodeElem.css('opacity', '0'); 
-                _positionCenter();
-                props.passcodeElem.addClass('passcodeTransition').css(vendor + 'TransitionProperty', 'opacity').css('opacity', '1');
-                props.passcodeElem.orientationChange(_positionCenter);
-            } else {
-                props.passcodeElem.orientationChange(_positionForIphone);
-                _positionForIphone();
-            }
-        };
-        
-        props.passcodeElem.css('opacity', '0').show(); // Need to unhide to calculate height/width
-        setTimeout(displayWidget, 0);
-    };
-    
-    var _hidePasscodeInput = function() {
-        
-        var cssTransform;
-        
-        var afterAnimate = function() { 
-                                props.passcodeElem.removeClass('passcodeTransition').css(vendor + 'TransitionProperty', 'none');
-                                props.passcodeElem.hide().unbind('webkitTransitionEnd');
-                                _destroy();
-                            }; 
-        
-        props.passcodeElem.bind('webkitTransitionEnd', afterAnimate);
-        
-        if (((/ipad/gi).test(navigator.platform)) || ($j(window).width() > ($j('#passcode table').outerWidth() + 50))) {
-            cssTransform = {opacity:0};
-            props.passcodeElem.addClass('passcodeTransition').css(vendor + 'TransitionProperty', 'opacity').css('opacity', '0');
-        } else {
-            cssTransform = {top: $j(window).height() + 'px'};
-            props.passcodeElem.addClass('passcodeTransition').css(vendor + 'TransitionProperty', '-' + vendor.toLowerCase() + '-transform');
-            props.passcodeElem.css(vendor + 'Transform', 'translateY('+ cssTransform.top + ')');
-        }
-        
-        //props.passcodeElem.animate(cssTransform, { duration: 500, complete: afterAnimate });
-    };
-    
-    var _initialize = function() {
-
-        if (initialized === undefined) {
-            var buttons = props.passcodeElem.find('table td.passcode_button');
-
-            buttons.each(
-                function() {
-                    var that = $j(this);
-                    var value = that.text();
-                    that.touch(
-                        function(e) {
-                            e.preventDefault(); e.stopPropagation();
-                            if (props.elemNum < 4) {
-                                $j(that).addClass('pressed');
-                                setTimeout( function() { $j(that).removeClass('pressed'); }, 100);
-                                _buttonClick(value);
-                                if (props.elemNum == 4 && props.callback) {
-                                    props.callback(props.passcode);
-                                }
-                            }
-                        });
-                });
-            initialized = true;
-        }
-    };
-    
-    var _setup = function(callback) {
-        props = {
-            passcodeElem : $j('#passcode'),
-            inputElems : $j('#passcode #passcode_input input'),
-            elemNum : 0,
-            passcode : '',
-            callback : callback
-        };
-        _initialize();
-        _setTitle(props.title);
-        _reset();
-    };
-    
-    var _reset = function() {
-        _setTitle('Enter Passcode');
-        _clearMsg();
-        _clearPasscode();
-    };
-    
-    var _clearPasscode = function() {
-        props.elemNum = 0;
-        props.passcode = '';
-        props.inputElems.val('');
-    };
-    
-    var _destroy = function() {
-        if (props && props.passcodeElem)
-            props.passcodeElem.unbindOrientationChange(_positionCenter);
-        props = undefined;
-    };
-    
-    var _setTitle = function(title) {
-        $j('#passcode #passcode_title').html(title);
-    };
-    
-    var _showMsg = function(msg, isError) {
-        $j('#passcode #passcode_message').html(msg).show();
-        if (isError)
-            $j('#passcode #passcode_header').addClass('passcode_error');
-    };
-    
-    var _clearMsg = function(msg) {
-        $j('#passcode #passcode_message').empty().hide();
-        $j('#passcode #passcode_header').removeClass('passcode_error');
-    };
-
-    var _buttonClick = function (elemVal) {
-        var inpElem, domInpElem;
-        
-        if (elemVal == 'Logout' || elemVal == 'Cancel') {
-            props.callback(-1);
-        } else if (elemVal == 'Delete') {
-            if (props.elemNum > 0) {
-                props.inputElems[--props.elemNum].value = '';
-                props.passcode = props.passcode.substr(0, props.elemNum);
-            }
-        } else if (parseInt(elemVal) >= 0) {
-            props.inputElems[props.elemNum++].value = '.';
-            props.passcode += elemVal;
-        }
-    };
-    
-    return {
-        checkPasscode : function(validator, callback) { 
-
-            var validate  = function(pass) { 
-            
-                var processResponse = function (resp, msg) {
-                    if (resp) { 
-                        _hidePasscodeInput();
-                        if(typeof callback == 'function') callback();
-                    } else {
-                        //display error
-                        _clearPasscode();
-                        if (msg) {
-                            _setTitle('Wrong Passcode');
-                            _showMsg(msg, true);
-                        }
-                    }
-                }
-                
-                if (validator) {
-                    validator(pass, processResponse)
-                }
-            };
-        
-            _setup(validate);
-            props.passcodeElem.find('#cancel').text('Logout');
-            _displayPasscodeWidget();
-        },
-    
-        setupPasscode : function(callback) {
-            var temp;
-            var validate = function(pass) {
-                if (pass == -1) {
-                    _hidePasscodeInput();
-                    if(typeof callback == 'function') callback(-1);
-                } else if (temp) {
-                    if  (temp == pass) {
-                        if(typeof callback == 'function') callback(props.passcode, _hidePasscodeInput);
-                    } else {
-                        temp = undefined;
-                        alert('Passcode didn\'t match. Please try again.');
-                        _reset();
-                    }
-                } else {
-                    temp = pass;
-                    _setTitle('Re-enter the passcode');
-                    _clearPasscode();
-                }
-            };
-    
-            _setup(validate);
-            _setTitle('Setup Passcode');
-            props.passcodeElem.find('#cancel').text('Cancel');
-            //props.passcodeElem('table #cancel').text('');
-            _displayPasscodeWidget();
+        kill: function() {
+        	if (sessionAlive) {
+		        ManageUserSession.invalidate();
+	            SalesforceOAuthPlugin.logout(); 
+    		}
         }
     }
 })();

@@ -30,17 +30,18 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
     
     public String resultSet {get; private set;}
     private RestRequest restReq;
+    private RestResponse restResp;
     
     public ContactsAppServiceController(RestRequest req, RestResponse res) {
         super(req);
         this.restReq = req;
+        this.restResp = res;
     }
     
     @HttpGet
     global static void doGet() {
         ContactsAppServiceController cont = new ContactsAppServiceController(RestContext.request, RestContext.response);
         cont.loadPage();
-        System.debug(cont.resultSet);
         RestContext.response.responseBody = Blob.valueOf(cont.resultSet);
     }
     
@@ -70,8 +71,11 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
                     this.resultSet = '{}';
                }
             } catch (SFDCApiClient.ApiException ae) {
-                this.resultSet = ae.errorCode;
-            } catch (Exception e) {}
+            	this.restResp.statusCode = ae.statusCode;
+                this.resultSet = ae.toJSON();
+            } catch (Exception e) {
+            	this.restResp.statusCode = 400;
+            }
         }
     }
     

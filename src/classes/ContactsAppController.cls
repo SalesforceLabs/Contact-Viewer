@@ -46,6 +46,11 @@ public with sharing class ContactsAppController {
         }
     }
     
+    public boolean isContainer { get {
+    	    return userAgent.toLowerCase().contains('salesforcemobilesdk');
+        }
+    }
+    
     public boolean addManifest { get {
           return System.currentPageReference().getParameters().size() == 0;
        }
@@ -64,6 +69,10 @@ public with sharing class ContactsAppController {
     public String maifestFooter { get {
            return '</html>';
        }
+    }
+    
+    public ContactsAppSettings__c getNativeSettings() {
+    	return SfdcOAuthManager.getNativeOAuthSettings();
     }
     
     public ContactsAppController() {

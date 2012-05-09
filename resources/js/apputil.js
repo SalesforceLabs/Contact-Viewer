@@ -85,21 +85,9 @@ function getFieldDescribe() {
     return eval('(' + StorageManager.getSessionValue(contact_describe_storage_key) + ')');
 }
 
+//FIXME: Remove my usage from code.
 function truncateLongText(elems) {
-	return;
-/*    var values = [], idx = 0;
-    $j.each(elems,
-        function() { 
-            var that = $j(this);
-            values[idx++] = that.text(); that.empty();
-        });
-        
-    idx = 0;
-    $j.each(elems, 
-        function() {
-            var that = $j(this);
-            that.setText(values[idx++], true);
-        });*/
+    return;
 }
 
 function isPortrait() {
@@ -110,11 +98,11 @@ var contact_describe_storage_key = 'SFDC-CONTACT-DESCRIBE';
 
 function fetchContactDescribe(callback) {
 
-	var onComplete = function(jqXHR, textStatus) {
-		if (typeof callback == 'function')
-			callback(textStatus == 'success');
-	}
-	
+    var onComplete = function(jqXHR, textStatus) {
+        if (typeof callback == 'function')
+            callback(textStatus == 'success');
+    }
+    
     ManageUserSession.getApiClient().describeContactViaApex( 
             function(response) {
                 contactLabel = response.label || 'Contact';
@@ -202,17 +190,26 @@ function createScroller(el, onPullDownCallback, ops) {
 
 function errorCallback(jqXHR, statusText){
     if (statusText == 'error') {
-        alert('Server Unavailable. Check network connection or try again later.');
-    } else if (statusText = 'timeout') {
-        if ((/NO_API_ACCESS/gi).test(jqXHR.responseText)) {
-            if (ManageUserSession.isActive()) {
-                alert('API is not accessible to current user. Please login with a user with access to Salesforce API.');
-                logout(true);
-            }
-        } else {
-            alert('Session timed out.');
-            window.location.reload();
+        var response = jqXHR.responseText;
+        try { response = $j.parseJSON(response);} catch (e){}
+        
+        switch (jqXHR.status) {
+            case 403: 
+                if ((/NO_API_ACCESS/gi).test(jqXHR.responseText) && ManageUserSession.isActive()) {
+                    alert(response.message);
+                    logout(true);
+                    break;
+                }
+            case 401:
+                alert(response.message || 'Session expired. Please relogin.');
+                ManageUserSession.invalidate(true, function() { window.location.reload(); });
+                break;
+            default:
+                alert('Server Unavailable. Check network connection or try again later.');
         }
+    } else if (statusText = 'timeout') {
+        alert('Session timed out.');
+        ManageUserSession.invalidate(true, function() { window.location.reload(); });
     }
 }
 

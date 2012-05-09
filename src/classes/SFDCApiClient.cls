@@ -27,7 +27,7 @@
 
 public with sharing class SFDCApiClient {
     
-    private static final String API_VERSION = '22.0';
+    private static final String API_VERSION = '24.0';
     private SessionManager sm;
     
     private Integer requestRetryCount = 0;
@@ -38,12 +38,20 @@ public with sharing class SFDCApiClient {
     }
     
     public class ApiException extends Exception {
+    	public Integer statusCode {get; private set;}
         public String errorCode {get; private set;}
         public String message {get; private set;}
-        private ApiException(String errorCode, String msg) {
+        private ApiException(Integer statusCode, String errorCode, String msg) {
             this(msg);
+            this.statusCode = statusCode;
             this.errorCode = errorCode;
             this.message = msg;
+        }
+        public String toJSON() {
+        	return JSON.serialize(new Map<String, String>{
+        		'errorCode' => this.errorCode,
+        		'message' => this.message
+        	});
         }
     }
     
@@ -64,11 +72,10 @@ public with sharing class SFDCApiClient {
         } else if (resp.getStatusCode() == 302 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
             req.setEndpoint(resp.getHeader('Location'));
             return makeRequest(req);
-        } if (resp.getStatusCode() == 401 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
-            this.sm.refreshSession();
-            return makeRequest(req);
+        } if (resp.getStatusCode() == 401) {
+            throw new ApiException(resp.getStatusCode(), 'INVALID_SESSION', 'Session expired or invalid. Please relogin.');
         } else if (resp.getStatusCode() == 403) {
-            throw new ApiException('NO_API_ACCESS', System.Label.APIIsNotAccessibleToCurrentUser);
+            throw new ApiException(resp.getStatusCode(), 'NO_API_ACCESS', System.Label.APIIsNotAccessibleToCurrentUser);
         }
         return null;
     }

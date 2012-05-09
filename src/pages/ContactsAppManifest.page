@@ -9,12 +9,12 @@ CACHE:
 {!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'css/basicstyle.css'), "")}
 {!URLFOR($Resource.ContactAppRsrcs, 'css/passcodemanager.css')}
 
-#js - debug=false adds the minified version of js files
+#js - debug=false adds the minified version of js files, isContainer=true adds the container version of the files
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}
 <apex:outputPanel layout="none" rendered="{!!debug}">
 {!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.min.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-plugins.min.js')}
-{!URLFOR($Resource.ContactAppRsrcs, 'js/appCommon.min.js')}
+{!URLFOR($Resource.ContactAppRsrcs, IF(isContainer, 'js/container/appCommon.min.js', 'js/appCommon.min.js'))}
 {!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp-ipad.min.js'), "")}
 {!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.min.js'), "")}
 </apex:outputPanel>
@@ -26,14 +26,24 @@ CACHE:
 {!URLFOR($Resource.ContactAppRsrcs, 'js/applib.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}
-{!URLFOR($Resource.ContactAppRsrcs, 'js/passcodemanager.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/appSettings.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/feedRenderer.js')}
-{!URLFOR($Resource.ContactAppRsrcs, 'js/manageUserSession.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/listViewManager.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/splitViewManager.js')}
+{!URLFOR($Resource.ContactAppRsrcs, IF(isContainer, 'js/container/manageUserSession.js', 'js/manageUserSession.js'))}
+{!IF(!isContainer, URLFOR($Resource.ContactAppRsrcs, 'js/passcodemanager.js'), "")}
 {!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp-ipad.js'), "")}
 {!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.js'), "")}
+</apex:outputPanel>
+<apex:outputPanel rendered="{!isContainer}" layout="none">
+<apex:outputPanel rendered="{!debug}" layout="none">
+{!URLFOR($Resource.SFMobileSDK, 'phonegap-1.2.0.js')}
+{!URLFOR($Resource.SFMobileSDK, 'SFHybridApp.js')}
+{!URLFOR($Resource.SFMobileSDK, 'SalesforceOAuthPlugin.js')}
+</apex:outputPanel>
+<apex:outputPanel rendered="{!!debug}" layout="none">
+{!URLFOR($Resource.SFMobileSDK, 'sdk-all.min.js')}
+</apex:outputPanel>
 </apex:outputPanel>
 
 #images

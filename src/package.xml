@@ -62,6 +62,7 @@
     </types>
     <types>
         <members>ContactAppRsrcs</members>
+        <members>SFMobileSDK</members>
         <name>StaticResource</name>
     </types>
     <types>

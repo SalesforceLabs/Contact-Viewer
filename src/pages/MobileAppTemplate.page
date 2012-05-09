@@ -46,7 +46,7 @@
     <meta name="format-detection" content="telephone=no"/>
     
     <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}"/>
-    <apex:outputPanel rendered="{!debug}">
+    <apex:outputPanel rendered="{!debug}" layout="none">
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}"/>
@@ -55,20 +55,30 @@
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/appSettings.js')}"/>
-        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/manageUserSession.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/listViewManager.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/splitViewManager.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/feedRenderer.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, IF(isContainer, 'js/container/manageUserSession.js', 'js/manageUserSession.js'))}"/>
     </apex:outputPanel>
-    <apex:outputPanel rendered="{!!debug}">
+    <apex:outputPanel rendered="{!!debug}" layout="none">
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.min.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-plugins.min.js')}"/>
-        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/appCommon.min.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, IF(isContainer, 'js/container/appCommon.min.js', 'js/appCommon.min.js'))}"/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!isContainer}" layout="none">
+        <apex:outputPanel rendered="{!debug}" layout="none">
+        <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, 'phonegap-1.2.0.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, 'SFHybridApp.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, 'SalesforceOAuthPlugin.js')}"/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!!debug}" layout="none">
+        <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, 'sdk-all.min.js')}"/>
+        </apex:outputPanel>
     </apex:outputPanel>
     
     <body style="background-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/bg.png')}'); width:100%; height:100%">
         <apex:insert name="body"/>
-        <c:PasscodeManager />
+        <c:PasscodeManager rendered="{!!isContainer}"/>
     </body>
     
     <style type="text/css">
@@ -84,14 +94,25 @@
         var staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
         var loadingImg = staticRsrcUrl + '/images/loading.gif';
         
-        document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+        <apex:outputPanel rendered="{!isContainer}" layout="none">
+        var remoteAccessConsumerKey='{!nativeSettings.OAuthClientId__c}', 
+            oauthRedirectURI='{!nativeSettings.OAuthClientRedirectURI__c}';
+        </apex:outputPanel>
         
+        <apex:outputPanel rendered="{!!isContainer}" layout="none">
         if ('standalone' in navigator && !navigator.standalone && (/iphone|ipod|ipad/gi).test(navigator.platform) && (/Safari/i).test(navigator.appVersion)) {
             document.write('<link rel="stylesheet" href="' + staticRsrcUrl + '/css/add2home.css">');
             document.write('<script type="application\/javascript" src="' + staticRsrcUrl + '/js/add2home.js"><\/script>');
         }
+        </apex:outputPanel>
         
         function checkCacheAndPrepareSession() {
+            var appLaunch = function() {
+                if ({!isContainer} && PhoneGap && !PhoneGap.available) { 
+                    document.addEventListener("deviceready", function() { prepareSession(true); },false); 
+                } else prepareSession(true);
+            };
+            
             if (window.applicationCache) {
                 switch (window.applicationCache.status) {
                     case window.applicationCache.CHECKING:
@@ -107,13 +128,14 @@
                         location.reload();
                         break;
                     default:
-                        prepareSession(true);
+                        appLaunch();
                 }
             } else {
-                prepareSession(true);
+                appLaunch();
             }
         }
         
+        document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
         document.addEventListener('DOMContentLoaded', checkCacheAndPrepareSession, false);
     </script>
     
