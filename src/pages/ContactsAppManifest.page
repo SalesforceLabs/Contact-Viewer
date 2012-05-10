@@ -35,15 +35,13 @@ CACHE:
 {!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp-ipad.js'), "")}
 {!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.js'), "")}
 </apex:outputPanel>
-<apex:outputPanel rendered="{!isContainer}" layout="none">
-<apex:outputPanel rendered="{!debug}" layout="none">
+<apex:outputPanel rendered="{!isContainer && debug}" layout="none">
 {!URLFOR($Resource.SFMobileSDK, 'phonegap-1.2.0.js')}
 {!URLFOR($Resource.SFMobileSDK, 'SFHybridApp.js')}
 {!URLFOR($Resource.SFMobileSDK, 'SalesforceOAuthPlugin.js')}
 </apex:outputPanel>
-<apex:outputPanel rendered="{!!debug}" layout="none">
+<apex:outputPanel rendered="{!isContainer && !debug}" layout="none">
 {!URLFOR($Resource.SFMobileSDK, 'sdk-all.min.js')}
-</apex:outputPanel>
 </apex:outputPanel>
 
 #images
