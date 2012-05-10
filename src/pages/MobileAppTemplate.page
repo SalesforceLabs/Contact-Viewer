@@ -48,6 +48,7 @@
     <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}"/>
     <apex:outputPanel rendered="{!debug}" layout="none">
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.spin.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}"/>

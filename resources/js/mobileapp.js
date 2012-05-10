@@ -59,7 +59,7 @@ function sessionCallback() {
     addClickListeners();
 
     var describeCallback, selectedContactId;    
-    var ind = $j('#loggedin').showActivityInd(loadingImg, 'Loading...');
+    var ind = $j('#loggedin').showActivityInd('Loading...');
         
     var last_visit_loc = StorageManager.getLocalValue(last_visited_loc_storage_key);
     if (last_visit_loc && last_visit_loc.split('/').length == 2) {
@@ -124,7 +124,7 @@ function showContact(contactId, onComplete) {
     $j('#detailpage .header>span').empty();
     switchToDetail();
 
-    var ind = $j('#loggedin').showActivityInd(loadingImg, 'Loading...');
+    var ind = $j('#loggedin').showActivityInd('Loading...');
     switchDetailSection('info', [contactId], function(success) { 
         if (success) $j('#detailpage #detail').show();
         $j('#detailpage .header #left').unbind().click(function(e) {

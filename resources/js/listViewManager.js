@@ -275,7 +275,7 @@ if (sforce.ListView === undefined) {
         },
         
         showBusyIndicator : function(text) {
-            this.busyInd = this.view.find('#listscroller').showActivityInd(loadingImg, text);
+            this.busyInd = this.view.find('#listscroller').showActivityInd(text);
         },
         
         hideBusyIndicator : function() {

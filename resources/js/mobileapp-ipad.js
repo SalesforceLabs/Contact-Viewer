@@ -77,7 +77,7 @@ function sessionCallback() {
     addClickListeners();
 
     var describeCallback, selectedContactId;   
-    var ind = $j('#loggedin').showActivityInd(loadingImg, 'Loading...');
+    var ind = $j('#loggedin').showActivityInd('Loading...');
     
     var callbacks = 0;
     var showMainFeed;
@@ -176,7 +176,7 @@ function showContact(contactId, onComplete) {
     $j('#detailpage .header>span').empty();
     switchToDetail();
 
-    var ind = $j('#rightsection').showActivityInd(loadingImg, 'Loading...');
+    var ind = $j('#rightsection').showActivityInd('Loading...');
     switchDetailSection('info', [contactId], function(success) { 
         if (success) {
             $j('#rightsection #detailpage #detail')
@@ -428,7 +428,7 @@ function showContactNews(callback, showLoadingIndicator) {
     
     var ind;
     if (showLoadingIndicator) {
-        ind = $j('#rightsection').showActivityInd(loadingImg, 'Loading...');
+        ind = $j('#rightsection').showActivityInd('Loading...');
     }
     switchToDetail();
     
@@ -524,7 +524,7 @@ function addLeftNavClickListeners(contact) {
                 case 'salesforce': loadingText += ' Activities'; break;
             }
             
-            var ind = $j('#rightsection #detailpage').showActivityInd(loadingImg, loadingText + '...');
+            var ind = $j('#rightsection #detailpage').showActivityInd(loadingText + '...');
             switchDetailSection(this.id, contact, ind.hide); 
         });
     if (!hasChatterEnabled) $j('#rightsection #detailpage #leftnav #chatter').hide();

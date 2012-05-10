@@ -1179,7 +1179,7 @@ if (sforce.ListView === undefined) {
         },
         
         showBusyIndicator : function(text) {
-            this.busyInd = this.view.find('#listscroller').showActivityInd(loadingImg, text);
+            this.busyInd = this.view.find('#listscroller').showActivityInd(text);
         },
         
         hideBusyIndicator : function() {
@@ -1206,7 +1206,7 @@ var ManageUserSession = (function() {
     function authenticate(onSuccess) {
     
         var indicator, oauthProperties, successCallback, loginSuccess, loginFailure;
-        indicator = $j(document).showActivityInd(loadingImg, 'Authenticating...', false);
+        indicator = $j(document).showActivityInd('Authenticating...', false);
     
         oauthProperties = new OAuthProperties(remoteAccessConsumerKey, 
                                                   oauthRedirectURI, 
