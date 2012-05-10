@@ -46,6 +46,12 @@ public with sharing class ContactsAppController {
         }
     }
     
+    // Don't allow animations on android devices.
+    public boolean allowAnimations {get{
+            return (!userAgent.contains('Version/') && !userAgent.contains('Android')); 
+        }
+    }
+
     public boolean isContainer { get {
     	    return userAgent.toLowerCase().contains('salesforcemobilesdk');
         }

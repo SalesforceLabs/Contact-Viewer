@@ -99,9 +99,13 @@ function sessionCallback() {
 }
 
 function switchToDetail(callback) {
-    $j('#listpage').changePage('#detailpage', false, function() { 
-        if (typeof callback == 'function') callback(); 
-    });
+	if (useAnimations) {
+	    $j('#listpage').changePage('#detailpage', false, callback);
+	} else {
+		$j('#listpage').hide();
+		$j('#detailpage').show().css('visibility', '');
+		if (typeof callback == 'function') callback();
+	}
 }
 
 function addClickListeners(searchContacts, displayList) {
@@ -124,11 +128,18 @@ function showContact(contactId, onComplete) {
     switchDetailSection('info', [contactId], function(success) { 
         if (success) $j('#detailpage #detail').show();
         $j('#detailpage .header #left').unbind().click(function(e) {
+        	var onSlideBack = function() {
+        		$j('#detailpage').css('visibility', 'hidden');
+				listView.resetSelectedContact();
+        	}
             $j('#detailpage .header #left').unbind();
-            $j('#detailpage').changePage('#listpage', true, function() { 
-                $j('#detailpage').css('visibility', 'hidden');
-                listView.resetSelectedContact();
-            }); 
+            if (useAnimations) {
+				$j('#detailpage').changePage('#listpage', true, onSlideBack); 
+			} else {
+				$j('#detailpage').hide();
+				$j('#listpage').show().css('visibility', '');
+				onSlideBack();
+			}
             updateLastVisitLoc();
         });
         ind.hide();

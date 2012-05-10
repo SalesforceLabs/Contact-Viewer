@@ -91,8 +91,9 @@
     </style>
     
     <script>
-        var staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
-        var loadingImg = staticRsrcUrl + '/images/loading.gif';
+        var useAnimations = {!allowAnimations}, 
+            staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
+            loadingImg = staticRsrcUrl + '/images/loading.gif';
         
         <apex:outputPanel rendered="{!isContainer}" layout="none">
         var remoteAccessConsumerKey='{!nativeSettings.OAuthClientId__c}', 
@@ -106,37 +107,14 @@
         }
         </apex:outputPanel>
         
-        function checkCacheAndPrepareSession() {
-            var appLaunch = function() {
-                if ({!isContainer} && PhoneGap && !PhoneGap.available) { 
-                    document.addEventListener("deviceready", function() { prepareSession(true); },false); 
-                } else prepareSession(true);
-            };
-            
-            if (window.applicationCache) {
-                switch (window.applicationCache.status) {
-                    case window.applicationCache.CHECKING:
-                    case window.applicationCache.DOWNLOADING:
-                        var loading = $j(document).showActivityInd(loadingImg, 'Loading...'); // Show Loading
-                        var callback = function() { loading.hide(); checkCacheAndPrepareSession(); }
-                        window.applicationCache.addEventListener('updateready', callback, false);
-                        window.applicationCache.addEventListener('cached', callback, false);
-                        window.applicationCache.addEventListener('error', callback, false);
-                        window.applicationCache.addEventListener('noupdate', callback, false);
-                        break;
-                    case window.applicationCache.UPDATEREADY:
-                        location.reload();
-                        break;
-                    default:
-                        appLaunch();
-                }
-            } else {
-                appLaunch();
-            }
-        }
-        
+        var appLaunch = function() {
+            if ({!isContainer} && PhoneGap && !PhoneGap.available) { 
+                document.addEventListener("deviceready", function() { prepareSession(true); },false);
+            } else prepareSession(true);
+        };
+
         document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-        document.addEventListener('DOMContentLoaded', checkCacheAndPrepareSession, false);
+        document.addEventListener('DOMContentLoaded', appLaunch, false);
     </script>
     
 </apex:page>
