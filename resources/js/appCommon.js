@@ -609,11 +609,15 @@ var SettingsManager = (function () {
         settings.find('#header #left').show().touch(
             function() {
                 settings.find('#header #left').hide().unbind();
-                from.changePage(settings.find('#main'), true, function() { from.css('visibility', 'hidden'); } );
+                if (useAnimations) {
+                    from.changePage(settings.find('#main'), true, function() { from.css('visibility', 'hidden'); } );
+                } else {
+                    from.hide();
+                    settings.find('#main').show().css('visibility', '');
+                }
                 settings.find('#header #title').text('Settings');
                 if(ManageUserSession.isActive()) settings.find('#header #done').show();
                 _initiateScroller('#main');
-//              _destroyScroller();
             }
         );  
     }
@@ -635,8 +639,6 @@ var SettingsManager = (function () {
             } else {
                 settings.find('#eula').css('margin-bottom', '0');
             }
-//          _destroyScroller();
-//          settingsScroller = createScroller(settings.find('#eula'));
         }
         
         var onComplete = function(jqXhr, textStatus) {
@@ -648,24 +650,29 @@ var SettingsManager = (function () {
     }
     
     var _navigatePage = function(to, titleText, showBackButton, cb) {
-
+        var that = $j(this), onChangePage;
+        
         if (customHostInFocus) {
             setTimeout(function() {
                 settings.find('#main #connection #host_url input').blur();
             }, 10);
-            /*if (_validateCustomHost()) {
-                settings.find('#main #connection #host_url form').submit();
-            } else return;*/
         }
         
-        var that = $j(this);
         that.addClass('cellselected');
         settings.find('#header #done').hide();
-        settings.find('#main').changePage(settings.find(to), false, function() { 
+        
+        onChangePage = function() { 
             that.removeClass('cellselected'); 
             settings.find('#main').css('visibility', 'hidden');
             if (typeof cb == 'function') cb();
-        });
+        }
+        if (useAnimations) {
+            settings.find('#main').changePage(settings.find(to), false, onChangePage);
+        } else {
+            settings.find('#main').hide();
+            settings.find(to).show().css('visibility', '');
+            onChangePage();
+        }
         settings.find('#header #title').text(titleText);
         _initiateScroller(to);
         if (showBackButton) _switchBack(settings.find(to));
@@ -758,19 +765,13 @@ var SettingsManager = (function () {
     
     return {
         show: function() {
-        
+            var initialY, finalY, onComplete;
+            
             _setup();
-            
             overlay = $j('#loggedin').addOverlay();
-            
             settings.find('#username').setText(ManageUserSession.getUsername() || 'None');
     
-            var loc = { top: 0, left: (window.innerWidth - settings.width())/2 };
-            settings.hide().css(loc).css('zIndex', $j.topZIndex(overlay.elem) + 10);
-            var initialY = window.innerHeight;
-            var finalY = (window.innerHeight - settings.height())/2;
-            
-            var onComplete = function() {
+            onComplete = function() {
                 SettingsManager.hide();
                 $j(this).unbind('click');
                 if(!ManageUserSession.isActive()) window.location = getBaseUrl();
@@ -778,19 +779,30 @@ var SettingsManager = (function () {
             settings.find('#header #done').unbind('click').click(onComplete);
             if(!ManageUserSession.isActive()) settings.find('#header #done').hide();
         
-            settings.show().slideIn('Y', initialY, finalY);
+            initialY = window.innerHeight;
+            finalY = (window.innerHeight - settings.height())/2;
+            
+            settings.hide().css('zIndex', $j.topZIndex(overlay.elem) + 10)
+                    .css({ left: (window.innerWidth - settings.width())/2 });
+            if (useAnimations) {
+                settings.css({top: 0}).show().slideIn('Y', initialY, finalY);
+            } else settings.css({top: finalY}).show();
+            
             _initiateScroller('#main');
             settings.orientationChange(_positionCenter);
         },
 
         hide: function(callback) {
-            var finalY = window.innerHeight;
-            var onComplete = function() {
+            var finalY = window.innerHeight,
+            onComplete = function() {
                 settings.hide();
                 overlay.hide();
                 if (typeof callback == 'function') callback();
-            }
-            settings.slideOut('Y', finalY, onComplete);
+            };
+            
+            if (useAnimations) settings.slideOut('Y', finalY, onComplete);
+            else onComplete();
+            
             _destroyScroller();
             settings.unbindOrientationChange(_positionCenter);
         },
@@ -803,7 +815,12 @@ var SettingsManager = (function () {
         
         hideEula: function() {
             SettingsManager.hide(function() {
-                settings.find('#eula').changePage(settings.find('#main'), true);
+                if (useAnimations) {
+                    settings.find('#eula').changePage(settings.find('#main'), true);
+                } else {
+                    settings.find('#eula').hide();
+                    settings.find('#main').show().css('visibility', '');
+                }
                 settings.find('#eula').css('visibility', 'hidden');
                 settings.find('#eula_buttons').hide();
                 settings.find('#header #title').text('Settings');
@@ -812,7 +829,6 @@ var SettingsManager = (function () {
     };
 })();
 
- 
 var FeedPhotoRenderer = function() { this.userIds = []; }
 
 FeedPhotoRenderer.prototype.getImage = function(userId) {
