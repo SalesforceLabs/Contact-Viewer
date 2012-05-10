@@ -107,10 +107,13 @@ global with sharing class ContactsAppOAuthController {
         } else if (RestContext.request.requestURI.endsWith('/authenticate')) {
             cont.obtainAccess(RestContext.request);
             
-        //To be used by only the container version of contact viewer to convert session info from container to contact viewer session
+        // To be used to convert existing oauth session info to contact viewer session
         } else if (RestContext.request.requestURI.endsWith('/prepareSession')) { 
             cont.prepareSession(RestContext.request);
             
+        } else if (RestContext.request.requestURI.endsWith('/revokeSession')) {
+        	cont.revokeSession(RestContext.request);
+        	
         } else { // If none of the above operations, return a 404
             RestContext.response.statusCode = 404;
         }
@@ -129,12 +132,39 @@ global with sharing class ContactsAppOAuthController {
     } 
     
     /**
-    * To be used by only the container version of contact viewer 
-    * to convert session info from container to contact viewer session.
+    * Converts an existing oauth session to contact viewer session.
     **/
     private void prepareSession(RestRequest req) {
         SessionManager sm = new SessionManager(req.headers);
-        if (sm != null && sm.isValid()) setupResponse(sm.getOAuthResponse(), null);
+        SfdcOAuthManager.OAuthResponse oauthInfo = (sm.isValid()) ? sm.getOAuthResponse() : null;
+        
+        if (oauthInfo == null) {
+        	oauthInfo = SfdcOAuthManager.initialize(req.params.get('accessToken'), 
+        	                                        req.params.get('instanceUrl'), 
+        	                                        req.params.get('identityUrl'));
+        }
+        if (oauthInfo != null) setupResponse(oauthInfo, null);
+    }
+    
+    /**
+    * Revokes an existing OAuth 2.0 session.
+    **/
+    private void revokeSession(RestRequest req) {
+    	String clientId = req.params.get('cid'), 
+               clientAuthToken = req.params.get('rt');
+        
+        if (clientId != null && clientAuthToken != null) {
+        	Map<String, String> tokenParts = parseClientAuthToken(getClientById(clientId), clientAuthToken);
+        	if (tokenParts != null && tokenParts.size() > 0) {
+                SfdcOAuthManager.revokeAccess(tokenParts.get(INSTANCE_URL_KEY), tokenParts.get(REF_TOKEN_KEY));
+                this.apiResp.success = true;
+        	}    
+        } else {
+        	SessionManager sm = new SessionManager(req.headers);
+	        if (sm != null && sm.isValid()) {
+	            this.apiResp.success = sm.destroy();
+	        }
+        }
     }
     
     /** 
@@ -247,51 +277,56 @@ global with sharing class ContactsAppOAuthController {
     * Decrypt the client side ref token and validate user passcode. 
     * If passcode is correct, return the oauth refresh token from the encrypted string.
     **/
-    private SfdcOAuthManager.OAuthResponse validateAndGetOAuthInfo(AppClient__c client, String clientSideString, String passcode) {
+    private SfdcOAuthManager.OAuthResponse validateAndGetOAuthInfo(AppClient__c client, String clientAuthToken, String passcode) {
         
-        String privatekey = (client != null) ? client.Encryption_Key__c : null;
+        //Get all the parts
+        Map<String, String> clientSideRefTokenParts = parseClientAuthToken(client, clientAuthToken);
         
-        if (client != null && privatekey != null && privatekey.length() > 0) {
+        if (clientSideRefTokenParts != null && clientSideRefTokenParts.size() > 0) {
             
-            // Let's decrypt this first
-            String decryptedString = ContactsAppUtil.decrypt(privatekey, clientSideString);
+            String tokenId = clientSideRefTokenParts.get(TOKEN_ID_KEY);
+            String savedPasscode = clientSideRefTokenParts.get(PASS_KEY);
+            String instanceUrl = clientSideRefTokenParts.get(INSTANCE_URL_KEY);
+            String refToken = clientSideRefTokenParts.get(REF_TOKEN_KEY);
             
-            //Get all the parts
-            Map<String, String> clientSideRefTokenParts = (Map<String, String>)JSON.deserialize(decryptedString, Map<String, String>.class);
-            
-            if (clientSideRefTokenParts != null && clientSideRefTokenParts.size() > 0) {
-                
-                String tokenId = clientSideRefTokenParts.get(TOKEN_ID_KEY);
-                String savedPasscode = clientSideRefTokenParts.get(PASS_KEY);
-                String instanceUrl = clientSideRefTokenParts.get(INSTANCE_URL_KEY);
-                String refToken = clientSideRefTokenParts.get(REF_TOKEN_KEY);
-                
-                if ((client.token_id__c == null || client.token_id__c == tokenId) && 
-                    (client.Failure_Count__c == null || client.Failure_Count__c < MAX_FAILURE_COUNT)) {
-                        
-                    String passcodeHash = ContactsAppUtil.generateHash(passcode);
-                    if (savedPasscode != null && savedPasscode.length() > 0 
-                        && (savedPasscode.equals(passcode) || savedPasscode.equals(passcodeHash))) {
-                        client.Failure_Count__c = 0;
-                        return SfdcOAuthManager.refreshAccessFromEncRefToken(instanceUrl, refToken);
-                    } else {
-                        if (client.Failure_Count__c == null) client.Failure_Count__c = 0;
-                        client.Failure_Count__c++;
-                        if (client.Failure_Count__c == MAX_FAILURE_COUNT) {
-                            client.Inactive__c = true;
-                            client.Encryption_Key__c = null;
-                        }
-                        throw new AuthenticationException('WRONG_PASSCODE', System.Label.TryAgainRemainingAttempts + ': ' + (MAX_FAILURE_COUNT - client.Failure_Count__c));
-                    }
+            if ((client.token_id__c == null || client.token_id__c == tokenId) && 
+                (client.Failure_Count__c == null || client.Failure_Count__c < MAX_FAILURE_COUNT)) {
+                    
+                String passcodeHash = ContactsAppUtil.generateHash(passcode);
+                if (savedPasscode != null && savedPasscode.length() > 0 
+                    && (savedPasscode.equals(passcode) || savedPasscode.equals(passcodeHash))) {
+                    client.Failure_Count__c = 0;
+                    return SfdcOAuthManager.refreshAccessFromEncRefToken(instanceUrl, refToken);
                 } else {
-                    throw new AuthenticationException('INVALID_TOKEN', System.Label.InvalidTokenPleaseLogoutAndRelogin);
+                    if (client.Failure_Count__c == null) client.Failure_Count__c = 0;
+                    client.Failure_Count__c++;
+                    if (client.Failure_Count__c == MAX_FAILURE_COUNT) {
+                        client.Inactive__c = true;
+                        client.Encryption_Key__c = null;
+                    }
+                    throw new AuthenticationException('WRONG_PASSCODE', System.Label.TryAgainRemainingAttempts + ': ' + (MAX_FAILURE_COUNT - client.Failure_Count__c));
                 }
+            } else {
+                throw new AuthenticationException('INVALID_TOKEN', System.Label.InvalidTokenPleaseLogoutAndRelogin);
             }
-        } else {
-            throw new AuthenticationException('INVALID_TOKEN', System.Label.AuthenticationFailurePleaseRelogin);
         }
         
         return null;   
+    }
+    
+    private Map<String, String> parseClientAuthToken(AppClient__c client, String clientAuthToken) {
+    	
+    	String privatekey = (client != null) ? client.Encryption_Key__c : null;
+        
+        if (client != null && privatekey != null && privatekey.length() > 0) {
+            // Let's decrypt this first
+            String decryptedString = ContactsAppUtil.decrypt(privatekey, clientAuthToken);
+            
+            //Get all the parts
+            return (Map<String, String>)JSON.deserialize(decryptedString, Map<String, String>.class);
+        } else {
+            throw new AuthenticationException('INVALID_TOKEN', System.Label.AuthenticationFailurePleaseRelogin);
+        }
     }
     
     /**
@@ -300,10 +335,13 @@ global with sharing class ContactsAppOAuthController {
     **/
     private AppClient__c setupAppClient(String passcode, SfdcOAuthManager.OAuthResponse oauthInfo) {
             
-        AppClient__c client = new AppClient__c( token_id__c = String.valueOf(Crypto.getRandomLong()) );
+        AppClient__c client = new AppClient__c();
         
         System.debug('Checking valid passcode: ' + passcode);
         if (passcode != null && passcode.trim().length() >= MIN_PASSCODE_LEN) {
+            
+            client.token_id__c = String.valueOf(Crypto.getRandomLong());
+            client.Encryption_Key__c = EncodingUtil.base64Encode(Crypto.generateAesKey(128));
             
             String clientSideRefToken = JSON.serialize(new Map<String, String> {
                 PASS_KEY => ContactsAppUtil.generateHash(passcode.trim()), 
@@ -311,8 +349,6 @@ global with sharing class ContactsAppOAuthController {
                 INSTANCE_URL_KEY => oauthInfo.instanceUrl,
                 REF_TOKEN_KEY => oauthInfo.encryptedRefreshToken
             });
-            
-            client.Encryption_Key__c = EncodingUtil.base64Encode(Crypto.generateAesKey(128));
             this.apiResp.authToken = ContactsAppUtil.encrypt(client.Encryption_Key__c, clientSideRefToken);
         }
         

@@ -84,8 +84,6 @@
         var staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
         var loadingImg = staticRsrcUrl + '/images/loading.gif';
         
-        document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-        
         if ('standalone' in navigator && !navigator.standalone && (/iphone|ipod|ipad/gi).test(navigator.platform) && (/Safari/i).test(navigator.appVersion)) {
             document.write('<link rel="stylesheet" href="' + staticRsrcUrl + '/css/add2home.css">');
             document.write('<script type="application\/javascript" src="' + staticRsrcUrl + '/js/add2home.js"><\/script>');
@@ -114,6 +112,7 @@
             }
         }
         
+        document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
         document.addEventListener('DOMContentLoaded', checkCacheAndPrepareSession, false);
     </script>
     

@@ -65,6 +65,7 @@
                         <span>{!$Label.CustomHost}</span>
                     </td></tr></tbody>
                 </table>
+                <p style="font-size: 0.8em; text-align: center; color: grey; line-height:20px;">WARNING: Changing login host may logout the current logged in user.</p>
                 </div>
             </div>
             <div id="about" class="page" style="visibility:hidden">

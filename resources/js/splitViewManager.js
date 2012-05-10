@@ -31,11 +31,6 @@ if (sforce === undefined) {
     sforce = {};
 }
 
-// We use $j rather than $ for jQuery so it works in Visualforce
-if (window.$j === undefined) {
-    $j = $.noConflict();
-}
-
 if (sforce.SplitView === undefined) {
 
     /**

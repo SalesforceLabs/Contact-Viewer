@@ -37,19 +37,19 @@ public with sharing class SessionManager {
     public SessionManager(Map<String, String> headers) {
         String sessionToken = headers.get('App-Session');
         // If we have the App-Session header then re-surrect the OAuthResponse from it's serialized state
-        if (sessionToken != null) 
-            this.authData = SfdcOAuthManager.initialize(sessionToken);
-        // Note: Used by container app. User can provide a Oauth value map that can be used to create a new OAuthResponse instance.   
-        else  
-            this.authData = SfdcOAuthManager.initialize(headers);
+        if (sessionToken != null) this.authData = SfdcOAuthManager.initialize(sessionToken);
     }
     
     public SessionManager(SfdcOAuthManager.OAuthResponse authData) {
         this.authData = authData;
     }
     
-    public void refreshSession() {
-        this.authData = SfdcOAuthManager.refreshAccessFromEncRefToken(instanceUrl, this.authData.encryptedRefreshToken);
+    public boolean refreshSession() {
+    	if (this.authData.encryptedRefreshToken != null) {
+            this.authData = SfdcOAuthManager.refreshAccessFromEncRefToken(instanceUrl, this.authData.encryptedRefreshToken);
+            return true;
+    	}
+        return false;
     }
     
     public boolean isValid() {
@@ -59,5 +59,10 @@ public with sharing class SessionManager {
     public SfdcOAuthManager.OAuthResponse getOAuthResponse() {
         return this.authData;
     }
-
+    
+    public boolean destroy() {
+    	if (isValid()) return this.authData.revoke(false);
+    	this.authData = null;
+    	return false;
+    }
 }

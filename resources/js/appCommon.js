@@ -91,21 +91,9 @@ function getFieldDescribe() {
     return eval('(' + StorageManager.getSessionValue(contact_describe_storage_key) + ')');
 }
 
+//FIXME: Remove my usage from code.
 function truncateLongText(elems) {
     return;
-/*    var values = [], idx = 0;
-    $j.each(elems,
-        function() { 
-            var that = $j(this);
-            values[idx++] = that.text(); that.empty();
-        });
-        
-    idx = 0;
-    $j.each(elems, 
-        function() {
-            var that = $j(this);
-            that.setText(values[idx++], true);
-        });*/
 }
 
 function isPortrait() {
@@ -208,17 +196,26 @@ function createScroller(el, onPullDownCallback, ops) {
 
 function errorCallback(jqXHR, statusText){
     if (statusText == 'error') {
-        alert('Server Unavailable. Check network connection or try again later.');
-    } else if (statusText = 'timeout') {
-        if ((/NO_API_ACCESS/gi).test(jqXHR.responseText)) {
-            if (ManageUserSession.isActive()) {
-                alert('API is not accessible to current user. Please login with a user with access to Salesforce API.');
-                logout(true);
-            }
-        } else {
-            alert('Session timed out.');
-            window.location.reload();
+        var response = jqXHR.responseText;
+        try { response = $j.parseJSON(response);} catch (e){}
+        
+        switch (jqXHR.status) {
+            case 403: 
+                if ((/NO_API_ACCESS/gi).test(jqXHR.responseText) && ManageUserSession.isActive()) {
+                    alert(response.message);
+                    logout(true);
+                    break;
+                }
+            case 401:
+                alert(response.message || 'Session expired. Please relogin.');
+                ManageUserSession.invalidate(true, function() { window.location.reload(); });
+                break;
+            default:
+                alert('Server Unavailable. Check network connection or try again later.');
         }
+    } else if (statusText = 'timeout') {
+        alert('Session timed out.');
+        ManageUserSession.invalidate(true, function() { window.location.reload(); });
     }
 }
 
@@ -315,11 +312,6 @@ function prepareSession(clearSettings) {
 
 if (sforce.Client === undefined) {
 
-    // We use $j rather than $ for jQuery so it works in Visualforce
-    if (window.$j === undefined) {
-        $j = $.noConflict();
-    }
-
     /**
      * The Client provides a convenient wrapper for the Force.com REST API, 
      * allowing JavaScript in Visualforce pages to use the API via the Ajax
@@ -396,6 +388,30 @@ if (sforce.Client === undefined) {
     sforce.Client.prototype.prepareSession = function(success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession';
         this.ajax('POST', url, null, success, error, complete);
+    }
+    
+    /**
+     * Prepare an app session from oauth values.
+     * @param success function to call on success
+     * @param error function to call on failure
+     * @param complete function to call on ajax call completion
+     */
+    sforce.Client.prototype.prepareSessionFromOAuth = function(accessToken, instanceUrl, userIdentityUrl, success, error, complete) {
+        var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession';
+        var data = 'accessToken=' + accessToken + '&instanceUrl=' + instanceUrl + '&identityUrl=' + userIdentityUrl;
+        this.ajax('POST', url, data, success, error, complete);
+    }
+    
+    /**
+     * Revokes existing session.
+     * @param success function to call on success
+     * @param error function to call on failure
+     * @param complete function to call on ajax call completion
+     */
+    sforce.Client.prototype.revokeSession = function(clientId, refToken, success, error, complete) {
+        var url = getBaseUrl() + '/services/apexrest/oauth2/revokeSession';
+        var data = (clientId && refToken) ? ('cid=' + clientId  + '&rt=' + refToken) : '';
+        this.ajax('POST', url, data, success, error, complete);
     }
     
     /**
@@ -1325,19 +1341,23 @@ var ManageUserSession = (function() {
         
         getLoginHostUrl: getLoginHostUrl,
         
-        setLoginHostType: function(host) { StorageManager.setLocalValue(login_host_storage_key, host); },
+        setLoginHostType: function(host) { 
+            if (host != ManageUserSession.getLoginHostType()) {
+                StorageManager.setLocalValue(login_host_storage_key, host);
+            }
+        },
         
         setLoginHostUrl: function(hostUrl) { 
-            var hostType = 'host_custom';
-            
             hostUrl = hostUrl.toLowerCase();
-            switch(hostUrl) {
-                case 'login.salesforce.com' : hostType = 'host_production'; break;
-                case 'test.salesforce.com' : hostType = 'host_sandbox'; break;
+            if (getLoginHostUrl() != hostUrl) {
+                var hostType = 'host_custom';
+                switch(hostUrl) {
+                    case 'login.salesforce.com' : hostType = 'host_production'; break;
+                    case 'test.salesforce.com' : hostType = 'host_sandbox'; break;
+                }
+                StorageManager.setLocalValue(login_host_url_storage_key, hostUrl); 
+                ManageUserSession.setLoginHostType(hostType);
             }
-            
-            StorageManager.setLocalValue(login_host_url_storage_key, hostUrl); 
-            ManageUserSession.setLoginHostType(hostType);
         },
         
         initialize: function(callback, clearSettings) {
@@ -1367,13 +1387,27 @@ var ManageUserSession = (function() {
             }
         },
         
-        kill: function(postLogout) {
-            StorageManager.clearAll();
+        invalidate: function (revokeSession, postInvalidate) {
+            if (revokeSession && sessionAlive) sf.revokeSession(null, null, null, null, postInvalidate);
+            
+            StorageManager.clearSessionValue(session_token_storage_key);
             sf = sessionAlive = username = undefined;
-            postLogout();
+        },
+        
+        kill: function(postLogout) {
+        
+            var clientId = StorageManager.getLocalValue(sfdc_clientId_storage_key);
+            var refToken = StorageManager.getLocalValue(sfdc_token_storage_key);
+            
+            var onRevoke = function() {
+                ManageUserSession.invalidate(); 
+                StorageManager.clearAll();
+                if (typeof postLogout == 'function') postLogout();
+            }
+            
+            sf.revokeSession(clientId, refToken, null, null, onRevoke);
         }
     }
-
 })();
 
 var PasscodeManager = (function () {
@@ -1615,11 +1649,6 @@ var PasscodeManager = (function () {
         }
     }
 })();
-
-// We use $j rather than $ for jQuery so it works in Visualforce
-if (window.$j === undefined) {
-    $j = $.noConflict();
-}
 
 if (sforce.SplitView === undefined) {
 

@@ -33,7 +33,8 @@ public with sharing class SfdcOAuthManager {
     private static final String PRIVATE_KEY;
     
     static {
-        ContactsAppSettings__c cas = ContactsAppSettings__c.getOrgDefaults();
+        ContactsAppSettings__c cas = ContactsAppSettings__c.getInstance('Defaults');
+        if (cas == null) cas = ContactsAppSettings__c.getOrgDefaults();
         CLIENT_ID = cas.OAuthClientId__c;
         CLIENT_SECRET = cas.OAuthClientSecret__c;
         REDIRECT_URI = cas.OAuthClientRedirectURI__c;
@@ -81,9 +82,31 @@ public with sharing class SfdcOAuthManager {
         }
         
         public String serialize() {
-            String jsonVal = JSON.serialize(this);
+            String jsonVal = JSON.serialize(new Map<String, String> { 
+            	   'accessToken' => this.accessToken, 
+            	   'instanceUrl' => this.instanceUrl,
+            	   'userInfoUri' => this.userInfoUri,
+            	   'userId'      => this.userId
+                });
             return EncodingUtil.base64Encode(Blob.valueOf(jsonVal));
         }
+        
+        public boolean revoke(boolean allSessions) {
+	        HttpRequest req = new HttpRequest();
+	        req.setMethod('POST');
+	        req.setEndpoint(this.instanceUrl + '/services/oauth2/revoke');
+	        
+	        if (allSessions && this.refreshToken != null) req.setBody('token=' + this.refreshToken);
+	        else req.setBody('token=' + this.accessToken);
+	        
+	        Http h = new Http();
+	        try {
+	            return h.send(req).getStatusCode() == 200;
+	        } catch (CalloutException e) {
+	            throw new OAuthException('CONNECTION_FAILURE', System.Label.FailedToConnectToSalesforce);
+	        }
+	        return false;
+	    }
     }
     
     /**
@@ -99,13 +122,11 @@ public with sharing class SfdcOAuthManager {
     * Initialize OAuthResponse from OAuth values provided in the map
     * @param authValueMap Map with different OAuth values to initialize the OAuthResponse
     */
-    public static OAuthResponse initialize(Map<String, String> authValueMap) {
+    public static OAuthResponse initialize(String accessToken, String instanceUrl, String identityUrl) {
         OAuthResponse authResp = new OAuthResponse();
-        
-        authResp.accessToken = authValueMap.get('Oauth-Acess-Token');
-        authResp.refreshToken = authValueMap.get('Oauth-Refresh-Token');
-        authResp.instanceUrl = authValueMap.get('Oauth-Instance-Url');
-        authResp.userInfoUri = authValueMap.get('Oauth-Uid-Token');
+        authResp.accessToken = accessToken;
+        authResp.instanceUrl = instanceUrl;
+        authResp.userInfoUri = identityUrl;
         
         return authResp;
     }
@@ -152,7 +173,6 @@ public with sharing class SfdcOAuthManager {
                 oAuthResp.userId = oAuthResp.userInfoUri.subString(userIdStart+1);
             }
         }
-        oAuthResp.userInfoUri = oAuthResp.userInfoUri.replace('https://login.salesforce.com', oAuthResp.instanceUrl);
         
         return oAuthResp;   
     }
@@ -233,5 +253,12 @@ public with sharing class SfdcOAuthManager {
         return null;
     }
     
-    
+    public static boolean revokeAccess(String instanceUrl, String encRefToken) {
+    	
+    	OAuthResponse oauthInfo = new OAuthResponse();
+    	oauthInfo.instanceUrl = instanceUrl;
+    	oauthInfo.refreshToken = ContactsAppUtil.decrypt(PRIVATE_KEY, encRefToken);
+        
+        return oauthInfo.revoke(true);
+    }
 }
