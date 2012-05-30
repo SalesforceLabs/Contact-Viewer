@@ -59,7 +59,7 @@ function sessionCallback() {
     addClickListeners();
 
     var describeCallback, selectedContactId;    
-    var ind = $j('#loggedin').showActivityInd(loadingImg, 'Loading...');
+    var ind = $j('#loggedin').showActivityInd('Loading...');
         
     var last_visit_loc = StorageManager.getLocalValue(last_visited_loc_storage_key);
     if (last_visit_loc && last_visit_loc.split('/').length == 2) {
@@ -99,13 +99,13 @@ function sessionCallback() {
 }
 
 function switchToDetail(callback) {
-	if (useAnimations) {
-	    $j('#listpage').changePage('#detailpage', false, callback);
-	} else {
-		$j('#listpage').hide();
-		$j('#detailpage').show().css('visibility', '');
-		if (typeof callback == 'function') callback();
-	}
+    if (useAnimations) {
+        $j('#listpage').changePage('#detailpage', false, callback);
+    } else {
+        $j('#listpage').hide();
+        $j('#detailpage').show().css('visibility', '');
+        if (typeof callback == 'function') callback();
+    }
 }
 
 function addClickListeners(searchContacts, displayList) {
@@ -124,22 +124,22 @@ function showContact(contactId, onComplete) {
     $j('#detailpage .header>span').empty();
     switchToDetail();
 
-    var ind = $j('#loggedin').showActivityInd(loadingImg, 'Loading...');
+    var ind = $j('#loggedin').showActivityInd('Loading...');
     switchDetailSection('info', [contactId], function(success) { 
         if (success) $j('#detailpage #detail').show();
         $j('#detailpage .header #left').unbind().click(function(e) {
-        	var onSlideBack = function() {
-        		$j('#detailpage').css('visibility', 'hidden');
-				listView.resetSelectedContact();
-        	}
+            var onSlideBack = function() {
+                $j('#detailpage').css('visibility', 'hidden');
+                listView.resetSelectedContact();
+            }
             $j('#detailpage .header #left').unbind();
             if (useAnimations) {
-				$j('#detailpage').changePage('#listpage', true, onSlideBack); 
-			} else {
-				$j('#detailpage').hide();
-				$j('#listpage').show().css('visibility', '');
-				onSlideBack();
-			}
+                $j('#detailpage').changePage('#listpage', true, onSlideBack); 
+            } else {
+                $j('#detailpage').hide();
+                $j('#listpage').show().css('visibility', '');
+                onSlideBack();
+            }
             updateLastVisitLoc();
         });
         ind.hide();

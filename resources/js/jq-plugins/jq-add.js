@@ -139,22 +139,23 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         }   
     };
     
-    $.fn.showActivityInd = function(loadingImgUrl, displayText, addOverlay) {
+    $.fn.showActivityInd = function(displayText, addOverlay) {
         
-        var overlay;
+        var overlay, that = this;
         if(addOverlay) overlay = this.addOverlay();
         
         if (actInd) actInd.hide().unbind();
         else {
-            actInd = $('<div></div>').hide().append('<img/><br/><span/>');
+            actInd = $('<div></div>').hide()
+                    .append('<div id="spinner" style="position:relative; top:15px;"/>')
+                    .append('<div id="text" style="margin: 45px 0 -5px 0;"/>');
             actInd.appendTo(document.body);
         }
         
         actInd[0].style.cssText = 'background-color:black; position: absolute; padding: 20px; color:white;' +
                                   '-webkit-border-radius: 10px; text-align: center; z-index:1000';
         
-        if (loadingImgUrl) actInd.find('img').css('padding-bottom', '15px').css({width: '32px', height: '32px'}).attr('src', loadingImgUrl);
-        actInd.find('span').text(displayText || 'Loading...');
+        actInd.children('#text').text(displayText || 'Loading...');
         
         var parentPos = this.offset();
         parentPos = (parentPos) ? parentPos : {left: 0, top: 0};
@@ -162,18 +163,15 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         var topPos = parentPos.top + (this.height() - actInd.outerHeight(false))/2;
         actInd.css('left', leftPos).css('top', topPos);
         
-        //actInd.css(vendor + 'Transform', 'scale3d(2, 2, 1)').show();
         actInd[0].style.cssText += ';-webkit-transition:-webkit-transform 100ms ease-out;';
-        actInd.show();
-        
-        //setTimeout(function() { actInd.css('-webkit-transform', 'scale3d(1, 1, 1)'); }, 0);
+        actInd.show().children('#spinner').spin('large', 'white');
         
         return {
             hide: function() {
                 actInd.css('-webkit-transition-property', '-webkit-transform, opacity');
                 actInd.bind('webkitTransitionEnd', function() { actInd.hide(); });
                 actInd.css({webkitTransform: 'scale3d(0.5, 0.5, 1)', opacity: '0'});
-                //actInd.hide().remove();
+                actInd.children('#spinner').spin(false);
                 if(overlay) overlay.hide();
             }
         };

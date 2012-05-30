@@ -1179,7 +1179,7 @@ if (sforce.ListView === undefined) {
         },
         
         showBusyIndicator : function(text) {
-            this.busyInd = this.view.find('#listscroller').showActivityInd(loadingImg, text);
+            this.busyInd = this.view.find('#listscroller').showActivityInd(text);
         },
         
         hideBusyIndicator : function() {
@@ -1246,7 +1246,7 @@ var ManageUserSession = (function() {
                 if (resp) logout(true);
                 else if (typeof pmcallback == 'function') pmcallback(false);
             } else {
-                var ind = $j(document).showActivityInd(loadingImg, 'Authenticating...', false);
+                var ind = $j(document).showActivityInd('Authenticating...', false);
                 
                 var checkResponse = function(response) {
                 
@@ -1306,7 +1306,7 @@ var ManageUserSession = (function() {
     
             passcode = (passcode == -1) ? undefined : passcode;
             var indMsg = (passcode) ? 'Setting Passcode...' : 'Authenticating...';
-            var indicator = $j(document).showActivityInd(loadingImg, indMsg, false);
+            var indicator = $j(document).showActivityInd(indMsg, false);
             
             var onSuccess = function(response) {
                 prepareSession(response);

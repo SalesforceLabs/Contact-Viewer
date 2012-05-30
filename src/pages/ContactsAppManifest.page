@@ -20,6 +20,7 @@ CACHE:
 </apex:outputPanel>
 <apex:outputPanel layout="none" rendered="{!debug}">
 {!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.spin.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}
