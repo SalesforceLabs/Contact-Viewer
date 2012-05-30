@@ -138,16 +138,16 @@ function sessionCallback() {
 
 /* Method to slide in the detail pane from right */
 function switchToDetail(callback) {
-	if (useAnimations) {
-		$j('#detailpage').slideInLeft(function() { 
-			switch(isPortrait()) { 
-				case false: $j('#detailpage').css(vendor + 'Transform', 'none'); break;
-			}
-		});
-	} else {
-		$j('#detailpage').show().css('visibility', '');
-	}
-	if (typeof callback == 'function') callback(); 
+    if (useAnimations) {
+        $j('#detailpage').slideInLeft(function() { 
+            switch(isPortrait()) { 
+                case false: $j('#detailpage').css(vendor + 'Transform', 'none'); break;
+            }
+        });
+    } else {
+        $j('#detailpage').show().css('visibility', '');
+    }
+    if (typeof callback == 'function') callback(); 
 }
 
 function addClickListeners() {

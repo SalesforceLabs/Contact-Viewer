@@ -73,7 +73,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         var onComp = function() { 
             that.removeClass('transitionSettings').css(vendor + 'TransitionProperty', 'none');
             that.unbind('webkitTransitionEnd'); 
-            if(typeof callback == 'function') callback(); 
+            if(typeof callback == 'function') setTimeout(callback, 10);
         };
         this.unbind('webkitTransitionEnd').bind('webkitTransitionEnd', onComp);
         
@@ -147,8 +147,8 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         if (actInd) actInd.hide().unbind();
         else {
             actInd = $('<div></div>').hide()
-            		.append('<div id="spinner" style="position:relative; top:15px;"/>')
-            		.append('<div id="text" style="margin: 45px 0 -5px 0;"/>');
+                    .append('<div id="spinner" style="position:relative; top:15px;"/>')
+                    .append('<div id="text" style="margin: 45px 0 -5px 0;"/>');
             actInd.appendTo(document.body);
         }
         
