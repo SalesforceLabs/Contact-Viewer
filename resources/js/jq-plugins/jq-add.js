@@ -73,7 +73,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         var onComp = function() { 
             that.removeClass('transitionSettings').css(vendor + 'TransitionProperty', 'none');
             that.unbind('webkitTransitionEnd'); 
-            if(typeof callback == 'function') callback(); 
+            if(typeof callback == 'function') setTimeout(callback, 10);
         };
         this.unbind('webkitTransitionEnd').bind('webkitTransitionEnd', onComp);
         
