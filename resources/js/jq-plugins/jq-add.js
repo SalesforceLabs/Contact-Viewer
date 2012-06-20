@@ -70,10 +70,12 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         var that = this,
             transProp = '-' + vendor.toLowerCase() + '-transform';
         
-        var onComp = function() { 
-            that.removeClass('transitionSettings').css(vendor + 'TransitionProperty', 'none');
-            that.unbind('webkitTransitionEnd'); 
-            if(typeof callback == 'function') setTimeout(callback, 10);
+        var onComp = function(event) {
+            if (that.is(event.target)) {
+                that.removeClass('transitionSettings').css(vendor + 'TransitionProperty', 'none');
+                that.unbind('webkitTransitionEnd'); 
+                if(typeof callback == 'function') callback();
+            }
         };
         this.unbind('webkitTransitionEnd').bind('webkitTransitionEnd', onComp);
         
@@ -294,6 +296,21 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
             if (evHandler) $j(window).unbindTouch(evHandler);
         }
         
+        return this;
+    };
+
+    $.fn.textfill = function(options) {
+        var fontSize = options.maxFontPixels;
+        var textSpan = $('span:visible:first', this);
+        var maxHeight = $(this).height();
+        var maxWidth = $(this).width();
+        var textHeight, textWidth;
+        do {
+            textSpan.css('font-size', fontSize);
+            textHeight = textSpan.height();
+            textWidth = textSpan.width();
+            fontSize = fontSize - 1;
+        } while ((textHeight > maxHeight || textWidth > maxWidth) && fontSize > 3);
         return this;
     };
     
