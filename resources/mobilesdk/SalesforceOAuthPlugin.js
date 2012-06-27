@@ -1,21 +1,21 @@
 var SalesforceOAuthPlugin = {
 
-	/**
-	* Obtain authentication credentials, calling 'authenticate' only if necessary.
-	* Most index.html authors can simply use this method to obtain auth credentials
-	* after onDeviceReady.
+    /**
+    * Obtain authentication credentials, calling 'authenticate' only if necessary.
+    * Most index.html authors can simply use this method to obtain auth credentials
+    * after onDeviceReady.
     *   success - The success callback function to use.
     *   fail    - The failure/error callback function to use.
-	* PhoneGap returns a dictionary with:
-	* 	accessToken
-	* 	refreshToken
+    * PhoneGap returns a dictionary with:
+    *   accessToken
+    *   refreshToken
     *   clientId
-	* 	userId
-	* 	orgId
+    *   userId
+    *   orgId
     *   loginUrl
-	* 	instanceUrl
-	* 	userAgent
-	*/
+    *   instanceUrl
+    *   userAgent
+    */
     getAuthCredentials: function(success, fail) {
         PhoneGap.exec(success, fail, "com.salesforce.oauth","getAuthCredentials",[]);
     },
@@ -89,10 +89,12 @@ var SalesforceOAuthPlugin = {
  *   oauthRedirectURI        - String containing the redirect URI configured for the remote access object.
  *   oauthScopes             - Array of strings specifying the authorization scope of the app (e.g ["api", "visualforce"]).
  *   autoRefreshOnForeground - Boolean, determines whether the container automatically refreshes OAuth session when app is foregrounded
+ *   autoRefreshPeriodically - Boolean, determines whether the container automatically refreshes OAuth session periodically
  */
-function OAuthProperties(remoteAccessConsumerKey, oauthRedirectURI, oauthScopes, autoRefreshOnForeground) {
+function OAuthProperties(remoteAccessConsumerKey, oauthRedirectURI, oauthScopes, autoRefreshOnForeground, autoRefreshPeriodically) {
     this.remoteAccessConsumerKey = remoteAccessConsumerKey;
     this.oauthRedirectURI = oauthRedirectURI;
     this.oauthScopes = oauthScopes;
     this.autoRefreshOnForeground = autoRefreshOnForeground;
+    this.autoRefreshPeriodically = autoRefreshPeriodically;
 }
