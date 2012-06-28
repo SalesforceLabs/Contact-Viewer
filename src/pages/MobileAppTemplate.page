@@ -68,12 +68,12 @@
     </apex:outputPanel>
     <apex:outputPanel rendered="{!isContainer}" layout="none">
         <apex:outputPanel rendered="{!debug}" layout="none">
-        <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, 'ios-phonegap-1.2.0.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, OSType + '-phonegap-1.2.0.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, 'SFHybridApp.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, 'SalesforceOAuthPlugin.js')}"/>
         </apex:outputPanel>
         <apex:outputPanel rendered="{!!debug}" layout="none">
-        <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, 'ios-sdk-all.min.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.SFMobileSDK, OSType + '-sdk-all.min.js')}"/>
         </apex:outputPanel>
     </apex:outputPanel>
     

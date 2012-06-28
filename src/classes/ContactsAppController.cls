@@ -57,6 +57,12 @@ public with sharing class ContactsAppController {
         }
     }
     
+    public String getOSType() {
+	    if (userAgent.toLowerCase().contains('iphone')) return 'ios';
+	    else if (userAgent.toLowerCase().contains('android')) return 'android';
+	    return '';
+    }
+    
     public boolean addManifest { get {
           return System.currentPageReference().getParameters().size() == 0;
        }

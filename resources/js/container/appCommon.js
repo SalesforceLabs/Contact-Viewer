@@ -1210,7 +1210,7 @@ var ManageUserSession = (function() {
     
         oauthProperties = new OAuthProperties(remoteAccessConsumerKey, 
                                                   oauthRedirectURI, 
-                                                  ['api'], true);
+                                                  ['api'], true, true);
         
         errorCallback = function() {
             indicator.hide();
