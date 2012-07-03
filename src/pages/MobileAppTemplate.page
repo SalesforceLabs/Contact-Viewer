@@ -29,12 +29,17 @@
 
     <script>
         var siteUrl = '{!$Site.CurrentSiteUrl}';
-        if (Math.min(window.screen.availHeight, window.screen.availWidth) < 500) {
-            if (!(/\/ContactsAppMobile\/?$/).test(window.location.pathname))
-                window.location = siteUrl + 'ContactsAppMobile' + window.location.search;
-        } else if (window.location.pathname.match('{!$Site.Prefix}/?$') == null) {
-            window.location = siteUrl;
-        }
+        (function() {
+            var pixelRatio = window.devicePixelRatio;
+            if (!pixelRatio) pixelRatio = 1;
+            
+            if (Math.min(window.screen.availHeight, window.screen.availWidth) < 500*pixelRatio) {
+	            if (!(/\/ContactsAppMobile\/?$/).test(window.location.pathname))
+	                window.location = siteUrl + 'ContactsAppMobile' + window.location.search;
+	        } else if (window.location.pathname.match('{!$Site.Prefix}/?$') == null) {
+	            window.location = siteUrl;
+	        }
+	    })();
     </script>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
