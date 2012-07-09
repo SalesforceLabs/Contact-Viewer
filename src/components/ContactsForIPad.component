@@ -138,11 +138,11 @@
                             <hr style="height: 1px; padding-left: 25px; border: 1px solid rgb(220, 220, 220); width: 100%;margin-top: -11px;"/>
                           </header>
                           
-                          <div id="map_div" style="position:relative; top:0px; height:180px; margin:20px 25px; background-color: #CCC;">
+                          <div id="map_div" style="position:relative; top:0px; height:180px; margin:20px 25px; background-color: #CCC; max-width:640px;">
                             <div id="google_map_canvas" style="height:100%; position:absolute; top:0px; width: 100%;"></div>
                             <div id="right" style="height: 100%; position: absolute; top: 0px; width: 10px; background-image: -webkit-gradient(linear, 100% 0, 0 0, color-stop(0, rgba(50, 50, 50, 0.5)), color-stop(0.3, rgba(100, 100, 100, 0.3)), color-stop(1, rgba(150, 150, 150, 0)));   right: 0px; "></div>
                             <div id="top" style="height: 20px; position: absolute; top: 0px; width: 100%; background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, rgba(25, 25, 25, 0.7)), color-stop(0.3, rgba(50, 50, 50, 0.4)), color-stop(1, rgba(150, 150, 150, 0)));   "></div>
-                            <div id="recenter" style=" position: absolute; top: 0px; right: 0; background-color: rgba(255, 255, 255, 0.5); color: #1797C0; padding: 8px 50px; border: 1px solid silver; -webkit-border-radius: 5px; font-weight: bold;">{!$Label.Recenter}</div>
+                            <div id="openMaps" style=" position: absolute; top: 0px; right: 0; background-color: rgba(255, 255, 255, 0.5); color: #1797C0; padding: 8px 50px; border: 1px solid silver; -webkit-border-radius: 5px; font-weight: bold;">{!$Label.OpenMaps}</div>
                             <div id="bottom" style="height: 10px; position: absolute; bottom: 0px; width: 100%; background-image: -webkit-gradient(linear, 0 100%, 0 0, color-stop(0, rgba(50, 50, 50, 0.5)), color-stop(0.2, rgba(100, 100, 100, 0.3)), color-stop(1, rgba(150, 150, 150, 0)));   "></div>
                             <div id="left" style="height: 100%; position: absolute; top: 0px; width: 20px; background-image: -webkit-gradient(linear, 0 0, 100% 0, color-stop(0, rgba(25, 25, 25, 0.7)), color-stop(0.3, rgba(50, 50, 50, 0.4)), color-stop(1, rgba(150, 150, 150, 0)));   left: 0px; "></div>
                             <div class="app-images rc_div rc_top_left"/><div class="app-images rc_div rc_top_right"/>

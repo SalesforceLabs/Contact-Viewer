@@ -31,7 +31,7 @@
         var siteUrl = '{!$Site.CurrentSiteUrl}';
         (function() {
             var pixelRatio = window.devicePixelRatio;
-            if (!pixelRatio) pixelRatio = 1;
+            if (!pixelRatio || /(iPad)|(iPhone)/.test(navigator.userAgent)) pixelRatio = 1;
             
             if (Math.min(window.screen.availHeight, window.screen.availWidth) < 500*pixelRatio) {
 	            if (!(/\/ContactsAppMobile\/?$/).test(window.location.pathname))
