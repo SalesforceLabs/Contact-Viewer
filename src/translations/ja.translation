@@ -265,6 +265,10 @@
         <name>NotValidResponse</name>
     </customLabels>
     <customLabels>
+        <label><!-- OpenMaps --></label>
+        <name>OpenMaps</name>
+    </customLabels>
+    <customLabels>
         <label><!-- Phone --></label>
         <name>Phone</name>
     </customLabels>
