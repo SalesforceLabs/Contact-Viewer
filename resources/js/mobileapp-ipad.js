@@ -573,55 +573,14 @@ function switchDetailSection(section, contact, callback) {
     updateLastVisitLoc(contact[0] + '/' + section);
 }
 
-var map, marker;
-function initializeMap() {
-    if (map) return true;
-    
-    if (!window.google || !window.google.maps) return false;
-    
-    var latlng = new google.maps.LatLng(-34.397, 150.644);
-    var myOptions = {
-      zoom: 8,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      streetViewControl: false,
-      mapTypeControl: false
-    }
-    map = new google.maps.Map(document.getElementById("google_map_canvas"), myOptions);
-    $j('#map_section #map_div #recenter').unbind().click( 
-        function() {
-            if (map && marker) { map.setCenter(marker.getPosition()); }
-        });
-    return true;
-}
-
 function codeAddressOnMap(address) {
-    
-   if (initializeMap()) {
-        $j('#map_div').show().css('visibility', 'hidden');
-        $j('#map_section').show().css('visibility', 'hidden');
-            
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode( { 'address': address}, 
-            function(results, status) {
-                if (marker) { marker.setMap(null); marker = undefined; }
-      
-                if (status == google.maps.GeocoderStatus.OK) {
-                    $j('#map_div #error').hide();
-                    $j('#map_section').css('visibility', '')
-                         .find('#map_div').css('visibility', '');
-
-                    google.maps.event.trigger(map, 'resize');
-                    map.setCenter(results[0].geometry.location);
-                    marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location
-                    });
-                } else {
-                    $j('#map_section').hide();
-                }
-            });
-    } else {
-        setTimeout(function() { codeAddressOnMap(address); }, 100);
-    }
+    var mapsImage = '<img src="http://maps.googleapis.com/maps/api/staticmap?' + 
+    				'zoom=14&size=640x180&format=jpeg&sensor=false&markers=color:red%7C' + 
+    				address + '"/>';
+    $j('#map_section #map_div #google_map_canvas').empty().append(mapsImage);
+    $j('#map_section #map_div #openMaps').unbind().click( 
+        function() {
+            window.location = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 
+            				  'maps:q=' : 'https://maps.google.com/maps?q=') + address;
+        });
 }
