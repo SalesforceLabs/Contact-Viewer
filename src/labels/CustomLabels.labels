@@ -463,6 +463,13 @@
         <value>Not a valid response.</value>
     </labels>
     <labels>
+        <fullName>OpenMaps</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>OpenMaps</shortDescription>
+        <value>Open Maps</value>
+    </labels>
+    <labels>
         <fullName>Phone</fullName>
         <language>en_US</language>
         <protected>true</protected>
