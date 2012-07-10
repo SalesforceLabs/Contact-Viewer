@@ -41,7 +41,6 @@ function initiateInfoScroller() {
         infopagescroll.refresh();
     }
     destroyFeedScroller();
-    $j('#infoscroller').find('#map_div #google_map_canvas').unbind().touch(function(e) { e.stopPropagation(); });
 }
 
 function destroyInfoScroller() {
@@ -574,13 +573,14 @@ function switchDetailSection(section, contact, callback) {
 }
 
 function codeAddressOnMap(address) {
+	var encodedAdd = encodeURI(address);
     var mapsImage = '<img src="http://maps.googleapis.com/maps/api/staticmap?' + 
     				'zoom=14&size=640x180&format=jpeg&sensor=false&markers=color:red%7C' + 
-    				address + '"/>';
+    				encodedAdd + '"/>';
     $j('#map_section #map_div #google_map_canvas').empty().append(mapsImage);
     $j('#map_section #map_div #openMaps').unbind().click( 
         function() {
             window.location = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 
-            				  'maps:q=' : 'https://maps.google.com/maps?q=') + address;
+            				  'maps:q=' : 'https://maps.google.com/maps?q=') + encodedAdd;
         });
 }

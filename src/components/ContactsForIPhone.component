@@ -47,14 +47,14 @@
                 </div>
                 <span></span>
             </div>
-            <div id="contactInfo" class="contentpage" style="position: absolute; top: 45px; bottom: 0; width: 100%">
+            <div id="contactInfo" class="contentpage" style="position: absolute; top: 45px; bottom: 0; width: 100%;">
                 <div id="detail">
                   <div id="summary" style="height: 135px; width: 100%; position: relative; border-bottom: 1px solid #2B2B2B; -webkit-box-shadow: 0px 2px 2px rgba(43, 43, 43, 0.5);">
                     <div id="photo_div" style="  -webkit-border-radius: 5px; padding: 10px 20px; padding-bottom:5px;">
-                       <apex:image value="{!URLFOR($Resource.ContactAppRsrcs, 'images/userPicwBorder.png')}" style="height: 75px;"/>
-                       <span style=" margin: 20px 10px; position: absolute; top: 0;"></span>
+                       <apex:image value="{!URLFOR($Resource.ContactAppRsrcs, 'images/userPicwBorder.png')}" style="height: 75px; float: left"/>
+                       <div style="min-height:65px; padding:10px 10px 0 10px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></div>
                     </div>
-                    <div id="call_contact" style="padding: 0 20px;">
+                    <div id="call_contact" style="padding: 5px 20px 0;">
                         <a id="email" href="#"><div>{!$Label.Email}</div></a>
                         <a id="facetime" href="#"><div>{!$Label.Facetime}</div></a>
                         <a id="skype" href="#"><div>{!$Label.Skype}</div></a>
@@ -62,32 +62,23 @@
                   </div>
                   
                   <span>
-                  <div id="infoscroller" class="detailscroller" style="top: 135px">
-                    <div id="info" style="width:100%; padding: 15px 0;">                      
-                      <table cellspacing="0" style="margin: 5px 20px; font-size: 12px;">
-                        <tbody><tr id="Account">
-                            <td class="fieldLbl">{!$Label.Company}</td>
-                            <td class="fieldVal"></td>
-                        </tr><tr id="Department">
-                            <td class="fieldLbl">{!$Label.Department}</td>
-                            <td class="fieldVal"></td>
-                        </tr><tr id="Phone">
-                            <td class="fieldLbl">{!$Label.Phone}</td>
-                            <td class="fieldVal"></td>
-                        </tr><tr id="Mobile">
-                            <td class="fieldLbl">{!$Label.Mobile}</td>
-                            <td class="fieldVal"></td>
-                        </tr><tr id="Email">
-                            <td class="fieldLbl">{!$Label.Email}</td>
-                            <td class="fieldVal"></td>
-                        </tr><tr id="ReportsTo">
-                            <td class="fieldLbl">{!$Label.ReportsTo}</td>
-                            <td class="fieldVal">&nbsp;</td>
-                        </tr><tr id="Address">
-                            <td class="fieldLbl">{!$Label.MailingAddress}</td>
-                            <td class="fieldVal"></td>
-                        </tr></tbody>
-                      </table>
+                  <div id="infoscroller" class="detailscroller" style="top: 138px">
+                    <div id="info" style="width:100%; padding: 15px 0;">
+                        <div class="roundedBox">
+						    <div id="Phone" class="rowLabel fieldLbl"><span>{!$Label.Phone}</span></div>
+						    <div id="Phone" class="rowValue"><span></span></div>
+						    <hr class="rowSeparator"/>
+						    <div id="Mobile" class="rowLabel fieldLbl"><span>{!$Label.Mobile}</span></div>
+						    <div id="Mobile" class="rowValue"><span></span></div>
+						</div>
+						<div class="roundedBox">
+                            <div id="Email" class="rowLabel fieldLbl"><span>{!$Label.Email}</span></div>
+                            <div id="Email" class="rowValue"><span></span></div>
+                        </div>
+                        <div class="roundedBox">
+                            <div id="Address" class="rowLabel fieldLbl"><span>{!$Label.MailingAddress}</span></div>
+                            <div id="Address" class="rowValue"><span></span></div>
+                        </div>
                     </div>
                   </div>
                   </span>
