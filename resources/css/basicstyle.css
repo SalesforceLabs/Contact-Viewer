@@ -54,15 +54,10 @@ body a {
 }
 
 .contentpage {
-/*	position:absolute; z-index:1;
-	top:45px; 
-	bottom:0px; 48px;
-	left:0;
-	width:100%;*/
-/*	overflow:auto; */
     position:relative;
 	background-color: white;
 	-webkit-user-select:text;
+	background-color: #E2E4E9;
 }
 
 #rightsection {
@@ -70,7 +65,7 @@ body a {
 	border-left:1px solid rgba(225, 225, 225, 0.2);
 }
 
-#detailpage #detail #summary #call_contact a>div { float: left; -webkit-border-radius: 5px; border: 1px solid silver; padding: 5px 0px; width: 80px; text-align: center; margin-right: 10px; }
+#detailpage #detail #summary #call_contact a>div { float: left; -webkit-border-radius: 5px; border: 1px solid silver; padding: 5px 0px; width: 80px; text-align: center; margin-right: 10px; background-color: white;}
 
 #listpage #footer>div#home { background-position: 0 0; width: 35px; height: 35px; }
 #listpage #footer>div#gear { background-position: -40px 0; width: 33px; height: 33px; }
@@ -377,4 +372,33 @@ input[type="search"] { -webkit-appearance:none; }
     width: 60%; vertical-align: top;
     padding-bottom: 8px; padding-top: 3px;
     font-size: 14px; color: rgb(42, 42, 42);
+}
+
+.roundedBox {
+    margin: 15px; 
+    -webkit-border-radius: 10px; 
+    border: 1px solid silver;  
+    line-height: 44px; 
+    background-color: white;
+}
+.rowLabel {
+    float: left; padding-left: 10px;
+    font-weight: bold; font-size: 12px;
+    width: 90px; 
+    text-align: right; 
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.rowValue {
+    color: black; 
+    padding: 10px;
+    min-height: 24px;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.rowSeparator {
+    border-bottom: 1px solid silver; 
+    border-top: none; margin: 0;
 }

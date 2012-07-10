@@ -35,12 +35,11 @@ var listView, splitView, sobjectModel;
 
 function initiateInfoScroller() {
     if (infopagescroll === undefined) {
-        infopagescroll = createScroller('infoscroller');
+        infopagescroll = createScroller('infoscroller', null, {onBeforeScrollStart: function(){}});
         $j(window).orientationChange(initiateInfoScroller);
     } else {
         infopagescroll.refresh();
     }
-    $j('#infoscroller').find('a').unbind().touch(function(e) { e.stopPropagation(); });
 }
 
 function destroyInfoScroller() {
@@ -152,8 +151,11 @@ function displayContactSummary(contact) {
     $j('#Id').val(contact.Id);
     var fieldInfo = getFieldDescribe();
     var detail = $j('#detailpage #detail');
-    detail.find('#summary #photo_div>span').html(formatStr(contact.Name, 25)).append('<br/>').append(formatStr(contact.Title, 25));
-        
+    detail.find('#summary #photo_div>div').html(contact.Name)
+    .append('<br/>').append((contact.Title) ? formatStr(contact.Title) + ', ' : '')
+    .append(formatStr(contact.Department) || '&nbsp;').append('<br/>')
+    .append(contact.Account ? formatStr(contact.Account.Name) : '&nbsp;');
+
     if (contact.Phone) {
         var phone = cleanupPhone(contact.Phone);
         detail.find('#call_contact #skype').attr('href', 'skype:' + phone + '?call').show();
@@ -175,59 +177,39 @@ function displayContactSummary(contact) {
 function displayContactDetails(contact) {
     var fieldInfo = getFieldDescribe();
     var info = $j('#detailpage #detail #info');
-    if (fieldInfo.AccountId) {
-        info.find('#Account').show();
-        info.find('#Account .fieldLbl').text(fieldInfo.AccountId.relationshipLabel);
-        info.find('#Account .fieldVal').html(contact.Account ? formatStr(contact.Account.Name, 50) : '&nbsp;');
-    } else {
-        info.find('#Account').hide();
-    }
-    if (fieldInfo.Department) {
-        info.find('#Department').show();
-        info.find('#Department .fieldLbl').text(fieldInfo.Department.label);
-        info.find('#Department .fieldVal').html(formatStr(contact.Department, 50) || '&nbsp;');
-    } else {
-        info.find('#Department').hide();
-    }
+
     if (fieldInfo.Phone) {
         info.find('#Phone').show();
-        info.find('#Phone .fieldLbl').text(fieldInfo.Phone.label);
-        info.find('#Phone .fieldVal').html((contact.Phone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.Phone)) + '" style="text-decoration:none;">' + formatStr(contact.Phone, 30) + '</a>' : '&nbsp;');
+        info.find('#Phone.rowLabel span').text(fieldInfo.Phone.label);
+        info.find('#Phone.rowValue span').html((contact.Phone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.Phone)) + '" style="text-decoration:none;">' + formatStr(contact.Phone, 30) + '</a>' : '&nbsp;');
     } else {
         info.find('#Phone').hide();
     }
     if (fieldInfo.MobilePhone) {
         info.find('#Mobile').show();
-        info.find('#Mobile .fieldLbl').text(fieldInfo.MobilePhone.label);
-        info.find('#Mobile .fieldVal').html((contact.MobilePhone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.MobilePhone)) + '">' + formatStr(contact.MobilePhone, 30) + '</a>' : '&nbsp;');
+        info.find('#Mobile.rowLabel span').text(fieldInfo.MobilePhone.label);
+        info.find('#Mobile.rowValue span').html((contact.MobilePhone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.MobilePhone)) + '">' + formatStr(contact.MobilePhone, 30) + '</a>' : '&nbsp;');
     } else {
         info.find('#Mobile').hide();
     }
     if (fieldInfo.Email) {
         info.find('#Email').show();
-        info.find('#Email .fieldLbl').text(fieldInfo.Email.label);
-        info.find('#Email .fieldVal').html((contact.Email) ? '<a href="mailto:' + contact.Email + '" style="text-decoration:none;">' + formatStr(contact.Email, 50) + '</a>' : '&nbsp;');   
+        info.find('#Email.rowLabel span').text(fieldInfo.Email.label);
+        info.find('#Email.rowValue span').html((contact.Email) ? '<a href="mailto:' + contact.Email + '" style="text-decoration:none;">' + formatStr(contact.Email, 50) + '</a>' : '&nbsp;');   
     } else {
         info.find('#Email').hide();
-    }
-    if (fieldInfo.ReportsToId) {
-        info.find('#ReportsTo').show();
-        info.find('#ReportsTo .fieldLbl').text(fieldInfo.ReportsToId.label.replace(/\sID$/,''));
-        info.find('#ReportsTo .fieldVal').html(contact.ReportsTo ? formatStr(contact.ReportsTo.Name, 50) : '&nbsp;');   
-    } else {
-        info.find('#ReportsTo').hide();
     }
 
     if (fieldInfo.MailingStreet != undefined) {
         var add = formatAddress(contact);
         info.find('#Address').show();
-        info.find('#Address .fieldLbl').text('Mailing Address');
+        info.find('#Address.rowLabel span').text('Mailing Address');
         if (add.length > 0 ) {
-            add = '<a href="http://maps.google.com/maps?daddr=' + add.replace(/\n/g, ', ') + '">' +
+            add = '<a href="https://maps.google.com/maps?q=' + encodeURI(add.replace(/\n/g, ', ')) + '">' +
                   add.replace(/\n/g, '<br/>') + '</a>';
-            info.find('#Address .fieldVal').html(add);
+            info.find('#Address.rowValue span').html(add);
         } else {
-            info.find('#Address .fieldVal').empty();
+            info.find('#Address.rowValue span').empty();
         }
     } else {
         info.find('#Address').hide();
