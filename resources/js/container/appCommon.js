@@ -1205,42 +1205,40 @@ var ManageUserSession = (function() {
     
     function authenticate(onSuccess) {
     
-        var indicator, oauthProperties, successCallback, loginSuccess, loginFailure;
+        var indicator, oauthProperties, loginSuccess, loginFailure;
         indicator = $j(document).showActivityInd('Authenticating...', false);
     
         oauthProperties = new OAuthProperties(remoteAccessConsumerKey, 
                                                   oauthRedirectURI, 
                                                   ['api'], true, true);
+                                                  
+        loginSuccess = function(callback) {
+			var successCallback = function(response) {
+				if (response.success) {
+					prepareSession(response);
+					indicator.hide();
+					if (typeof callback == 'function') callback();
+				} else loginFailure();
+			};
+        	return function(oauthInfo) {
+				sf.prepareSessionFromOAuth(oauthInfo.accessToken, 
+										   oauthInfo.instanceUrl, 
+										   oauthInfo.identityUrl, 
+										   successCallback, loginFailure);
+			}
+        }
         
-        errorCallback = function() {
+        // Error callback on login process failure method.
+        loginFailure = function(result) {
+            SFHybridApp.logError("loginFailure: " + result);
             indicator.hide();
             var errorMsg = 'Authentication failed. Do you want to retry?';
             if (confirm(errorMsg)) ManageUserSession.initialize(onSuccess);
         }
         
-        successCallback = function(response) {
-            if (response.success) {
-                prepareSession(response);
-                indicator.hide();
-                if (typeof onSuccess == 'function') onSuccess();
-            } else errorCallback();
-        };
-        
-        loginSuccess = function(oauthInfo) {
-            sf.prepareSessionFromOAuth(oauthInfo.accessToken, 
-                                       oauthInfo.instanceUrl, 
-                                       oauthInfo.identityUrl, 
-                                       successCallback, errorCallback);
-        }
-        
-        // Error callback for the SalesforceOAuthPlugin.authenticate() method.
-        loginFailure = function(result) {
-            SFHybridApp.logError("loginFailure: " + result);
-            errorCallback();
-        }
-        SalesforceOAuthPlugin.authenticate(loginSuccess, loginFailure, oauthProperties);
+        SalesforceOAuthPlugin.authenticate(loginSuccess(onSuccess), loginFailure, oauthProperties);
         $j(document).off('salesforceSessionRefresh').on('salesforceSessionRefresh', function(event) {
-            loginSuccess(event.originalEvent.data)
+            (loginSuccess())(event.originalEvent.data);
         });
     }
     
