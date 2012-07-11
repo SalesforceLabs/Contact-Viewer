@@ -1213,19 +1213,19 @@ var ManageUserSession = (function() {
                                                   ['api'], true, true);
                                                   
         loginSuccess = function(callback) {
-			var successCallback = function(response) {
-				if (response.success) {
-					prepareSession(response);
-					indicator.hide();
-					if (typeof callback == 'function') callback();
-				} else loginFailure();
-			};
-        	return function(oauthInfo) {
-				sf.prepareSessionFromOAuth(oauthInfo.accessToken, 
-										   oauthInfo.instanceUrl, 
-										   oauthInfo.identityUrl, 
-										   successCallback, loginFailure);
-			}
+            var successCallback = function(response) {
+                if (response.success) {
+                    prepareSession(response);
+                    indicator.hide();
+                    if (typeof callback == 'function') callback();
+                } else loginFailure();
+            };
+            return function(oauthInfo) {
+                sf.prepareSessionFromOAuth(oauthInfo.accessToken, 
+                                           oauthInfo.instanceUrl, 
+                                           oauthInfo.identityUrl, 
+                                           successCallback, loginFailure);
+            }
         }
         
         // Error callback on login process failure method.
