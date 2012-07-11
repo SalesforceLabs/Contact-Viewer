@@ -35,7 +35,7 @@ var listView, splitView, sobjectModel;
 
 function initiateInfoScroller() {
     if (infopagescroll === undefined) {
-        infopagescroll = createScroller('infoscroller', null, {onBeforeScrollStart: function(){}});
+        infopagescroll = createScroller('infoscroller');
         $j(window).orientationChange(initiateInfoScroller);
     } else {
         infopagescroll.refresh();
@@ -53,7 +53,7 @@ function destroyInfoScroller() {
 
 function initiateFeedScroller() {
     if (feedpagescroll === undefined) {
-        feedpagescroll = createScroller('feedscroller', null, {onBeforeScrollStart: function(){}});
+        feedpagescroll = createScroller('feedscroller');
         $j(window).orientationChange(initiateFeedScroller);
     } else {
         feedpagescroll.refresh();

@@ -35,7 +35,7 @@ var listView, splitView, sobjectModel;
 
 function initiateInfoScroller() {
     if (infopagescroll === undefined) {
-        infopagescroll = createScroller('infoscroller', null, {onBeforeScrollStart: function(){}});
+        infopagescroll = createScroller('infoscroller');
         $j(window).orientationChange(initiateInfoScroller);
     } else {
         infopagescroll.refresh();
