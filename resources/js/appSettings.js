@@ -57,7 +57,7 @@ var SettingsManager = (function () {
         if (page && scrollerOnPage != page) {
             if (settingsScroller) _destroyScroller();
             
-            settingsScroller = createScroller(settings.find('.settings_body ' + page), null, {onBeforeScrollStart: function() {}});
+            settingsScroller = createScroller(settings.find('.settings_body ' + page));
             scrollerOnPage = page;
             $j(window).orientationChange( function() { _initiateScroller(); } );
         } else if (settingsScroller) {
