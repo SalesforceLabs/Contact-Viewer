@@ -72,6 +72,9 @@ var ManageUserSession = (function() {
             errorCallback();
         }
         SalesforceOAuthPlugin.authenticate(loginSuccess, loginFailure, oauthProperties);
+        $j(document).off('salesforceSessionRefresh').on('salesforceSessionRefresh', function(event) {
+            loginSuccess(event.originalEvent.data)
+        });
     }
     
     return {
