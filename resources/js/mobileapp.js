@@ -109,7 +109,7 @@ function switchToDetail(callback) {
 
 function addClickListeners(searchContacts, displayList) {
     
-    $j('#listpage #header #gear').unbind().touch(
+    $j('#listpage #header #gear').off().enableTap().click(
         function(e) {
             e.preventDefault();
             SettingsManager.show();
@@ -126,12 +126,12 @@ function showContact(contactId, onComplete) {
     var ind = $j('#loggedin').showActivityInd('Loading...');
     switchDetailSection('info', [contactId], function(success) { 
         if (success) $j('#detailpage #detail').show();
-        $j('#detailpage .header #left').unbind().click(function(e) {
+        $j('#detailpage .header #left').off().enableTap().click(function(e) {
             var onSlideBack = function() {
                 $j('#detailpage').css('visibility', 'hidden');
                 listView.resetSelectedContact();
             }
-            $j('#detailpage .header #left').unbind();
+            $j('#detailpage .header #left').off();
             if (useAnimations) {
                 $j('#detailpage').changePage('#listpage', true, onSlideBack); 
             } else {

@@ -75,12 +75,12 @@ if (sforce.ListView === undefined) {
                 var onComplete = function() {
                     if (listOverlay) listOverlay.hide();
                     that.view.find('#header #searchbar').show();
-                    selecterDiv.unbind('webkitTransitionEnd').hide();
+                    selecterDiv.off('webkitTransitionEnd').hide();
                     selecterDiv.css('zIndex', '');
                     selecterDiv.prev().css('zIndex', '');
                     that.showingListSelector = false;
                 }
-                selecterDiv.bind('webkitTransitionEnd', onComplete);
+                selecterDiv.on('webkitTransitionEnd', onComplete);
                 
                 selecterDiv.css('-webkit-transform', 'translateY(-' + selecterDiv.height() + 'px)');
             }
@@ -132,8 +132,8 @@ if (sforce.ListView === undefined) {
             }
         
             that._addSearchListeners();
-            that.view.find('#header #titlebar').unbind().click(_showListSelectButtons);            
-            that.view.find('#listscroller #scroller #contactlist').unbind().click(
+            that.view.find('#header #titlebar').off().enableTap().click(_showListSelectButtons);            
+            that.view.find('#listscroller #scroller #contactlist').off().enableTap().click(
                 function(e) {
                     var theTarget = e.target;
                     
@@ -175,8 +175,8 @@ if (sforce.ListView === undefined) {
                 return false;
             }
             that.view.find('#header #searchbar>form').submit(onSubmit);
-            that.view.find('#header #searchbar>form>input[type=search]').focusin(searchInFocus).bind('keydown', searchTextChange).bind('keyup', searchTextChange);
-            that.view.find('#header #searchbar #closebutton').click(function(e) {
+            that.view.find('#header #searchbar>form>input[type=search]').focusin(searchInFocus).on('keydown', searchTextChange).on('keyup', searchTextChange);
+            that.view.find('#header #searchbar #closebutton').off().enableTap().click(function(e) {
                 e.preventDefault(); 
                 $j(this).hide().prev().val('').blur();
                 if (that.mode == 'search') {

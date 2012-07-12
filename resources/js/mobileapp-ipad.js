@@ -151,14 +151,14 @@ function switchToDetail(callback) {
 
 function addClickListeners() {
     
-    $j('#listpage #footer #gear').unbind().touch(
+    $j('#listpage #footer #gear').off().enableTap().click(
         function(e) {
             e.preventDefault();
             splitView.focusOutContactList();
             setTimeout(SettingsManager.show, 10);
         });
     
-    $j('#listpage #footer #home').unbind().touch(
+    $j('#listpage #footer #home').off().enableTap().click(
         function(e) {
             e.preventDefault();
             splitView.focusOutContactList();
@@ -402,9 +402,9 @@ function renderContactLayout(contactId, recordTypeId) {
     detailsLayout.find('#layout').empty();
     detailsLayout.find('#viewMoreBtn').find('span').text('Load All Details');
     detailsLayout.find('#viewMoreBtn').find('img').hide();
-    detailsLayout.find('#viewMoreBtn').show().unbind().click(
+    detailsLayout.find('#viewMoreBtn').show().off().enableTap().click(
         function() {
-            $j(this).unbind().find('span').text('Loading Details...');
+            $j(this).off().find('span').text('Loading Details...');
             $j(this).find('img').show();
             ManageUserSession.getApiClient().getContactDetailsViaApex(contactId, recordTypeId,
                 function(response) {
@@ -512,7 +512,7 @@ function getAggregateFeed(contactIdArr, callback, options) {
 }
 
 function addLeftNavClickListeners(contact) {
-    $j('#rightsection #detailpage #leftnav .dsIcons').unbind('click')
+    $j('#rightsection #detailpage #leftnav .dsIcons').off().enableTap()
         .click(function() {     
             
             var loadingText = 'Loading';
@@ -573,14 +573,14 @@ function switchDetailSection(section, contact, callback) {
 }
 
 function codeAddressOnMap(address) {
-	var encodedAdd = encodeURI(address);
+    var encodedAdd = encodeURI(address);
     var mapsImage = '<img src="http://maps.googleapis.com/maps/api/staticmap?' + 
-    				'zoom=14&size=640x180&format=jpeg&sensor=false&markers=color:red%7C' + 
-    				encodedAdd + '"/>';
+                    'zoom=14&size=640x180&format=jpeg&sensor=false&markers=color:red%7C' + 
+                    encodedAdd + '"/>';
     $j('#map_section #map_div #google_map_canvas').empty().append(mapsImage);
-    $j('#map_section #map_div #openMaps').unbind().click( 
+    $j('#map_section #map_div #openMaps').off().enableTap().click( 
         function() {
             window.location = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 
-            				  'maps:q=' : 'https://maps.google.com/maps?q=') + encodedAdd;
+                              'maps:q=' : 'https://maps.google.com/maps?q=') + encodedAdd;
         });
 }
