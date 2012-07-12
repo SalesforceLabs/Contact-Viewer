@@ -36,10 +36,16 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
     function NoClickDelay(el, options) {
         this.element = $j(el);
         this.options = options || {};
-        if( window.Touch ) this.element.off('touchstart').on('touchstart', this);
+        if( window.Touch ) this.element.off('touchstart').on('touchstart', this.eventListener(this));
     }
     
     NoClickDelay.prototype = {
+    	eventListener: function(listener) {
+    		return function(ev) {
+    			return listener.handleEvent.apply(listener, [ev.originalEvent]);
+    		}
+    	},
+    	
         handleEvent: function(e) {
             switch(e.type) {
                 case 'touchstart': this.onTouchStart(e); break;
@@ -48,9 +54,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
             }
         },
     
-        onTouchStart: function(ev) {
-            var e = ev.originalEvent;
-                
+        onTouchStart: function(e) {                
             e.preventDefault();
             this.moved = false;
     
@@ -59,8 +63,8 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
             if(typeof this.options.onTapStart == 'function') this.options.onTapStart(this.theTarget);
             if(this.options.pressedClass) this.theTarget.addClass(this.options.pressedClass);
     
-            this.element.on('touchmove', this);
-            this.element.on('touchend', this);
+            this.element[0].addEventListener('touchmove', this, false);
+            this.element[0].addEventListener('touchend', this, false);
         },
     
         onTouchMove: function(e) {
@@ -70,8 +74,8 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         },
     
         onTouchEnd: function(e) {
-            this.element.off('touchmove', this);
-            this.element.off('touchend', this);
+            this.element[0].removeEventListener('touchmove', this, false);
+            this.element[0].removeEventListener('touchend', this, false);
     
             if( !this.moved && this.theTarget ) {
                 if(this.options.pressedClass) this.theTarget.removeClass(this.options.pressedClass);

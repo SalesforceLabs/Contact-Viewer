@@ -183,7 +183,7 @@ var SettingsManager = (function () {
             function() { _navigatePageWithBack('#hosts', 'Login Host'); }
         );
         
-        settings.find('#hosts table td').touch(
+        settings.find('#hosts table td').enableTap().click(
             function() {
                 var that = $j(this);
                 that.addClass('cellselected');
