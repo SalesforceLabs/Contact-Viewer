@@ -33,6 +33,56 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
 
     var actInd;
     
+    function NoClickDelay(el, options) {
+        this.element = $j(el);
+        this.options = options || {};
+        if( window.Touch ) this.element.off('touchstart').on('touchstart', this);
+    }
+    
+    NoClickDelay.prototype = {
+        handleEvent: function(e) {
+            switch(e.type) {
+                case 'touchstart': this.onTouchStart(e); break;
+                case 'touchmove': this.onTouchMove(e); break;
+                case 'touchend': this.onTouchEnd(e); break;
+            }
+        },
+    
+        onTouchStart: function(ev) {
+            var e = ev.originalEvent;
+                
+            e.preventDefault();
+            this.moved = false;
+    
+            this.theTarget = document.elementFromPoint(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+            if(this.theTarget.nodeType == 3) this.theTarget = this.theTarget.parentNode;
+            if(typeof this.options.onTapStart == 'function') this.options.onTapStart(this.theTarget);
+            if(this.options.pressedClass) this.theTarget.addClass(this.options.pressedClass);
+    
+            this.element.on('touchmove', this);
+            this.element.on('touchend', this);
+        },
+    
+        onTouchMove: function(e) {
+            this.moved = true;
+            if(typeof this.options.onTapCancel == 'function') this.options.onTapCancel(this.theTarget);
+            if(this.options.pressedClass) this.theTarget.removeClass(this.options.pressedClass);
+        },
+    
+        onTouchEnd: function(e) {
+            this.element.off('touchmove', this);
+            this.element.off('touchend', this);
+    
+            if( !this.moved && this.theTarget ) {
+                if(this.options.pressedClass) this.theTarget.removeClass(this.options.pressedClass);
+                var theEvent = document.createEvent('MouseEvents');
+                theEvent.initEvent('click', true, true);
+                this.theTarget.dispatchEvent(theEvent);
+            }
+            this.theTarget = undefined;
+        }
+    };
+    
     $.fn.changePage = function (to, reverse, callback) {
         var fromPage = this,
             toPage = (typeof to == 'object') ? to : $(to),
@@ -73,11 +123,11 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         var onComp = function(event) {
             if (that.is(event.target)) {
                 that.removeClass('transitionSettings').css(vendor + 'TransitionProperty', 'none');
-                that.unbind('webkitTransitionEnd'); 
+                that.off('webkitTransitionEnd'); 
                 if(typeof callback == 'function') callback();
             }
         };
-        this.unbind('webkitTransitionEnd').bind('webkitTransitionEnd', onComp);
+        this.off('webkitTransitionEnd').on('webkitTransitionEnd', onComp);
         
         this.addClass('transitionSettings').css('visibility', 'visible');
 
@@ -146,7 +196,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         var overlay, that = this;
         if(addOverlay) overlay = this.addOverlay();
         
-        if (actInd) actInd.hide().unbind();
+        if (actInd) actInd.hide().off();
         else {
             actInd = $('<div></div>').hide()
                     .append('<div id="spinner" style="position:relative; top:15px;"/>')
@@ -171,7 +221,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         return {
             hide: function() {
                 actInd.css('-webkit-transition-property', '-webkit-transform, opacity');
-                actInd.bind('webkitTransitionEnd', function() { actInd.hide(); });
+                actInd.on('webkitTransitionEnd', function() { actInd.hide(); });
                 actInd.css({webkitTransform: 'scale3d(0.5, 0.5, 1)', opacity: '0'});
                 actInd.children('#spinner').spin(false);
                 if(overlay) overlay.hide();
@@ -198,7 +248,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         return {
             elem: overlay,
             hide: function() {
-                overlay.unbind('orientationchange').hide().remove();
+                overlay.off('orientationchange').hide().remove();
             }
         };
     };
@@ -212,7 +262,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
     
     $.fn.orientationChange = function(listener) {
         if ((/AppleWebKit/i).test(navigator.appVersion) && "orientation" in window && "onorientationchange" in window) {
-            this.bind('orientationchange', listener);
+            this.on('orientationchange', listener);
         } else {
             $j(window).resize(listener);
         }
@@ -221,22 +271,27 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
     
     $.fn.unbindOrientationChange = function(listener) {
         if ((/AppleWebKit/i).test(navigator.appVersion) && window.onorientationchange) {
-            this.unbind('orientationchange', listener);
+            this.off('orientationchange', listener);
         } else {
-            $j(window).unbind('resize', listener);
+            $j(window).off('resize', listener);
         }
         return this;
     };
     
     $.fn.touch = function(listener) {
-        if (window.Touch) this.bind('touchstart', listener);
-        else this.bind('click', listener);
+        if (window.Touch) this.on('touchstart', listener);
+        else this.on('click', listener);
         return this;
     };
     
     $.fn.unbindTouch = function(listener) {
-        if (window.Touch) this.unbind('touchstart', listener);
-        else this.unbind('click', listener);
+        if (window.Touch) this.off('touchstart', listener);
+        else this.off('click', listener);
+        return this;
+    };
+    
+    $.fn.enableTap = function(options) {
+        new NoClickDelay(this, options);
         return this;
     };
     

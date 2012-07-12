@@ -63,7 +63,6 @@ var SettingsManager = (function () {
         } else if (settingsScroller) {
             settingsScroller.refresh();
         }
-        settings.find('.settings_body ' + scrollerOnPage + ' a').unbind().touch(function(e) { e.stopPropagation(); });
     }
     
     var _destroyScroller = function() {
@@ -98,7 +97,7 @@ var SettingsManager = (function () {
     var _switchBack = function(from) {
         settings.find('#header #left').show().touch(
             function() {
-                settings.find('#header #left').hide().unbind();
+                settings.find('#header #left').hide().off();
                 if (useAnimations) {
                     from.changePage(settings.find('#main'), true, function() { from.css('visibility', 'hidden'); } );
                 } else {
@@ -114,8 +113,8 @@ var SettingsManager = (function () {
     
     var _addEulaResponseListeners = function(onAccept, onDecline) {
         var buttons = settings.find('#eula_buttons').show();
-        buttons.find('#accept').unbind().click(onAccept);
-        buttons.find('#decline').unbind().click(onDecline);
+        buttons.find('#accept').off().enableTap().click(onAccept);
+        buttons.find('#decline').off().enableTap().click(onDecline);
     }
     
     var _showEula = function(showButtons, callback) {
@@ -180,7 +179,7 @@ var SettingsManager = (function () {
     }
     
     var _addEventListeners = function() {
-        settings.find('#main #connection #hostType').click(
+        settings.find('#main #connection #hostType').enableTap().click(
             function() { _navigatePageWithBack('#hosts', 'Login Host'); }
         );
         
@@ -221,32 +220,31 @@ var SettingsManager = (function () {
                 return false;
             });
         
-        settings.find('#main #help #help_about').click(
+        settings.find('#main #help #help_about').enableTap().click(
             function() { _navigatePageWithBack('#about', 'About'); }
         );
         
-        settings.find('#main #help #help_faq').click(
+        settings.find('#main #help #help_faq').enableTap().click(
             function() { 
                 _navigatePageWithBack('#faq', 'FAQ', function() { /*_destroyScroller(); settingsScroller = createScroller(settings.find('#faq')); */}); 
             }
         );
         
-        settings.find('#main #help #help_eula').click(
+        settings.find('#main #help #help_eula').enableTap().click(
             function() { 
                 _navigatePageWithBack('#eula', 'Contact Viewer EULA', _showEula);
             }
         );
         
-        settings.find('#loginbtn').unbind()
-                .click( function() { prepareSession(); } )
-                .touch( function(e) { e.stopPropagation(); });
-        settings.find('#logoutbtn').unbind().click(function(e) {
+        settings.find('#loginbtn').off()
+                .enableTap().click( function() { prepareSession(); } );
+        settings.find('#logoutbtn').off().enableTap().click(function(e) {
             // Delete the saved refresh token
             var resp = confirm('Logout user ' + ManageUserSession.getUsername() + '?');
             if (resp) {
                 logout(false);
             }
-        }).touch( function(e) { e.stopPropagation(); });
+        });
     };
     
     var _positionCenter = function() {
@@ -263,10 +261,10 @@ var SettingsManager = (function () {
     
             onComplete = function() {
                 SettingsManager.hide();
-                $j(this).unbind('click');
+                $j(this).off('click');
                 if(!ManageUserSession.isActive()) window.location = getBaseUrl();
             }
-            settings.find('#header #done').unbind('click').click(onComplete);
+            settings.find('#header #done').off('click').enableTap().click(onComplete);
             if(!ManageUserSession.isActive()) settings.find('#header #done').hide();
         
             initialY = window.innerHeight;
