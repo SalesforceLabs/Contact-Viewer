@@ -145,6 +145,7 @@ function showContact(contactId, onComplete) {
         if (typeof onComplete == 'function') onComplete();
     });
     updateLastVisitLoc(contactId + '/' + 'info');
+    if (typeof showContactPicture == 'function') showContactPicture(contactId);
 }
 
 function displayContactSummary(contact) {

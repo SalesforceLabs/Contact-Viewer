@@ -100,6 +100,17 @@ public with sharing class SFDCApiClient {
         return makeRequest(req);
     }
     
+    private String doPost(String path, String payload) {
+        HttpRequest req = initializeRequest();
+        req.setMethod('POST');
+        
+        String url = sm.instanceUrl + '/services/data/v' + API_VERSION + path;
+        req.setBody(payload);
+        req.setEndpoint(url);
+        
+        return makeRequest(req);
+    }
+    
     public String getUserInfo() {
         HttpRequest req = initializeRequest();
         req.setMethod('GET');
@@ -126,6 +137,10 @@ public with sharing class SFDCApiClient {
     
     public String search(String sosl) {
         return doGet('/search', new Map<String, String>{ 'q' => sosl });
+    }
+    
+    public String create(String sobjectType, String payload) {
+        return doPost('/sobjects/' + sobjectType, payload);
     }
     
     public SFDCPartnerSoap.DescribeLayoutResult describeLayout(String sObjectType, Id[] recordTypeIds) {
