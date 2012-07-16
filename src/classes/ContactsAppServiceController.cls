@@ -271,7 +271,12 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
     }
     
     private String insertSObject() {
-    	return client.create(getRequestParam('sobject'), restReq.getBody());
+    	Map<String, String> payload = new Map<String, String>();
+    	for (String key : this.restReq.params.keySet()) {
+    		if (!key.equals('action') && !key.equals('sobject'))
+                payload.put(key, this.restReq.params.get(key));
+    	}
+    	return client.create(getRequestParam('sobject'), JSON.serialize(payload));
     }
     
     private String manageEula() {

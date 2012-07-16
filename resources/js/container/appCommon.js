@@ -1493,7 +1493,7 @@ function showContactPicture(contactId) {
 }
 
 function onPicSuccess(imageData) {
-    ManageUserSession.getApiClient().addAttachment('ContactViewer-UserPhoto', listView.selectedContactId, imageData, function() {console.log('success');}, function(e) {console.log('error' + e);});
+    ManageUserSession.getApiClient().addAttachment('ContactViewer-UserPhoto', listView.selectedContactId, imageData);
     StorageManager.setLocalValue(listView.selectedContactId + '__pic', imageData);
     showContactPicture(listView.selectedContactId);
 }
@@ -1506,7 +1506,7 @@ $j(function() {
     $j('#photo_div img').enableTap().click(saveUserPic);
     if (typeof sforce.Client != 'undefined') {
         sforce.Client.prototype.addAttachment = function(name, parentId, base64Content, success, error, complete) {
-            var url = getBaseUrl() + '/cvapi?sobject=Attachment',
+            var url = getBaseUrl() + '/services/apexrest/cvapi?action=insertSObject&sobject=Attachment',
                 attachment = {"Name": name, "ParentId": parentId, "Body": base64Content};
             this.ajax('POST', url, attachment, success, error, complete);
         }
