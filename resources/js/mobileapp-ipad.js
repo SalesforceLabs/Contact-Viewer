@@ -279,7 +279,7 @@ function displayContactSummary(contact) {
     var address = formatAddress(contact);
     if (address && address.length > 0) {
         detail.find('#call_contact #directions').show()
-            .attr('href', 'http://maps.google.com/maps?daddr='+address.replace(/\n/g, ', '));
+            .attr('href', 'https://maps.google.com/maps?daddr='+address.replace(/\n/g, ', '));
     } else {
         detail.find('#call_contact #directions').hide();
     }
