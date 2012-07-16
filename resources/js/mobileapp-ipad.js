@@ -530,6 +530,8 @@ function addLeftNavClickListeners(contact) {
 }
 
 function switchDetailSection(section, contact, callback) {
+    var startTime = Date.now();
+    
     $j('#feedscroller ul').empty();
     $j('#feedscroller').appendTo('#rightsection #detailpage #detail>span'); 
     $j('#detailpage #contactInfo').show();
@@ -547,7 +549,10 @@ function switchDetailSection(section, contact, callback) {
         destroyInfoScroller();
     }
     
-    var cb = function(success) { if (typeof callback == 'function') callback(success); }
+    var cb = function(success) { 
+        LocalyticsManager.tagDetailView(section, Date.now()-startTime);
+        if (typeof callback == 'function') callback(success); 
+    }
     
     var afterFeedRefresh = function() {
         $j('#rightsection #detailpage #detail #feedscroller').css('visibility', ''); 

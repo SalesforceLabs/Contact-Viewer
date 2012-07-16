@@ -258,6 +258,11 @@ if (sforce.ListView === undefined) {
                             .append($j('<strong></strong>').text(this.LastName || ''))
                             .appendTo(listContainer);
                 });
+            
+            if (that.mode == 'search')
+                LocalyticsManager.tagSearch(recs.length);
+            else
+                LocalyticsManager.tagListEvent(this.selectedListId, recs.length);
         },
         
         resetSelectedContact : function() {
