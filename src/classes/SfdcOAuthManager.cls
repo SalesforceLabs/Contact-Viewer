@@ -33,8 +33,7 @@ public with sharing class SfdcOAuthManager {
     private static final String PRIVATE_KEY;
     
     static {
-        ContactsAppSettings__c cas = ContactsAppSettings__c.getInstance('Defaults');
-        if (cas == null) cas = ContactsAppSettings__c.getOrgDefaults();
+        ContactsAppSettings__c cas = ContactsAppUtil.getAppSettings('Defaults');
         CLIENT_ID = cas.OAuthClientId__c;
         CLIENT_SECRET = cas.OAuthClientSecret__c;
         REDIRECT_URI = cas.OAuthClientRedirectURI__c;

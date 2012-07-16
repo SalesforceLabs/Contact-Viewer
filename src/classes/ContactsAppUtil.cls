@@ -34,7 +34,6 @@ public with sharing class ContactsAppUtil {
             Blob valueBlob = Blob.valueOf(value);
             encryptedValue = EncodingUtil.base64Encode(Crypto.encryptWithManagedIV('AES128', keyBlob, valueBlob));
         }
-        System.debug('Encrypted Token:' + encryptedValue);
         return encryptedValue;
     }
         
@@ -45,7 +44,6 @@ public with sharing class ContactsAppUtil {
             Blob valueBlob = EncodingUtil.base64Decode(value);
             decryptedValue = Crypto.decryptWithManagedIV('AES128', keyBlob, valueBlob).toString();
         }
-        System.debug('Decrypted Token:' + decryptedValue);
         return decryptedValue;
     }
     
@@ -73,5 +71,11 @@ public with sharing class ContactsAppUtil {
             csv = csv.subString(0, csv.length() - 1);
         }
         return csv;
+    }
+    
+    public static ContactsAppSettings__c getAppSettings(String mode) {
+    	ContactsAppSettings__c cas = ContactsAppSettings__c.getInstance(mode);
+        if (cas == null) cas = ContactsAppSettings__c.getOrgDefaults();
+        return cas;
     }
 }
