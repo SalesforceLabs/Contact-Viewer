@@ -98,6 +98,7 @@
     
     <script>
         var useAnimations = {!allowAnimations}, 
+            localyticsAppId = '{!localyticsAppId}',
             staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
             loadingImg = staticRsrcUrl + '/images/loading.gif';
         

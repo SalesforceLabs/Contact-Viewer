@@ -84,7 +84,14 @@ public with sharing class ContactsAppController {
     }
     
     public ContactsAppSettings__c getNativeSettings() {
-    	return SfdcOAuthManager.getNativeOAuthSettings();
+    	return ContactsAppUtil.getAppSettings('Native');
+    }
+
+    public String localyticsAppId { get {
+           String mode = (this.isContainer) ? 'Native' : 'Defaults';
+           ContactsAppSettings__c cas = ContactsAppUtil.getAppSettings(mode);
+           return cas.LocalyticsAppID__c;
+       }
     }
     
     public ContactsAppController() {

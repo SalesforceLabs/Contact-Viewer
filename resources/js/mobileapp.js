@@ -259,10 +259,15 @@ function renderContactInfo(contactId, callback) {
 }
 
 function switchDetailSection(section, contact, callback) {
+    var startTime = Date.now();
+
     $j('#detailpage #contactInfo').show();  
     $j('#detailpage #detail>span>div').hide();
     
-    var cb = function(success) { if (typeof callback == 'function') callback(success); }
+    var cb = function(success) { 
+        LocalyticsManager.tagDetailView(section, Date.now()-startTime);
+        if (typeof callback == 'function') callback(success); 
+    }
     
     if (section == 'info') {
         renderContactInfo(contact[0], function(success) { 
