@@ -72,6 +72,13 @@ public with sharing class ContactsAppController {
        }
     }
     
+    public String localyticsAppId { get {
+    	   String mode = 'Defaults';
+    	   ContactsAppSettings__c cas = ContactsAppUtil.getAppSettings(mode);
+           return cas.LocalyticsAppID__c;
+       }
+    }
+    
     public ContactsAppController() {
         this.userAgent = System.currentPageReference().getHeaders().get('User-Agent');
         this.device = System.currentPageReference().getParameters().get('device');
