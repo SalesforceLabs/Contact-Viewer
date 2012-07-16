@@ -28,7 +28,6 @@
 @RestResource(urlMapping='/cvapi')
 global with sharing class ContactsAppServiceController extends BaseServiceController {
     
-    public String resultSet {get; private set;}
     private RestRequest restReq;
     private RestResponse restResp;
     
@@ -41,44 +40,67 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
     @HttpGet
     global static void doGet() {
         ContactsAppServiceController cont = new ContactsAppServiceController(RestContext.request, RestContext.response);
-        cont.loadPage();
-        RestContext.response.responseBody = Blob.valueOf(cont.resultSet);
+        RestContext.response.responseBody = Blob.valueOf(cont.loadPage('get'));
     }
     
-    public void loadPage() {
+    @HttpPost
+    global static void doPost() {
+        ContactsAppServiceController cont = new ContactsAppServiceController(RestContext.request, RestContext.response);
+        RestContext.response.responseBody = Blob.valueOf(cont.loadPage('post'));
+    }
+    
+    public String loadPage(String method) {
+    	String resultSet;
+    	
         if (this.sm.isValid()) {
             try {
-               String action = getRequestParam('action');
-               if (action == 'fetchContacts') {
-                    this.resultSet = getContactsList();
-               } else if (action == 'retrieveContact') {
-                    this.resultSet = retrieveContact();
-               } else if (action == 'fetchChatter') {
-                    this.resultSet = fetchChatter();
-               } else if (action == 'getUsersInfo') {
-                    this.resultSet = getUsersInfo();
-               } else if (action == 'searchContacts') {
-                    this.resultSet = searchContacts();
-               } else if (action == 'fetchActivities') {
-                    this.resultSet = fetchActivities();
-               } else if (action == 'describeContact') {
-                    this.resultSet = getContactDescribe();
-               } else if (action == 'manageEula') {
-                    this.resultSet = manageEula();
-               }
+                String action = getRequestParam('action');
+                if (method == 'get')
+                    resultSet = performGetAction(action);
+                else if (method == 'post') 
+                    resultSet = performPostAction(action);
             
-               if (this.resultSet == null) {
-                    this.resultSet = '{}';
-               }
+                if (resultSet == null) resultSet = '{}';
+                
             } catch (SFDCApiClient.ApiException ae) {
             	this.restResp.statusCode = ae.statusCode;
-                this.resultSet = ae.toJSON();
+                resultSet = ae.toJSON();
             } catch (Exception e) {
             	this.restResp.statusCode = 400;
             }
         }
+        return resultSet;
     }
     
+    private String performGetAction(String action) {
+    	String resultSet;
+    	
+        if (action == 'fetchContacts') {
+            resultSet = getContactsList();
+        } else if (action == 'retrieveContact') {
+            resultSet = retrieveContact();
+        } else if (action == 'fetchChatter') {
+            resultSet = fetchChatter();
+        } else if (action == 'getUsersInfo') {
+            resultSet = getUsersInfo();
+        } else if (action == 'searchContacts') {
+            resultSet = searchContacts();
+        } else if (action == 'fetchActivities') {
+            resultSet = fetchActivities();
+        } else if (action == 'describeContact') {
+            resultSet = getContactDescribe();
+        } else if (action == 'manageEula') {
+            resultSet = manageEula();
+        }
+        return resultSet;
+    }
+
+    private String performPostAction(String action) {
+    	if (action == 'insertSObject')
+    	   return insertSObject();
+    	return null;
+    }
+     
     private String getRequestParam(String param) {
         if (this.restReq != null) {
             return this.restReq.params.get(param);
@@ -246,6 +268,15 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
         }
         
         return val;
+    }
+    
+    private String insertSObject() {
+    	Map<String, String> payload = new Map<String, String>();
+    	for (String key : this.restReq.params.keySet()) {
+    		if (!key.equals('action') && !key.equals('sobject'))
+                payload.put(key, this.restReq.params.get(key));
+    	}
+    	return client.create(getRequestParam('sobject'), JSON.serialize(payload));
     }
     
     private String manageEula() {

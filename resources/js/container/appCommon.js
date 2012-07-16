@@ -324,7 +324,6 @@ if (sforce.Client === undefined) {
      */
     sforce.Client = function() {
         this.sessionHeader = null;
-        
         this.SESSION_HEADER = 'App-Session';
     }
     
@@ -1478,3 +1477,38 @@ var StorageManager = (function() {
         }
     }
 })();
+
+function saveUserPic() {
+    navigator.camera.getPicture(onPicSuccess, onPicFail, { quality: 50 }); 
+}
+
+function showContactPicture(contactId) {
+    var existingPic = StorageManager.getLocalValue(contactId + '__pic');
+    if (existingPic) {
+        existingPic = "data:image/jpeg;base64," + existingPic;
+    } else {
+        existingPic = staticRsrcUrl + '/images/userPicwBorder.png';
+    }
+    $j('#photo_div img').attr('src', existingPic);
+}
+
+function onPicSuccess(imageData) {
+    ManageUserSession.getApiClient().addAttachment('ContactViewer-UserPhoto', listView.selectedContactId, imageData);
+    StorageManager.setLocalValue(listView.selectedContactId + '__pic', imageData);
+    showContactPicture(listView.selectedContactId);
+}
+
+function onPicFail(message) {
+    console.log('Pic Failed because: ' + message);
+}
+
+$j(function() {
+    $j('#photo_div img').enableTap().click(saveUserPic);
+    if (typeof sforce.Client != 'undefined') {
+        sforce.Client.prototype.addAttachment = function(name, parentId, base64Content, success, error, complete) {
+            var url = getBaseUrl() + '/services/apexrest/cvapi?action=insertSObject&sobject=Attachment',
+                attachment = {"Name": name, "ParentId": parentId, "Body": base64Content};
+            this.ajax('POST', url, attachment, success, error, complete);
+        }
+    }
+});
