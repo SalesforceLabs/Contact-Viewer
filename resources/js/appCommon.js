@@ -1847,7 +1847,6 @@ var StorageManager = (function() {
 
 if (window.LocalyticsManager === undefined) {
     window.LocalyticsManager = function() {
-        this.device = DEVICE_TYPE;
         // Call init at the beginning of every page load. It create a
         // Localytics session object
         localyticsSession.init(localyticsAppId);
@@ -1863,44 +1862,72 @@ if (window.LocalyticsManager === undefined) {
         // session as well.
         localyticsSession.upload();
         // Upload Localytics data every minute.
-        this.uploadTimer = setInterval(localyticsSession.upload, 60000);
+        this.uploadTimer = setInterval(localyticsSession.upload, 30000);
     };
+    window.LocalyticsManager();
 }
 
 if (window.LocalyticsManager != undefined) {
-    LocalyticsManager.prototype.tagScreen = function() {
+    (function() {
+        var bucketRecordCount = function(count) {
+            return (count < 100) ? '< 100' : 
+                   (count < 200) ? '100 - 200' : 
+                   (count < 500) ? '200 - 500' : '> 500';
+        }
+
+        var bucketLoadTime = function(timeInMillis) {
+            return (timeInMillis < 500) ? '< 0.5s' : 
+                   (timeInMillis < 1000) ? '0.5 - 1s' : 
+                   (timeInMillis < 2000) ? '1 - 2s' : '> 2s';
+        }
+
+        var bucketTextLength = function(timeInMillis) {
+            return (timeInMillis < 500) ? '< 0.5s' : 
+                   (timeInMillis < 1000) ? '0.5 - 1s' : 
+                   (timeInMillis < 2000) ? '1 - 2s' : 
+                   (timeInMillis < 5000) ? '2 - 5s' : '> 5s';
+        }
+
+        LocalyticsManager.tagScreen = function() {
+            
+        }
+
+        LocalyticsManager.tagSplitView = function() {
+            
+        }
+
+        LocalyticsManager.tagPortraitView = function() {
+            
+        }
         
-    }
+        LocalyticsManager.tagEvent = function(event, data) {
+            localyticsSession.tagEvent(event, data);
+        }
 
-    LocalyticsManager.prototype.tagSplitView = function() {
-        
-    }
+        LocalyticsManager.tagListView = function(listName, recordCount, loadTime) {
+            this.tagEvent('Render List', {
+                            list: listName,
+                            resultsetSize: bucketRecordCount(recordCount),
+                            loadTimeRange: bucketLoadTime(loadTime),
+                            loadTime: loadTime
+                          });
+        }
 
-    LocalyticsManager.prototype.tagPortraitView = function() {
-        
-    }
-    
-    LocalyticsManager.prototype.tagEvent = function(event, data) {
-        localyticsSession.tagEvent(event, data);
-    }
+        LocalyticsManager.tagSearch = function(textLength, recordCount, loadTime) {
+            this.tagEvent('Search', {
+                            textLength: (textLength < 3) ? '< 3' : (textLength < 5) ? '3 - 5' : '> 5',
+                            resultsetSize: bucketRecordCount(recordCount),
+                            loadTimeRange: bucketLoadTime(loadTime),
+                            loadTime: loadTime
+                          });
+        }
 
-    LocalyticsManager.prototype.tagListView = function(listName, recordCount) {
-        if (this.prevListName != undefined && this.prevListName)
-            this.tagEvent('LIST-' + this.prevListName.toUpperCase() + '-CLOSE', {timeSpent: (Date.now()-this.listTagTime)/1000});
-        this.tagEvent('LIST-' + listName.toUpperCase() + '-OPEN', {records: recordCount});
-        this.prevListName = listName;
-        this.listTagTime = Date.now();
-    }
-
-    LocalyticsManager.prototype.tagSearch = function(recordCount) {
-        this.tagListView('search', recordCount);
-    }
-
-    LocalyticsManager.prototype.tagDetailView = function(detailView, loadTime) {
-        if (this.prevDetailView != undefined && this.prevDetailView)
-            this.tagEvent(this.device + '-DETAIL-' + this.prevDetailView.toUpperCase() + '-CLOSE', {timeSpent: (Date.now()-this.detailTagTime)/1000});
-        this.tagEvent(this.device + '-DETAIL-' + detailView.toUpperCase() + '-OPEN', {loadTime: loadTime});
-        this.prevDetailView = detailView;
-        this.detailTagTime = Date.now();
-    }
+        LocalyticsManager.tagDetailView = function(detailView, loadTime) {
+            this.tagEvent('Render Detail', {
+                            view: detailView,
+                            loadTimeRange: bucketLoadTime(loadTime),
+                            loadTime: loadTime
+                          });
+        }
+    })();
 }
