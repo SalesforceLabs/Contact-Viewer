@@ -63,8 +63,11 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
             if(typeof this.options.onTapStart == 'function') this.options.onTapStart(this.theTarget);
             if(this.options.pressedClass) this.theTarget.addClass(this.options.pressedClass);
     
-            this.element[0].addEventListener('touchmove', this, false);
-            this.element[0].addEventListener('touchend', this, false);
+            this.targetParent = this.element.has(this.theTarget);
+            if (!this.targetParent.length) this.targetParent = this.element.filter(this.theTarget);
+
+            this.targetParent[0].addEventListener('touchmove', this, false);
+            this.targetParent[0].addEventListener('touchend', this, false);
         },
     
         onTouchMove: function(e) {
@@ -74,8 +77,8 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         },
     
         onTouchEnd: function(e) {
-            this.element[0].removeEventListener('touchmove', this, false);
-            this.element[0].removeEventListener('touchend', this, false);
+            this.targetParent[0].removeEventListener('touchmove', this, false);
+            this.targetParent[0].removeEventListener('touchend', this, false);
     
             if( !this.moved && this.theTarget ) {
                 if(this.options.pressedClass) this.theTarget.removeClass(this.options.pressedClass);
@@ -84,6 +87,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
                 this.theTarget.dispatchEvent(theEvent);
             }
             this.theTarget = undefined;
+            this.targetParent = undefined;
         }
     };
     
