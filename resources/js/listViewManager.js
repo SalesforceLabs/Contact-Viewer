@@ -109,7 +109,7 @@ if (sforce.ListView === undefined) {
                         that.view.find('#header #searchbar>form>button').hide();
                         
                         _hideListSelectButtons(listOverlay); 
-                        that._displayList(theTarget.id);
+                        that.displayList(theTarget.id);
                         
                         return true;
                     }
@@ -168,6 +168,8 @@ if (sforce.ListView === undefined) {
                 var text = $j(this).find('input[type=search]').blur().val();
                 text = text.trim();
                 if (text.length > 1 && !text.startsWith('*')) {
+                    that.searchTextLength = text.length;
+                    that.listFetchStartTime = Date.now();
                     that.mode = "search";
                     that.view.find('#header #titlebar #title').html('Search Results');
                     if (typeof that.options.onSearch == 'function') that.options.onSearch(text);
@@ -180,26 +182,10 @@ if (sforce.ListView === undefined) {
                 e.preventDefault(); 
                 $j(this).hide().prev().val('').blur();
                 if (that.mode == 'search') {
-                    that._displayList(that.selectedListId);
+                    that.displayList(that.selectedListId);
                     that.mode = 'list';
                 }
             });
-        },
-        
-        _displayList : function(listId) {
-        
-            var that = this, listButton;
-            
-            if (listId) listButton = that.view.find('#header #listselect button#' + listId);
-            else listButton = that.view.find('#header #listselect button#recent');
-            
-            that.view.find('#header #titlebar #title').text(listButton.text());
-            
-            that.selectedListId = listButton[0].id;
-            
-            if (typeof that.options.onListSelect == 'function') {
-                that.options.onListSelect(that.selectedListId);
-            }
         },
         
         _initiateContactListScroller : function(pullDownCallback) {
@@ -222,6 +208,22 @@ if (sforce.ListView === undefined) {
         },
                 
         //PUBLIC METHODS
+        displayList : function(listId, onLoad) {
+        
+            var that = this, listButton;
+            that.listFetchStartTime = Date.now();
+            
+            if (listId) listButton = that.view.find('#header #listselect button#' + listId);
+            else listButton = that.view.find('#header #listselect button#recent');
+            
+            that.view.find('#header #titlebar #title').text(listButton.text());
+            
+            that.selectedListId = listButton[0].id;
+            
+            if (typeof that.options.onListSelect == 'function') {
+                that.options.onListSelect(that.selectedListId, onLoad);
+            }
+        },
 
         updateList : function(recs) {
             var that = this;
@@ -260,9 +262,9 @@ if (sforce.ListView === undefined) {
                 });
             
             if (that.mode == 'search')
-                LocalyticsManager.tagSearch(recs.length);
+                LocalyticsManager.tagSearch(that.searchTextLength, recs.length, Date.now()-that.listFetchStartTime);
             else
-                LocalyticsManager.tagListEvent(this.selectedListId, recs.length);
+                LocalyticsManager.tagListView(this.selectedListId, recs.length, Date.now()-that.listFetchStartTime);
         },
         
         resetSelectedContact : function() {
