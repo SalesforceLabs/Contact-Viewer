@@ -129,7 +129,7 @@ function sessionCallback() {
         function() { listView.refreshScroller(); }
     );
     
-    getContacts('recent', showMainFeed);
+    listView.displayList('recent', showMainFeed);
     
     // Add the add to home screen scripts if needed
     if (typeof window.addToHomeLaunch == 'function') window.addToHomeLaunch();

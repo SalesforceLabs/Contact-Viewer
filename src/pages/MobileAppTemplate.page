@@ -28,7 +28,12 @@
 -->
 
     <script>
-        var siteUrl = '{!$Site.CurrentSiteUrl}';
+        var siteUrl = '{!$Site.CurrentSiteUrl}',
+            useAnimations = {!allowAnimations}, 
+            localyticsAppId = '{!localyticsAppId}',
+            staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}',
+            loadingImg = staticRsrcUrl + '/images/loading.gif';
+
         (function() {
             var pixelRatio = window.devicePixelRatio;
             if (!pixelRatio || /(iPad)|(iPhone)/.test(navigator.userAgent)) pixelRatio = 1;
@@ -57,6 +62,8 @@
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/localytics.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/localyticsManager.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/applib.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}"/>
@@ -87,11 +94,6 @@
     </style>
     
     <script>
-        var useAnimations = {!allowAnimations}, 
-            localyticsAppId = '{!localyticsAppId}',
-            staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}';
-            loadingImg = staticRsrcUrl + '/images/loading.gif';
-        
         if ('standalone' in navigator && !navigator.standalone && (/iphone|ipod|ipad/gi).test(navigator.platform) && (/Safari/i).test(navigator.appVersion)) {
             document.write('<link rel="stylesheet" href="' + staticRsrcUrl + '/css/add2home.css">');
             document.write('<script type="application\/javascript" src="' + staticRsrcUrl + '/js/add2home.js"><\/script>');

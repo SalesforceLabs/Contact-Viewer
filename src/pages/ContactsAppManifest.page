@@ -24,6 +24,8 @@ CACHE:
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.dateFormat-1.0.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.topzindex.min.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/localytics.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/localyticsManager.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/applib.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/apputil.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/storage.js')}
