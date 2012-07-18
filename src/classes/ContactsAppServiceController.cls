@@ -205,8 +205,8 @@ global with sharing class ContactsAppServiceController extends BaseServiceContro
         String response = null;
         
         if (text != null && text.trim().length() > 0) {
-            text = String.escapeSingleQuotes(text.trim()).replaceAll('([{}])', '\\$1');
-            String sosl = 'Find {' + text + '* } IN NAME FIELDS ' +
+            text = text.trim().replaceAll('([?&|!{}\\[\\]()^~*:\\\\"\'+-])', '\\\\$1');
+            String sosl = 'Find { ' + text + '* } IN NAME FIELDS ' +
                           'RETURNING Contact (Id, FirstName, LastName, Name, Account.Name LIMIT 200)';
             response = client.search(sosl);
         }
