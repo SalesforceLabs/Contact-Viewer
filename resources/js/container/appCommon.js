@@ -322,13 +322,27 @@ if (sforce.Client === undefined) {
      *                  PhoneGap etc
      * @constructor
      */
-    sforce.Client = function() {
+    sforce.Client = function(authenticatorFn) {
         this.sessionHeader = null;
         this.SESSION_HEADER = 'App-Session';
+        this.retryHandler = function(retryFn, errorFn){
+            return function(jqXHR, statusText) {
+                switch (jqXHR.status) {
+                    case 401:
+                        if (typeof authenticatorFn == 'function') {
+                            authenticatorFn(retryFn);
+                            break;
+                        }
+                    default: 
+                        errorFn(jqXHR, statusText);
+                }
+            };
+        };
     }
     
-    sforce.Client.prototype.ajax = function(type, url, data, success, error, complete) {
-        var that = this;
+    sforce.Client.prototype.ajax = function(type, url, data, success, error, complete, dontRetry) {
+        var that = this,
+            retryFn = function() { that.ajax(type, url, data, success, error, complete, true); };
         $j.ajax({
             type: type,
             url: url,
@@ -336,7 +350,7 @@ if (sforce.Client === undefined) {
             data: data,
             dataType: 'json',
             success: success,
-            error: error,
+            error: (dontRetry) ? error : that.retryHandler(retryFn, error),
             complete: complete,
             beforeSend: function(xhr) {
                 if (that.sessionHeader)
@@ -489,16 +503,17 @@ if (sforce.Client === undefined) {
      * @param success function to call on success
      * @param error function to call on failure
      */
-    sforce.Client.prototype.getContactDetailsViaApex = function(contactId, recordTypeId, success, error, complete) {
-        var that = this;
-        var url = getBaseUrl() + '/ContactDetails';
-        var timezoneOffset = new Date().getTimezoneOffset();
+    sforce.Client.prototype.getContactDetailsViaApex = function(contactId, recordTypeId, success, error, complete, dontRetry) {
+        var that = this,
+            url = getBaseUrl() + '/ContactDetails',
+            timezoneOffset = new Date().getTimezoneOffset(),
+            retryFn = function() { that.getContactDetailsViaApex(contactId, recordTypeId, success, error, complete, true); };
         $j.ajax({
             type: 'GET',
             url: url,
             data: 'id=' + contactId + '&rtid=' + (recordTypeId || '') + '&tzOffset=' + timezoneOffset,
             success: success,
-            error: error,
+            error: (dontRetry) ? error : that.retryHandler(retryFn, error),
             complete: complete,
             beforeSend: function(xhr) {
                 if (that.sessionHeader)
@@ -1293,7 +1308,7 @@ var ManageUserSession = (function() {
             else {
                 authenticate(callback);
                 SalesforceOAuthPlugin.getLoginDomain(function(val) { loginHostUrl = val.toLowerCase(); });
-                if (!sf) sf = new sforce.Client();
+                if (!sf) sf = new sforce.Client(authenticate);
             }
         },
         

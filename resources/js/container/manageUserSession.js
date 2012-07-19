@@ -122,7 +122,7 @@ var ManageUserSession = (function() {
             else {
                 authenticate(callback);
                 SalesforceOAuthPlugin.getLoginDomain(function(val) { loginHostUrl = val.toLowerCase(); });
-                if (!sf) sf = new sforce.Client();
+                if (!sf) sf = new sforce.Client(authenticate);
             }
         },
         
