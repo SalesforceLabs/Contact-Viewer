@@ -135,13 +135,17 @@ global with sharing class ContactsAppOAuthController {
     * Converts an existing oauth session to contact viewer session.
     **/
     private void prepareSession(RestRequest req) {
-        SessionManager sm = new SessionManager(req.headers);
-        SfdcOAuthManager.OAuthResponse oauthInfo = (sm.isValid()) ? sm.getOAuthResponse() : null;
+    	SfdcOAuthManager.OAuthResponse oauthInfo = null;
+    	
+    	String accessToken = req.params.get('accessToken'), 
+               instanceUrl = req.params.get('instanceUrl'), 
+               identityUrl = req.params.get('identityUrl');
         
-        if (oauthInfo == null) {
-        	oauthInfo = SfdcOAuthManager.initialize(req.params.get('accessToken'), 
-        	                                        req.params.get('instanceUrl'), 
-        	                                        req.params.get('identityUrl'));
+        if (accessToken != null && instanceUrl != null && identityUrl != null) {
+        	oauthInfo = SfdcOAuthManager.initialize(accessToken, instanceUrl, identityUrl);
+        } else {
+	        SessionManager sm = new SessionManager(req.headers);
+	        oauthInfo = (sm.isValid()) ? sm.getOAuthResponse() : null;
         }
         if (oauthInfo != null) setupResponse(oauthInfo, null);
     }

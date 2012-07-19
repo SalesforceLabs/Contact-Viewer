@@ -36,40 +36,44 @@ var ManageUserSession = (function() {
         sf.setSessionHeader(response.sessionToken);
     }
     
-    function authenticate(onSuccess) {
+    function authenticate(onSuccess, showSpinner) {
     
         var indicator, oauthProperties, loginSuccess, loginFailure;
-        indicator = $j(document).showActivityInd('Authenticating...', false);
     
+        if (showSpinner) 
+            indicator = $j(document).showActivityInd('Authenticating...', false);
+
         oauthProperties = new OAuthProperties(remoteAccessConsumerKey, 
                                                   oauthRedirectURI, 
-                                                  ['api'], true, true);
+                                                  ['api'], false, false);
                                                   
+        // Error callback on login process failure method.
+        loginFailure = function(callback) {
+            return function() {
+                if (indicator) indicator.hide();
+                var errorMsg = 'Authentication failed. Do you want to retry?';
+                if (confirm(errorMsg)) authenticate(callback);
+            }
+        }
+
         loginSuccess = function(callback) {
-            var successCallback = function(response) {
+            var failureCallback = loginFailure(callback),
+                successCallback = function(response) {
                 if (response.success) {
                     prepareSession(response);
-                    indicator.hide();
+                    if (indicator) indicator.hide();
                     if (typeof callback == 'function') callback();
-                } else loginFailure();
+                } else failureCallback();
             };
             return function(oauthInfo) {
                 sf.prepareSessionFromOAuth(oauthInfo.accessToken, 
                                            oauthInfo.instanceUrl, 
                                            oauthInfo.identityUrl, 
-                                           successCallback, loginFailure);
+                                           successCallback, failureCallback);
             }
         }
         
-        // Error callback on login process failure method.
-        loginFailure = function(result) {
-            SFHybridApp.logError("loginFailure: " + result);
-            indicator.hide();
-            var errorMsg = 'Authentication failed. Do you want to retry?';
-            if (confirm(errorMsg)) ManageUserSession.initialize(onSuccess);
-        }
-        
-        SalesforceOAuthPlugin.authenticate(loginSuccess(onSuccess), loginFailure, oauthProperties);
+        SalesforceOAuthPlugin.authenticate(loginSuccess(onSuccess), loginFailure(onSuccess), oauthProperties);
         $j(document).off('salesforceSessionRefresh').on('salesforceSessionRefresh', function(event) {
             (loginSuccess())(event.originalEvent.data);
         });
@@ -120,7 +124,7 @@ var ManageUserSession = (function() {
             if (sessionAlive)
                 callback();
             else {
-                authenticate(callback);
+                authenticate(callback, true);
                 SalesforceOAuthPlugin.getLoginDomain(function(val) { loginHostUrl = val.toLowerCase(); });
                 if (!sf) sf = new sforce.Client(authenticate);
             }
