@@ -72,10 +72,10 @@ public with sharing class SFDCApiClient {
         } else if (resp.getStatusCode() == 302 && this.requestRetryCount++ < MAX_REQUEST_RETRIES) {
             req.setEndpoint(resp.getHeader('Location'));
             return makeRequest(req);
-        } if (resp.getStatusCode() == 401) {
-            throw new ApiException(resp.getStatusCode(), 'INVALID_SESSION', 'Session expired or invalid. Please relogin.');
+        } if (resp.getStatusCode() == 401 || (resp.getStatusCode() == 403 && resp.getBody().contains('Bad_OAuth_Token'))) {
+            throw new ApiException(401, 'INVALID_SESSION', 'Session expired or invalid. Please relogin.');
         } else if (resp.getStatusCode() == 403) {
-            throw new ApiException(resp.getStatusCode(), 'NO_API_ACCESS', System.Label.APIIsNotAccessibleToCurrentUser);
+            throw new ApiException(403, 'NO_API_ACCESS', System.Label.APIIsNotAccessibleToCurrentUser);
         }
         return null;
     }

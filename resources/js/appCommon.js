@@ -411,8 +411,9 @@ if (sforce.Client === undefined) {
      * @param complete function to call on ajax call completion
      */
     sforce.Client.prototype.prepareSessionFromOAuth = function(accessToken, instanceUrl, userIdentityUrl, success, error, complete) {
-        var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession';
-        var data = 'accessToken=' + accessToken + '&instanceUrl=' + instanceUrl + '&identityUrl=' + userIdentityUrl;
+        var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession',
+            data = 'accessToken=' + accessToken + '&instanceUrl=' + instanceUrl + '&identityUrl=' + userIdentityUrl;
+        this.sessionHeader = null;
         this.ajax('POST', url, data, success, error, complete);
     }
     
