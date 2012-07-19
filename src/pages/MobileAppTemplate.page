@@ -55,8 +55,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no"/>
     
-    <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}"/>
     <apex:outputPanel rendered="{!debug}">
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.spin.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}"/>
@@ -74,8 +74,7 @@
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/feedRenderer.js')}"/>
     </apex:outputPanel>
     <apex:outputPanel rendered="{!!debug}">
-        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.min.js')}"/>
-        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-plugins.min.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/libraries.min.js')}"/>
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/appCommon.min.js')}"/>
     </apex:outputPanel>
     
