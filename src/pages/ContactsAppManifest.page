@@ -10,15 +10,14 @@ CACHE:
 {!URLFOR($Resource.ContactAppRsrcs, 'css/passcodemanager.css')}
 
 #js - debug=false adds the minified version of js files, isContainer=true adds the container version of the files
-{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}
 <apex:outputPanel layout="none" rendered="{!!debug}">
-{!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.min.js')}
-{!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-plugins.min.js')}
+{!URLFOR($Resource.ContactAppRsrcs, 'js/libraries.min.js')}
 {!URLFOR($Resource.ContactAppRsrcs, IF(isContainer, 'js/container/appCommon.min.js', 'js/appCommon.min.js'))}
 {!IF(isIPad, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp-ipad.min.js'), "")}
 {!IF(isIPhone, URLFOR($Resource.ContactAppRsrcs, 'js/mobileapp.min.js'), "")}
 </apex:outputPanel>
 <apex:outputPanel layout="none" rendered="{!debug}">
+{!URLFOR($Resource.ContactAppRsrcs, 'js/jquery-1.7.1.min.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/iscroll.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jquery.spin.js')}
 {!URLFOR($Resource.ContactAppRsrcs, 'js/jq-plugins/jq-add.js')}
