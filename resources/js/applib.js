@@ -47,7 +47,7 @@ if (sforce.Client === undefined) {
         this.sessionHeader = null;
         
         this.SESSION_HEADER = 'App-Session';
-        this.retryHandler = function(retryFn, errorFn){
+        this.retryHandler = function(retryFn, errorFn) {
             return function(jqXHR, statusText) {
                 switch (jqXHR.status) {
                     case 401:
@@ -64,7 +64,12 @@ if (sforce.Client === undefined) {
     
     sforce.Client.prototype.ajax = function(type, url, data, success, error, complete, dontRetry) {
         var that = this,
-            retryFn = function() { that.ajax(type, url, data, success, error, complete, true); };
+            allowComplete = false,
+            retryFn = function() { that.ajax(type, url, data, success, error, complete, true); }
+            completeFn = function(jqXHR, status) {
+                if (typeof complete == 'function' && (dontRetry || allowComplete)) 
+                    complete(jqXHR, status);
+            };
         $j.ajax({
             type: type,
             url: url,
@@ -73,12 +78,12 @@ if (sforce.Client === undefined) {
             dataType: 'json',
             success: success,
             error: (dontRetry) ? error : that.retryHandler(retryFn, error),
-            complete: complete,
+            complete: completeFn,
             beforeSend: function(xhr) {
                 if (that.sessionHeader)
                     xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
             }
-        });
+        }).success(function() { allowComplete = true; });
     }
     
     sforce.Client.prototype.setSessionHeader = function(token) {
@@ -230,19 +235,24 @@ if (sforce.Client === undefined) {
         var that = this,
             url = getBaseUrl() + '/ContactDetails',
             timezoneOffset = new Date().getTimezoneOffset(),
-            retryFn = function() { that.getContactDetailsViaApex(contactId, recordTypeId, success, error, complete, true); };
+            allowComplete = false,
+            retryFn = function() { that.getContactDetailsViaApex(contactId, recordTypeId, success, error, complete, true); },
+            completeFn = function(jqXHR, status) {
+                if (typeof complete == 'function' && (dontRetry || allowComplete)) 
+                    complete(jqXHR, status);
+            };
         $j.ajax({
             type: 'GET',
             url: url,
             data: 'id=' + contactId + '&rtid=' + (recordTypeId || '') + '&tzOffset=' + timezoneOffset,
             success: success,
             error: (dontRetry) ? error : that.retryHandler(retryFn, error),
-            complete: complete,
+            complete: completeFn,
             beforeSend: function(xhr) {
                 if (that.sessionHeader)
                     xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
             }
-        });
+        }).success(function() { allowComplete = true; });
     }
     
     /**
