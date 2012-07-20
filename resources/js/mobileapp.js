@@ -118,31 +118,38 @@ function addClickListeners(searchContacts, displayList) {
 
 function showContact(contactId, onComplete) {
 
+    var ind, xhrManager;
+
     // Hide the details and show the empty panel after hide operation completes
     $j('#detailpage #detail').hide();
     $j('#detailpage .header>span').empty();
     switchToDetail();
 
-    var ind = $j('#loggedin').showActivityInd('Loading...');
-    switchDetailSection('info', [contactId], function(success) { 
+    ind = $j('#loggedin').showActivityInd('Loading...');
+    // Initiate XHR to render contact info
+    xhrManager = switchDetailSection('info', [contactId], function(success) { 
         if (success) $j('#detailpage #detail').show();
-        $j('#detailpage .header #left').off().enableTap().click(function(e) {
-            var onSlideBack = function() {
-                $j('#detailpage').css('visibility', 'hidden');
-                listView.resetSelectedContact();
-            }
-            $j('#detailpage .header #left').off();
-            if (useAnimations) {
-                $j('#detailpage').changePage('#listpage', true, onSlideBack); 
-            } else {
-                $j('#detailpage').hide();
-                $j('#listpage').show().css('visibility', '');
-                onSlideBack();
-            }
-            updateLastVisitLoc();
-        });
         ind.hide();
         if (typeof onComplete == 'function') onComplete();
+    });
+    // Attach back navigation listener
+    $j('#detailpage .header #left').off().enableTap().click(function(e) {
+        var onSlideBack = function() {
+            $j('#detailpage').css('visibility', 'hidden');
+            listView.resetSelectedContact();
+        }
+        // Abort the XHR if still running
+        xhrManager.abort();
+
+        $j('#detailpage .header #left').off();
+        if (useAnimations) {
+            $j('#detailpage').changePage('#listpage', true, onSlideBack); 
+        } else {
+            $j('#detailpage').hide();
+            $j('#listpage').show().css('visibility', '');
+            onSlideBack();
+        }
+        updateLastVisitLoc();
     });
     updateLastVisitLoc(contactId + '/' + 'info');
     if (typeof showContactPicture == 'function') showContactPicture(contactId);
@@ -244,7 +251,7 @@ function renderContactInfo(contactId, callback) {
     
     var info = $j('#detailpage #detail #info');
     
-    ManageUserSession.getApiClient().retrieveContactViaApex(contactId, fields,
+    return ManageUserSession.getApiClient().retrieveContactViaApex(contactId, fields,
             function(rec) {
                 if(rec && 'Id' in rec) {
                     $j('#detailpage .header>span').text(rec.Name);
@@ -270,7 +277,7 @@ function switchDetailSection(section, contact, callback) {
     }
     
     if (section == 'info') {
-        renderContactInfo(contact[0], function(success) { 
+        return renderContactInfo(contact[0], function(success) { 
             if(success) $j('#detailpage #detail #infoscroller').show(); 
             cb(success); 
         });

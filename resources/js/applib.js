@@ -46,43 +46,70 @@ if (sforce.Client === undefined) {
     sforce.Client = function(authenticatorFn) {
         this.sessionHeader = null;
         this.SESSION_HEADER = 'App-Session';
-        this.retryHandler = function(retryFn, errorFn) {
+        this.errorHandler = function(requestManager, errorFn) {
             return function(jqXHR, statusText) {
+                if (statusText == 'abort') return;
                 switch (jqXHR.status) {
                     case 401:
-                        if (typeof authenticatorFn == 'function') {
-                            authenticatorFn(retryFn);
+                        if (requestManager.allowRetry && typeof authenticatorFn == 'function') {
+                            requestManager.retryingRequest = true;
+                            authenticatorFn(function() { requestManager.replay(); });
                             break;
                         }
                     default: 
-                        errorFn(jqXHR, statusText);
+                        requestManager.allowRetry = false;
+                        if (typeof errorFn == 'function') errorFn(jqXHR, statusText);
                 }
             };
         };
     }
+
+    sforce.Client.RequestManager = function(jqXHR, allowRetry) {
+        this.xhr = jqXHR;
+        this.allowRetry = allowRetry || true;
+    }
+    sforce.Client.RequestManager.prototype.abort = function() {
+        this.allowRetry = false;
+        if (this.xhr.state() == 'pending') this.xhr.abort();
+        else if (this.retryingRequest) {
+            this.settings.complete(this.xhr, 'abort');
+        }
+        this.retryingRequest = false;
+    }
+    sforce.Client.RequestManager.prototype.replay = function() {
+        if (this.allowRetry) {
+            this.allowRetry = false;
+            this.xhr = $j.ajax(this.settings);
+        }
+    }
     
-    sforce.Client.prototype.ajax = function(type, url, data, success, error, complete, dontRetry) {
+    sforce.Client.prototype.ajax = function(type, url, data, dataType, success, error, complete) {
         var that = this,
-            allowComplete = false,
-            retryFn = function() { that.ajax(type, url, data, success, error, complete, true); }
-            completeFn = function(jqXHR, status) {
-                if (typeof complete == 'function' && (dontRetry || allowComplete)) 
-                    complete(jqXHR, status);
-            };
-        $j.ajax({
+            xhrManager = new sforce.Client.RequestManager();
+            
+        xhrManager.xhr = $j.ajax({
             type: type,
             url: url,
             processData: true,
             data: data,
-            dataType: 'json',
+            dataType: dataType,
             success: success,
-            error: (dontRetry) ? error : that.retryHandler(retryFn, error),
-            complete: completeFn,
-            beforeSend: function(xhr) {
+            error: that.errorHandler(xhrManager, error),
+            beforeSend: function(xhr, settings) {
+                xhrManager.settings = settings;
                 if (that.sessionHeader)
                     xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
+            },
+            complete: function(jqXHR, status) {
+                if (typeof complete == 'function' && (!xhrManager.allowRetry || !xhrManager.retryingRequest))
+                    complete(jqXHR, status);
             }
-        }).success(function() { allowComplete = true; });
+        });
+        return xhrManager;
+    }
+
+    sforce.Client.prototype.getJSON = function(type, url, data, success, error, complete) {
+        return this.ajax(type, url, data, 'json', success, error, complete);
     }
     
     sforce.Client.prototype.setSessionHeader = function(token) {
@@ -104,7 +131,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.refreshAccessToken = function(passcode, clientId, refToken, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/oauth2/refreshAccess';
-        this.ajax('POST', url, 'rt='+refToken+'&pass='+passcode+'&cid='+clientId, success, error, complete);
+        return this.getJSON('POST', url, 'rt='+refToken+'&pass='+passcode+'&cid='+clientId, success, error, complete);
     }
     
     /**
@@ -115,7 +142,7 @@ if (sforce.Client === undefined) {
     sforce.Client.prototype.obtainAccessToken = function(host, authCode, passcode, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/oauth2/authenticate';
         var data = 'code=' + authCode + (passcode ? ('&pass='+passcode) : '') + (host ? ('&host=' + host) : '');
-        this.ajax('POST', url, data, success, error, complete);
+        return this.getJSON('POST', url, data, success, error, complete);
     }
     
     /**
@@ -126,7 +153,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.prepareSession = function(success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession';
-        this.ajax('POST', url, null, success, error, complete);
+        return this.getJSON('POST', url, null, success, error, complete);
     }
     
     /**
@@ -139,7 +166,7 @@ if (sforce.Client === undefined) {
         var url = getBaseUrl() + '/services/apexrest/oauth2/prepareSession',
             data = 'accessToken=' + accessToken + '&instanceUrl=' + instanceUrl + '&identityUrl=' + userIdentityUrl;
         this.sessionHeader = null;
-        this.ajax('POST', url, data, success, error, complete);
+        return this.getJSON('POST', url, data, success, error, complete);
     }
     
     /**
@@ -151,7 +178,7 @@ if (sforce.Client === undefined) {
     sforce.Client.prototype.revokeSession = function(clientId, refToken, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/oauth2/revokeSession';
         var data = (clientId && refToken) ? ('cid=' + clientId  + '&rt=' + refToken) : '';
-        this.ajax('POST', url, data, success, error, complete);
+        return this.getJSON('POST', url, data, success, error, complete);
     }
     
     /**
@@ -161,7 +188,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.queryContactsViaApex = function(filter, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/cvapi';
-        this.ajax('GET', url, 'action=fetchContacts&filter=' + filter, success, error, complete);
+        return this.getJSON('GET', url, 'action=fetchContacts&filter=' + filter, success, error, complete);
     }
     
     /**
@@ -171,7 +198,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.retrieveContactViaApex = function(contactId, fields, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/cvapi';
-        this.ajax('GET', url, 'action=retrieveContact&id=' + contactId + '&fields=' + fields, success, error, complete);
+        return this.getJSON('GET', url, 'action=retrieveContact&id=' + contactId + '&fields=' + fields, success, error, complete);
     }
     
     /**
@@ -181,7 +208,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.searchContactsViaApex = function(text, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/cvapi';
-        this.ajax('GET', url, 'action=searchContacts&text=' + text, success, error, complete);
+        return this.getJSON('GET', url, 'action=searchContacts&text=' + text, success, error, complete);
     }
     
     /**
@@ -191,7 +218,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.fetchChatterViaApex = function(contactIdArr, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/cvapi';
-        this.ajax('GET', url, 'action=fetchChatter&ids=' + contactIdArr, success, error, complete);
+        return this.getJSON('GET', url, 'action=fetchChatter&ids=' + contactIdArr, success, error, complete);
     }
     
     /**
@@ -201,7 +228,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.fetchActivitiesViaApex = function(contactIdArr, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/cvapi';
-        this.ajax('GET', url, 'action=fetchActivities&ids=' + contactIdArr, success, error, complete);
+        return this.getJSON('GET', url, 'action=fetchActivities&ids=' + contactIdArr, success, error, complete);
     }
     
     /**
@@ -211,7 +238,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.getUsersInfoViaApex = function(uids, fetchPhotos, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/cvapi';
-        this.ajax('GET', url, 'action=getUsersInfo&id=' + uids + '&fetchPhotos=' + fetchPhotos, success, error, complete);
+        return this.getJSON('GET', url, 'action=getUsersInfo&id=' + uids + '&fetchPhotos=' + fetchPhotos, success, error, complete);
     }
     
     
@@ -222,7 +249,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.describeContactViaApex = function(success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/cvapi';
-        this.ajax('GET', url, 'action=describeContact', success, error, complete);
+        return this.getJSON('GET', url, 'action=describeContact', success, error, complete);
     }
     
     /**
@@ -230,28 +257,12 @@ if (sforce.Client === undefined) {
      * @param success function to call on success
      * @param error function to call on failure
      */
-    sforce.Client.prototype.getContactDetailsViaApex = function(contactId, recordTypeId, success, error, complete, dontRetry) {
+    sforce.Client.prototype.getContactDetailsViaApex = function(contactId, recordTypeId, success, error, complete) {
         var that = this,
             url = getBaseUrl() + '/ContactDetails',
             timezoneOffset = new Date().getTimezoneOffset(),
-            allowComplete = false,
-            retryFn = function() { that.getContactDetailsViaApex(contactId, recordTypeId, success, error, complete, true); },
-            completeFn = function(jqXHR, status) {
-                if (typeof complete == 'function' && (dontRetry || allowComplete)) 
-                    complete(jqXHR, status);
-            };
-        $j.ajax({
-            type: 'GET',
-            url: url,
-            data: 'id=' + contactId + '&rtid=' + (recordTypeId || '') + '&tzOffset=' + timezoneOffset,
-            success: success,
-            error: (dontRetry) ? error : that.retryHandler(retryFn, error),
-            complete: completeFn,
-            beforeSend: function(xhr) {
-                if (that.sessionHeader)
-                    xhr.setRequestHeader(that.SESSION_HEADER, that.sessionHeader);
-            }
-        }).success(function() { allowComplete = true; });
+            data = 'id=' + contactId + '&rtid=' + (recordTypeId || '') + '&tzOffset=' + timezoneOffset;
+        return this.ajax('GET', url, data, 'html', success, error, complete);
     }
     
     /**
@@ -261,13 +272,7 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.getContactAppEula = function(success, error, complete) {
         var url = getBaseUrl() + '/ContactsAppEula';
-        $j.ajax({
-            type: 'GET',
-            url: url,
-            success: success,
-            error: error,
-            complete: complete
-        });
+        return this.ajax('GET', url, null, 'html', success, error, complete);
     }
     
     /**
@@ -277,6 +282,6 @@ if (sforce.Client === undefined) {
      */
     sforce.Client.prototype.submitEulaResponse = function(clientId, response, success, error, complete) {
         var url = getBaseUrl() + '/services/apexrest/cvapi';
-        this.ajax('GET', url, 'action=manageEula&clientId='+ clientId + '&eulaResponse=' + response, success, error, complete);
+        return this.getJSON('GET', url, 'action=manageEula&clientId='+ clientId + '&eulaResponse=' + response, success, error, complete);
     }
 }
