@@ -9,6 +9,10 @@
         <name>EncryptionKey__c</name>
     </fields>
     <fields>
+        <label><!-- Localytics App ID --></label>
+        <name>LocalyticsAppID__c</name>
+    </fields>
+    <fields>
         <label>OAuthクライアントID</label>
         <name>OAuthClientId__c</name>
     </fields>

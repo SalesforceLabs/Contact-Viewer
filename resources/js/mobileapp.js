@@ -53,14 +53,14 @@ function destroyInfoScroller() {
 
 function sessionCallback() {
     
+    var describeCallback, selectedContactId, ind, 
+        last_visit_loc = StorageManager.getLocalValue(last_visited_loc_storage_key);
+
     $j('#loggedin').css('display', 'block');
+    ind = $j('#loggedin').showActivityInd('Loading...');
     
     addClickListeners();
-
-    var describeCallback, selectedContactId;    
-    var ind = $j('#loggedin').showActivityInd('Loading...');
-        
-    var last_visit_loc = StorageManager.getLocalValue(last_visited_loc_storage_key);
+    
     if (last_visit_loc && last_visit_loc.split('/').length == 2) {
         
         last_visit_loc = last_visit_loc.split('/');
@@ -69,7 +69,7 @@ function sessionCallback() {
         describeCallback = function(success) { 
             if (success) {
                 ind.hide();
-                showContact(selectedContactId);
+                showContact(selectedContactId, LocalyticsManager.logAppReady);
             }
         }
     }
@@ -88,7 +88,10 @@ function sessionCallback() {
     listView = new sforce.ListView({selectedContactId: selectedContactId, onListSelect: getContacts, onSearch: searchContacts, onItemSelect: showContact});
     
     splitView.addOrientationChangeCallback(
-        function() { listView.refreshScroller(); }
+        function(isPortrait) { 
+            listView.refreshScroller();
+            LocalyticsManager.tagScreenOrientation(isPortrait);
+        }
     );
     
     listView.displayList('recent', ind.hide);
@@ -276,6 +279,7 @@ function switchDetailSection(section, contact, callback) {
     }
     
     if (section == 'info') {
+        LocalyticsManager.tagScreen('Detail');
         return renderContactInfo(contact[0], function(success) { 
             if(success) $j('#detailpage #detail #infoscroller').show(); 
             cb(success); 

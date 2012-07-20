@@ -71,26 +71,28 @@ function destroyFeedScroller() {
 
 function sessionCallback() {
     
-    $j('#loggedin').css('display', 'block');
+    var describeCallback, selectedContactId, showMainFeed, onSlide, ind,
+        callbacks = 0,
+        last_visit_loc = StorageManager.getLocalValue(last_visited_loc_storage_key),
+        loadingComplete = function() {
+            ind.hide();
+            LocalyticsManager.logAppReady();
+        };
     
+    $j('#loggedin').css('display', 'block');
+    ind = $j('#loggedin').showActivityInd('Loading...');
+
     addClickListeners();
 
-    var describeCallback, selectedContactId;   
-    var ind = $j('#loggedin').showActivityInd('Loading...');
-    
-    var callbacks = 0;
-    var showMainFeed;
-    
-    var last_visit_loc = StorageManager.getLocalValue(last_visited_loc_storage_key);
     if (last_visit_loc && last_visit_loc.split('/').length == 2) {
         
         last_visit_loc = last_visit_loc.split('/');
         selectedContactId = last_visit_loc[0];
         
-        var onSlide = function() {
+        onSlide = function() {
             if (last_visit_loc[1] != 'info') renderContactInfo(last_visit_loc[0]);
             addLeftNavClickListeners([last_visit_loc[0]]);
-            switchDetailSection(last_visit_loc[1] || 'info', [last_visit_loc[0]], ind.hide);
+            switchDetailSection(last_visit_loc[1] || 'info', [last_visit_loc[0]], loadingComplete);
         }
         
         describeCallback = function(success) { 
@@ -101,13 +103,12 @@ function sessionCallback() {
             if (success) {
                 callbacks += 1;
                 if (callbacks == 2) {
-                    showContactNews(ind.hide, false);
+                    showContactNews(loadingComplete, false);
                 }
             }
         }
         
         describeCallback = function(success) {
-            //setupContactListSection();
             showMainFeed(success);
         };
     }
@@ -126,7 +127,10 @@ function sessionCallback() {
     listView = new sforce.ListView({selectedContactId: selectedContactId, onListSelect: getContacts, onSearch: searchContacts, onItemSelect: showContact});
     
     splitView.addOrientationChangeCallback(
-        function() { listView.refreshScroller(); }
+        function(isPortrait) { 
+            listView.refreshScroller();
+            LocalyticsManager.tagScreenOrientation(isPortrait);
+        }
     );
     
     listView.displayList('recent', showMainFeed);
@@ -449,6 +453,7 @@ function showContactNews(callback, showLoadingIndicator) {
         if (ind) ind.hide();
         if (typeof callback == 'function') callback();
     }, options);
+    LocalyticsManager.tagScreen('Home Feed');
 }
 
 function getAggregateFeed(contactIdArr, callback, options) {
@@ -565,12 +570,16 @@ function switchDetailSection(section, contact, callback) {
             if(success) $j('#rightsection #detailpage #detail #infoscroller').css('visibility', ''); 
             cb(success); 
         });
+        LocalyticsManager.tagScreen('Detail');
     } else if (section == 'chatter') {
         getChatter(contact[0], afterFeedRefresh);
+        LocalyticsManager.tagScreen('Chatter Feed');
     } else if (section == 'salesforce') {
         getActivities(contact[0], afterFeedRefresh);
+        LocalyticsManager.tagScreen('Activity Feed');
     } else if (section == 'rss') {
         getAggregateFeed([contact[0]], afterFeedRefresh);
+        LocalyticsManager.tagScreen('Aggregate Feed');
     } else {
         cb();
     }

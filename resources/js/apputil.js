@@ -296,7 +296,9 @@ function prepareSession(clearSettings) {
         StorageManager.clearSessionValue(login_redirect_storage_key);
         setTimeout(SettingsManager.show, 10);
     } else {
+        LocalyticsManager.logAppStarted();
         var onSessionActive = function() {
+            LocalyticsManager.logAuthComplete();
             if (!ManageUserSession.isEulaAccepted()) getEulaResponse(sessionCallback);
             else sessionCallback();
         }
