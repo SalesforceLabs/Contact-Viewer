@@ -230,6 +230,10 @@ var SettingsManager = (function () {
                 _navigatePageWithBack('#faq', 'FAQ', function() { /*_destroyScroller(); settingsScroller = createScroller(settings.find('#faq')); */}); 
             }
         );
+
+        settings.find('#main #help #help_feedback').enableTap().click(
+            function() { location.href = 'mailto:' + feedbackEmail; }
+        );
         
         settings.find('#main #help #help_eula').enableTap().click(
             function() { 

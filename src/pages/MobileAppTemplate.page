@@ -31,6 +31,7 @@
         var siteUrl = '{!$Site.CurrentSiteUrl}',
             useAnimations = {!allowAnimations}, 
             localyticsAppId = '{!localyticsAppId}',
+            feedbackEmail = '{!feedbackEmail}',
             staticRsrcUrl = '{!URLFOR($Resource.ContactAppRsrcs, '')}',
             loadingImg = staticRsrcUrl + '/images/loading.gif';
 

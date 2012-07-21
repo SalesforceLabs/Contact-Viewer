@@ -41,6 +41,8 @@
                         {!$Label.AboutContactViewer}<span class="app-images appleui arrow-next"/>
                     </td></tr><tr><td id="help_faq" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
                         {!$Label.FAQ}<span class="app-images appleui arrow-next"/>
+                    </td></tr><tr><td id="help_feedback" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
+                        Provide Feedback
                     </td></tr><tr><td id="help_eula" style="border-bottom: 1px solid silver;text-align: left; font-weight: bold;  padding:0 10px;">
                         {!$Label.EndUserLicenseAgreement}<span class="app-images appleui arrow-next"/>
                     </td></tr><tr><td id="help_ask" style="text-align: left; font-weight: bold;  padding-left: 10px;">

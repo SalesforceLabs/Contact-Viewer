@@ -9,6 +9,10 @@
         <name>EncryptionKey__c</name>
     </fields>
     <fields>
+        <label><!-- Feedback Email --></label>
+        <name>FeedbackEmail__c</name>
+    </fields>
+    <fields>
         <label><!-- Localytics App ID --></label>
         <name>LocalyticsAppID__c</name>
     </fields>

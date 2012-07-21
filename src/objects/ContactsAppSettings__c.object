@@ -14,6 +14,14 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>FeedbackEmail__c</fullName>
+        <externalId>false</externalId>
+        <label>Feedback Email</label>
+        <required>false</required>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>LocalyticsAppID__c</fullName>
         <externalId>false</externalId>
         <label>Localytics App ID</label>
