@@ -79,6 +79,12 @@ public with sharing class ContactsAppController {
        }
     }
     
+    public String feedbackEmail { get {
+           ContactsAppSettings__c cas = ContactsAppUtil.getAppSettings('Defaults');
+           return cas.FeedbackEmail__c;
+       }
+    }
+    
     public ContactsAppController() {
         this.userAgent = System.currentPageReference().getHeaders().get('User-Agent');
         this.device = System.currentPageReference().getParameters().get('device');
