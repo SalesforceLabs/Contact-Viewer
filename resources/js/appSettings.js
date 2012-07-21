@@ -169,6 +169,7 @@ var SettingsManager = (function () {
     
     var _navigatePageWithBack = function(to, titleText, cb) {
         _navigatePage(to, titleText, true, cb)
+        LocalyticsManager.tagScreen(titleText);
     }
     
     var _validateCustomHost = function() {
@@ -278,6 +279,7 @@ var SettingsManager = (function () {
             
             _initiateScroller('#main');
             settings.orientationChange(_positionCenter);
+            LocalyticsManager.tagScreen('Settings');
         },
 
         hide: function(callback) {
@@ -299,6 +301,7 @@ var SettingsManager = (function () {
             SettingsManager.show();
             _navigatePage('#eula', 'End User License Agreement', false, 
                 function() { _showEula(true); _addEulaResponseListeners(onAccept, onDecline); });
+            LocalyticsManager.tagScreen('EULA Request');
         },
         
         hideEula: function() {

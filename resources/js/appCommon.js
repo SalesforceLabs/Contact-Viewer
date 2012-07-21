@@ -302,7 +302,9 @@ function prepareSession(clearSettings) {
         StorageManager.clearSessionValue(login_redirect_storage_key);
         setTimeout(SettingsManager.show, 10);
     } else {
+        LocalyticsManager.logAppStarted();
         var onSessionActive = function() {
+            LocalyticsManager.logAuthComplete();
             if (!ManageUserSession.isEulaAccepted()) getEulaResponse(sessionCallback);
             else sessionCallback();
         }
@@ -709,6 +711,7 @@ var SettingsManager = (function () {
     
     var _navigatePageWithBack = function(to, titleText, cb) {
         _navigatePage(to, titleText, true, cb)
+        LocalyticsManager.tagScreen(titleText);
     }
     
     var _validateCustomHost = function() {
@@ -818,6 +821,7 @@ var SettingsManager = (function () {
             
             _initiateScroller('#main');
             settings.orientationChange(_positionCenter);
+            LocalyticsManager.tagScreen('Settings');
         },
 
         hide: function(callback) {
@@ -839,6 +843,7 @@ var SettingsManager = (function () {
             SettingsManager.show();
             _navigatePage('#eula', 'End User License Agreement', false, 
                 function() { _showEula(true); _addEulaResponseListeners(onAccept, onDecline); });
+            LocalyticsManager.tagScreen('EULA Request');
         },
         
         hideEula: function() {
@@ -1905,29 +1910,21 @@ if (window.LocalyticsManager != undefined) {
                    (count < 500) ? '200 - 500' : '> 500';
         }
 
-        var bucketLoadTime = function(timeInMillis) {
-            return (timeInMillis < 500) ? '< 0.5s' : 
-                   (timeInMillis < 1000) ? '0.5 - 1s' : 
-                   (timeInMillis < 2000) ? '1 - 2s' : '> 2s';
+        var bucketLoadTime = function(timeInMillis, buckets) {
+            if (!buckets || !buckets.length) buckets = [500, 1000, 2000];
+            for (var idx in buckets)
+                if (timeInMillis < buckets[idx]) {
+                    return ((idx == 0) ? '< ' : (buckets[idx-1]/1000 + ' - ')) +
+                           buckets[idx]/1000 + 's';
+                }
         }
 
-        var bucketTextLength = function(timeInMillis) {
-            return (timeInMillis < 500) ? '< 0.5s' : 
-                   (timeInMillis < 1000) ? '0.5 - 1s' : 
-                   (timeInMillis < 2000) ? '1 - 2s' : 
-                   (timeInMillis < 5000) ? '2 - 5s' : '> 5s';
+        LocalyticsManager.tagScreen = function(screenName) {
+            localyticsSession.tagScreen(screenName);
         }
 
-        LocalyticsManager.tagScreen = function() {
-            
-        }
-
-        LocalyticsManager.tagSplitView = function() {
-            
-        }
-
-        LocalyticsManager.tagPortraitView = function() {
-            
+        LocalyticsManager.tagScreenOrientation = function(isPortrait) {
+            this.tagScreen((isPortrait) ? 'Portrait' : 'Landscape');
         }
         
         LocalyticsManager.tagEvent = function(event, data) {
@@ -1958,6 +1955,30 @@ if (window.LocalyticsManager != undefined) {
                             loadTimeRange: bucketLoadTime(loadTime),
                             loadTime: loadTime
                           });
+        }
+
+        LocalyticsManager.logAppStarted = function() {
+            this.appStartTime = Date.now();
+        }
+
+        LocalyticsManager.logAuthComplete = function() {
+            if (!this.appStartTime) this.appStartTime = Date.now();
+            this.appAuthTime = Date.now();
+        }
+
+        LocalyticsManager.logAppReady = function() {
+            var authTime, dataLoadTime;
+            if (this.appAuthTime)
+                authTime = Date.now() - this.appStartTime;
+                dataLoadTime = Date.now() - this.appAuthTime;
+
+                this.tagEvent('App Ready', {
+                    authTime: authTime,
+                    dataLoadTime: dataLoadTime,
+                    authTimeRange: bucketLoadTime(authTime, [2000, 5000, 10000]),
+                    dataLoadTimeRange: bucketLoadTime(dataLoadTime, [2000, 5000, 10000]),
+                    totalLoadTimeRange: bucketLoadTime(authTime + dataLoadTime, [5000, 10000, 15000])
+                });
         }
     })();
 }
