@@ -133,7 +133,7 @@ if (sforce.ListView === undefined) {
         
             that._addSearchListeners();
             that.view.find('#header #titlebar').off().enableTap().click(_showListSelectButtons);            
-            that.view.find('#listscroller #scroller #contactlist').off().enableTap().click(
+            that.view.find('#listscroller #scroller #contactlist').off().click(
                 function(e) {
                     var theTarget = e.target;
                     
