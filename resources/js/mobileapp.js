@@ -218,7 +218,7 @@ function displayContactDetails(contact) {
         if (add.length > 0 ) {
             addURI = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 'maps:q=' : 
                      'https://maps.google.com/maps?q=') + encodeURI(add.replace(/\n/g, ', '));
-            add = '<a href="' + addURI + '">' + add.replace(/\n/g, '<br/>') + '</a>';
+            add = '<a href="' + addURI + '" target="_blank">' + add.replace(/\n/g, '<br/>') + '</a>';
             info.find('#Address.rowValue span').html(add);
         } else {
             info.find('#Address.rowValue span').empty();
