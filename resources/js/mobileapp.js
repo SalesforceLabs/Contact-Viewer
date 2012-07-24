@@ -186,8 +186,9 @@ function displayContactSummary(contact) {
 }
 
 function displayContactDetails(contact) {
-    var fieldInfo = getFieldDescribe();
-    var info = $j('#detailpage #detail #info');
+    var fieldInfo = getFieldDescribe(),
+        info = $j('#detailpage #detail #info'),
+        add, addURI;
 
     if (fieldInfo.Phone) {
         info.find('#Phone').show();
@@ -212,12 +213,13 @@ function displayContactDetails(contact) {
     }
 
     if (fieldInfo.MailingStreet != undefined) {
-        var add = formatAddress(contact);
+        add = formatAddress(contact);
         info.find('#Address').show();
         info.find('#Address.rowLabel span').text('Mailing Address');
         if (add.length > 0 ) {
-            add = '<a href="https://maps.google.com/maps?q=' + encodeURI(add.replace(/\n/g, ', ')) + '">' +
-                  add.replace(/\n/g, '<br/>') + '</a>';
+            addURI = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 'maps:q=' : 
+                     'https://maps.google.com/maps?q=') + encodeURI(add.replace(/\n/g, ', '));
+            add = '<a href="' + addURI + '">' + add.replace(/\n/g, '<br/>') + '</a>';
             info.find('#Address.rowValue span').html(add);
         } else {
             info.find('#Address.rowValue span').empty();
