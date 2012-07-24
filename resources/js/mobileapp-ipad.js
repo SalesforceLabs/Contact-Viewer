@@ -40,6 +40,8 @@ function initiateInfoScroller() {
     } else {
         infopagescroll.refresh();
     }
+    // Disable touch event propagation on anchor tags to prevent iscroll from doing crazy shit
+    $j('#infoscroller a').touch(function(e) { e.stopPropagation(); });
     destroyFeedScroller();
 }
 
@@ -406,7 +408,7 @@ function renderContactLayout(contactId, recordTypeId) {
     detailsLayout.find('#layout').empty();
     detailsLayout.find('#viewMoreBtn').find('span').text('Load All Details');
     detailsLayout.find('#viewMoreBtn').find('img').hide();
-    detailsLayout.find('#viewMoreBtn').show().off().enableTap().click(
+    detailsLayout.find('#viewMoreBtn').show().off().click(
         function() {
             $j(this).off().find('span').text('Loading Details...');
             $j(this).find('img').show();
@@ -592,7 +594,7 @@ function codeAddressOnMap(address) {
                     'zoom=14&size=640x180&format=jpeg&sensor=false&markers=color:red%7C' + 
                     encodedAdd + '"/>';
     $j('#map_section #map_div #google_map_canvas').empty().append(mapsImage);
-    $j('#map_section #map_div #openMaps').off().enableTap().click( 
+    $j('#map_section #map_div #openMaps').off().click( 
         function() {
             window.location = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 
                               'maps:q=' : 'https://maps.google.com/maps?q=') + encodedAdd;

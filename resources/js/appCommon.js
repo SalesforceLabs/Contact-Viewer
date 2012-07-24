@@ -723,11 +723,11 @@ var SettingsManager = (function () {
     }
     
     var _addEventListeners = function() {
-        settings.find('#main #connection #hostType').enableTap().click(
+        settings.find('#main #connection #hostType').click(
             function() { _navigatePageWithBack('#hosts', 'Login Host'); }
         );
         
-        settings.find('#hosts table td').enableTap().click(
+        settings.find('#hosts table td').click(
             function() {
                 var that = $j(this);
                 that.addClass('cellselected');
@@ -764,29 +764,29 @@ var SettingsManager = (function () {
                 return false;
             });
         
-        settings.find('#main #help #help_about').enableTap().click(
+        settings.find('#main #help #help_about').click(
             function() { _navigatePageWithBack('#about', 'About'); }
         );
         
-        settings.find('#main #help #help_faq').enableTap().click(
+        settings.find('#main #help #help_faq').click(
             function() { 
                 _navigatePageWithBack('#faq', 'FAQ', function() { /*_destroyScroller(); settingsScroller = createScroller(settings.find('#faq')); */}); 
             }
         );
 
-        settings.find('#main #help #help_feedback').enableTap().click(
+        settings.find('#main #help #help_feedback').click(
             function() { location.href = 'mailto:' + feedbackEmail; }
         );
         
-        settings.find('#main #help #help_eula').enableTap().click(
+        settings.find('#main #help #help_eula').click(
             function() { 
                 _navigatePageWithBack('#eula', 'Contact Viewer EULA', _showEula);
             }
         );
         
         settings.find('#loginbtn').off()
-                .enableTap().click( function() { prepareSession(); } );
-        settings.find('#logoutbtn').off().enableTap().click(function(e) {
+                .click( function() { prepareSession(); } );
+        settings.find('#logoutbtn').off().click(function(e) {
             // Delete the saved refresh token
             var resp = confirm('Logout user ' + ManageUserSession.getUsername() + '?');
             if (resp) {
@@ -1075,7 +1075,7 @@ if (sforce.ListView === undefined) {
         
             that._addSearchListeners();
             that.view.find('#header #titlebar').off().enableTap().click(_showListSelectButtons);            
-            that.view.find('#listscroller #scroller #contactlist').off().enableTap().click(
+            that.view.find('#listscroller #scroller #contactlist').off().click(
                 function(e) {
                     var theTarget = e.target;
                     
