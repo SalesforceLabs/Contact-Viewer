@@ -597,7 +597,11 @@ function codeAddressOnMap(address) {
     $j('#map_section #map_div #google_map_canvas').empty().append(mapsImage);
     $j('#map_section #map_div #openMaps').off().click( 
         function() {
-            window.location = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 
-                              'maps:q=' : 'https://maps.google.com/maps?q=') + encodedAdd;
+            var locURI = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 
+                         'maps:q=' : 'https://maps.google.com/maps?q=') + encodedAdd;
+            if ((/iphone|ipod|ipad/gi).test(navigator.platform))
+                window.location = locURI;
+            else
+                window.open(locURI);
         });
 }
