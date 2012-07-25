@@ -1922,6 +1922,7 @@ if (window.LocalyticsManager != undefined) {
                     return ((idx == 0) ? '< ' : (buckets[idx-1]/1000 + ' - ')) +
                            buckets[idx]/1000 + 's';
                 }
+            return '>' + buckets[buckets.length - 1];
         }
 
         LocalyticsManager.tagScreen = function(screenName) {
