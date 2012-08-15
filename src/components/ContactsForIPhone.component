@@ -64,21 +64,6 @@
                   <span>
                   <div id="infoscroller" class="detailscroller" style="top: 138px">
                     <div id="info" style="width:100%; padding: 15px 0;">
-                        <div class="roundedBox">
-						    <div id="Phone" class="rowLabel fieldLbl"><span>{!$Label.Phone}</span></div>
-						    <div id="Phone" class="rowValue"><span></span></div>
-						    <hr class="rowSeparator"/>
-						    <div id="Mobile" class="rowLabel fieldLbl"><span>{!$Label.Mobile}</span></div>
-						    <div id="Mobile" class="rowValue"><span></span></div>
-						</div>
-						<div class="roundedBox">
-                            <div id="Email" class="rowLabel fieldLbl"><span>{!$Label.Email}</span></div>
-                            <div id="Email" class="rowValue"><span></span></div>
-                        </div>
-                        <div class="roundedBox">
-                            <div id="Address" class="rowLabel fieldLbl"><span>{!$Label.MailingAddress}</span></div>
-                            <div id="Address" class="rowValue"><span></span></div>
-                        </div>
                     </div>
                   </div>
                   </span>

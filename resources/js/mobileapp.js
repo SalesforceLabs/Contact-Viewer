@@ -187,44 +187,44 @@ function displayContactSummary(contact) {
 function displayContactDetails(contact) {
     var fieldInfo = getFieldDescribe(),
         info = $j('#detailpage #detail #info'),
-        add, addURI;
+        phoneFields = [], emailFields = [], addressFields = [],
+        add = '', addURI = '';
 
-    if (fieldInfo.Phone) {
-        info.find('#Phone').show();
-        info.find('#Phone.rowLabel span').text(fieldInfo.Phone.label);
-        info.find('#Phone.rowValue span').html((contact.Phone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.Phone)) + '" style="text-decoration:none;">' + formatStr(contact.Phone, 30) + '</a>' : '&nbsp;');
-    } else {
-        info.find('#Phone').hide();
+    // Empty any existing dom elements
+    info.empty();
+
+    // Iterate over each field in contact result and add phone and email fields.
+    for (var field in contact) {
+        // Do this check to ignore irrelevant properties on contact json object such as "attributes"
+        // Also skip fields with empty values
+        if (fieldInfo[field] && contact[field]) { 
+            switch (fieldInfo[field].type.toLowerCase()) {
+                case 'phone' :
+                    if (phoneFields.length > 0) phoneFields.push('<hr class="rowSeparator"/>');
+                    phoneFields.push('<div class="rowLabel fieldLbl"><span>' + fieldInfo[field].label + '</span></div>');
+                    phoneFields.push('<div id="' + field + '" class="rowValue"><span><a href="tel:' + cleanupPhone(contact[field]) + '" style="text-decoration:none;">' + contact[field] + '</a></span></div>');
+                    break;
+                case 'email' :
+                    if (emailFields.length > 0) emailFields.push('<hr class="rowSeparator"/>');
+                    emailFields.push('<div class="rowLabel fieldLbl"><span>' + fieldInfo[field].label + '</span></div>');
+                    emailFields.push('<div id="' + field + '" class="rowValue"><span><a href="mailto:' + contact[field] + '" style="text-decoration:none;">' + contact[field] + '</a></span></div>');
+                    break;
+            }
+        }
     }
-    if (fieldInfo.MobilePhone) {
-        info.find('#Mobile').show();
-        info.find('#Mobile.rowLabel span').text(fieldInfo.MobilePhone.label);
-        info.find('#Mobile.rowValue span').html((contact.MobilePhone) ? '<a href="tel:' + formatStr(cleanupPhone(contact.MobilePhone)) + '">' + formatStr(contact.MobilePhone, 30) + '</a>' : '&nbsp;');
-    } else {
-        info.find('#Mobile').hide();
-    }
-    if (fieldInfo.Email) {
-        info.find('#Email').show();
-        info.find('#Email.rowLabel span').text(fieldInfo.Email.label);
-        info.find('#Email.rowValue span').html((contact.Email) ? '<a href="mailto:' + contact.Email + '" style="text-decoration:none;">' + formatStr(contact.Email, 50) + '</a>' : '&nbsp;');   
-    } else {
-        info.find('#Email').hide();
-    }
+
+    if (phoneFields.length > 0) info.append('<div class="roundedBox">' + phoneFields.join('') + '</div>');
+    if (emailFields.length > 0) info.append('<div class="roundedBox">' + emailFields.join('') + '</div>');
 
     if (fieldInfo.MailingStreet != undefined) {
         add = formatAddress(contact);
-        info.find('#Address').show();
-        info.find('#Address.rowLabel span').text('Mailing Address');
         if (add.length > 0 ) {
             addURI = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 'maps:q=' : 
                      'https://maps.google.com/maps?q=') + encodeURI(add.replace(/\n/g, ', '));
-            add = '<a href="' + addURI + '" target="_blank">' + add.replace(/\n/g, '<br/>') + '</a>';
-            info.find('#Address.rowValue span').html(add);
-        } else {
-            info.find('#Address.rowValue span').empty();
         }
-    } else {
-        info.find('#Address').hide();
+        addressFields.push('<div class="rowLabel fieldLbl"><span>Mailing Address</span></div>');
+        addressFields.push('<div id="Address" class="rowValue"><span><a href="' + addURI + '" style="text-decoration:none;" target="_blank">' + add.replace(/\n/g, '<br/>') + '</a></span></div>');
+        info.append('<div class="roundedBox">' + addressFields.join('') + '</div>');
     }
 }
 
@@ -241,17 +241,22 @@ function renderContactInfo(contactId, callback) {
         }
     }
     
-    var fields = ['Id', 'Name', 'Account.Id', 'Account.Name', 'Department', 'Title', 'Phone', 
-                  'MobilePhone', 'Email', 'MailingStreet', 'MailingCity', 'MailingState', 
+    var fields = ['Id', 'Name', 'Account.Id', 'Account.Name', 'Department', 'Title', 
+                  'MailingStreet', 'MailingCity', 'MailingState', 
                   'MailingCountry', 'MailingPostalCode', 'ReportsTo.Name'];
     if (hasRecordTypes) fields.push('RecordTypeId');
     
     var fieldInfos = getFieldDescribe();
     
     fields = fields.filter(function(fieldName) {
-        fieldName = fieldName.split('.');
-        return (true && fieldInfos[fieldName[0]]);
+        fieldName = fieldName.split('.')[0];
+        return fieldName in fieldInfos;
     });
+
+    for (var fieldName in fieldInfos) {
+        var fieldType = fieldInfos[fieldName].type.toLowerCase();
+        if (fieldType == 'email' || fieldType == 'phone') fields.push(fieldName);
+    }
     
     var info = $j('#detailpage #detail #info');
     
