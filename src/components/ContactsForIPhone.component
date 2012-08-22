@@ -48,25 +48,12 @@
                 <span></span>
             </div>
             <div id="contactInfo" class="contentpage" style="position: absolute; top: 45px; bottom: 0; width: 100%;">
-                <div id="detail">
-                  <div id="summary" style="height: 135px; width: 100%; position: relative; border-bottom: 1px solid #2B2B2B; -webkit-box-shadow: 0px 2px 2px rgba(43, 43, 43, 0.5);">
-                    <div id="photo_div" style="  -webkit-border-radius: 5px; padding: 10px 20px; padding-bottom:5px;">
-                       <apex:image value="{!URLFOR($Resource.ContactAppRsrcs, 'images/userPicwBorder.png')}" style="height: 75px; float: left"/>
-                       <div style="min-height:65px; padding:10px 10px 0 10px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></div>
-                    </div>
-                    <div id="call_contact" style="padding: 5px 20px 0;">
-                        <a id="email" href="#"><div>{!$Label.Email}</div></a>
-                        <a id="facetime" href="#"><div>{!$Label.Facetime}</div></a>
-                        <a id="skype" href="#"><div>{!$Label.Skype}</div></a>
-                    </div>
+                <div id="detail" style="padding: 15px 0;">
+                  <div id="photo_div" style="-webkit-border-radius: 5px; padding: 0px 20px;">
+                     <apex:image value="{!URLFOR($Resource.ContactAppRsrcs, 'images/userPicwBorder.png')}" style="height: 75px; float: left"/>
+                     <div style="min-height:65px; padding:10px 10px 0 10px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></div>
                   </div>
-                  
-                  <span>
-                  <div id="infoscroller" class="detailscroller" style="top: 138px">
-                    <div id="info" style="width:100%; padding: 15px 0;">
-                    </div>
-                  </div>
-                  </span>
+                  <div id="info"></div>
                 </div>
             </div>
          </div>

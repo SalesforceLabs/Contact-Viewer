@@ -54,7 +54,7 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
             }
         },
     
-        onTouchStart: function(e) {                
+        onTouchStart: function(e) {
             e.preventDefault();
             this.moved = false;
     
@@ -77,14 +77,18 @@ var vendor = (/webkit/i).test(navigator.appVersion) ? 'webkit' :
         },
     
         onTouchEnd: function(e) {
+            var target = this.theTarget;
+
             this.targetParent[0].removeEventListener('touchmove', this, false);
             this.targetParent[0].removeEventListener('touchend', this, false);
     
             if( !this.moved && this.theTarget ) {
                 if(this.options.pressedClass) this.theTarget.removeClass(this.options.pressedClass);
-                var theEvent = document.createEvent('MouseEvents');
-                theEvent.initEvent('click', true, true);
-                this.theTarget.dispatchEvent(theEvent);
+                setTimeout(function() {
+                    var theEvent = document.createEvent('MouseEvents');
+                    theEvent.initEvent('click', true, true);
+                    target.dispatchEvent(theEvent);
+                }, 0);
             }
             this.theTarget = undefined;
             this.targetParent = undefined;

@@ -35,7 +35,7 @@ var listView, splitView, sobjectModel;
 
 function initiateInfoScroller() {
     if (infopagescroll === undefined) {
-        infopagescroll = createScroller('infoscroller');
+        infopagescroll = createScroller('contactInfo');
         $j(window).orientationChange(initiateInfoScroller);
     } else {
         infopagescroll.refresh();
@@ -129,12 +129,7 @@ function showContact(contactId, onComplete) {
     switchToDetail();
 
     ind = $j('#loggedin').showActivityInd('Loading...');
-    // Initiate XHR to render contact info
-    xhrManager = switchDetailSection('info', [contactId], function(success) { 
-        if (success) $j('#detailpage #detail').show();
-        ind.hide();
-        if (typeof onComplete == 'function') onComplete();
-    });
+    
     // Attach back navigation listener
     $j('#detailpage .header #left').off().enableTap().click(function(e) {
         var onSlideBack = function() {
@@ -154,6 +149,13 @@ function showContact(contactId, onComplete) {
         }
         updateLastVisitLoc();
     });
+
+    // Initiate XHR to render contact info
+    xhrManager = switchDetailSection('info', [contactId], function(success) { 
+        if (success) $j('#detailpage #detail').show();
+        ind.hide();
+        if (typeof onComplete == 'function') onComplete();
+    });
     updateLastVisitLoc(contactId + '/' + 'info');
 }
 
@@ -161,34 +163,17 @@ function displayContactSummary(contact) {
     $j('#Id').val(contact.Id);
     var fieldInfo = getFieldDescribe();
     var detail = $j('#detailpage #detail');
-    detail.find('#summary #photo_div>div').html(contact.Name)
+    detail.find('#photo_div>div').html(contact.Name)
     .append('<br/>').append((contact.Title) ? formatStr(contact.Title) + ', ' : '')
     .append(formatStr(contact.Department) || '&nbsp;').append('<br/>')
     .append(contact.Account ? formatStr(contact.Account.Name) : '&nbsp;');
-
-    if (contact.Phone) {
-        var phone = cleanupPhone(contact.Phone);
-        detail.find('#call_contact #skype').attr('href', 'skype:' + phone + '?call').show();
-        if ((/ipad|iphone/gi).test(navigator.platform)) 
-            detail.find('#call_contact #facetime').attr('href', 'facetime://' + phone).show();
-        else detail.find('#call_contact #facetime').hide();
-    } else {
-        detail.find('#call_contact #skype').attr('href', '#').hide();
-        detail.find('#call_contact #facetime').attr('href', '#').hide();
-    }
-    
-    if (contact.Email) {
-        detail.find('#call_contact #email').attr('href', 'mailto:' + contact.Email).show();
-    } else {
-        detail.find('#call_contact #email').attr('href', '#').hide();
-    }
 }
 
 function displayContactDetails(contact) {
     var fieldInfo = getFieldDescribe(),
         info = $j('#detailpage #detail #info'),
         phoneFields = [], emailFields = [], addressFields = [],
-        add = '', addURI = '';
+        add = '', addURI = '', showActions;
 
     // Empty any existing dom elements
     info.empty();
@@ -202,7 +187,7 @@ function displayContactDetails(contact) {
                 case 'phone' :
                     if (phoneFields.length > 0) phoneFields.push('<hr class="rowSeparator"/>');
                     phoneFields.push('<div class="rowLabel fieldLbl"><span>' + fieldInfo[field].label + '</span></div>');
-                    phoneFields.push('<div id="' + field + '" class="rowValue"><span><a href="tel:' + cleanupPhone(contact[field]) + '" style="text-decoration:none;">' + contact[field] + '</a></span></div>');
+                    phoneFields.push('<div id="' + field + '" class="rowValue"><span><a id="phone" href="tel:' + cleanupPhone(contact[field]) + '" style="text-decoration:none;">' + contact[field] + '</a></span></div>');
                     break;
                 case 'email' :
                     if (emailFields.length > 0) emailFields.push('<hr class="rowSeparator"/>');
@@ -219,13 +204,16 @@ function displayContactDetails(contact) {
     if (fieldInfo.MailingStreet != undefined) {
         add = formatAddress(contact);
         if (add.length > 0 ) {
-            addURI = ((typeof PhoneGap != 'undefined' && PhoneGap) ? 'maps:q=' : 
-                     'https://maps.google.com/maps?q=') + encodeURI(add.replace(/\n/g, ', '));
+            addURI = 'https://maps.google.com/maps?q=' + encodeURIComponent(add.replace(/\n/g, ', '));
         }
         addressFields.push('<div class="rowLabel fieldLbl"><span>Mailing Address</span></div>');
-        addressFields.push('<div id="Address" class="rowValue"><span><a href="' + addURI + '" style="text-decoration:none;" target="_blank">' + add.replace(/\n/g, '<br/>') + '</a></span></div>');
+        addressFields.push('<div id="Address" class="rowValue"><span>');
+        addressFields.push('<a href="' + addURI + '" style="text-decoration:none;" target="_blank">' + add.replace(/\n/g, '<br/>') + '</a>');
+        addressFields.push('</span></div>');
         info.append('<div class="roundedBox">' + addressFields.join('') + '</div>');
     }
+
+    ActionManager.attachHandler(info.find('.rowValue a'));
 }
 
 function renderContactInfo(contactId, callback) {

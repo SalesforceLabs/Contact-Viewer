@@ -402,3 +402,33 @@ input[type="search"] { -webkit-appearance:none; }
     border-bottom: 1px solid silver; 
     border-top: none; margin: 0;
 }
+.actionSheet {
+	position: absolute;
+    top: 0; left: 0; right: 0;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0,rgba(212, 218, 220, 0.8)), color-stop(0.1, rgba(74, 74, 86, 0.95)));
+    border-top: 1px solid #4A4A56;
+    padding: 20px;
+    font-size: 16px; 
+    font-weight: bold;
+}
+.actionSheet .button {
+	display: block;
+	margin-bottom: 10px;
+    background-color: #F2F2F2;
+    padding: 10px;
+    text-align: center;
+    color: #33393D;
+    border-radius: 5px;
+    border: solid #D4D4D4 1px;
+}
+.actionSheet .button#cancel {
+	margin: 25px 0 5px;
+    color: white;
+    border: solid #222 1px;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 50%, from(#B9BCBE), to(#222));
+}
+.actionSheet .button.selected {
+	color: white;
+	background-color: #C6E1FF;
+	background-image: none;
+}

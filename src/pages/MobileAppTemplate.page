@@ -38,6 +38,7 @@
         (function() {
             var pixelRatio = window.devicePixelRatio;
             if (!pixelRatio || /(iPad)|(iPhone)/.test(navigator.userAgent)) pixelRatio = 1;
+            if (localStorage && localStorage.getItem('CONTACTS-SKIP-REDIRECT')) return; 
             
             if (Math.min(window.screen.availHeight, window.screen.availWidth) < 500*pixelRatio) {
 	            if (!(/\/ContactsAppMobile\/?$/).test(window.location.pathname))
@@ -79,7 +80,7 @@
         <script type="text/javascript" src="{!URLFOR($Resource.ContactAppRsrcs, 'js/appCommon.min.js')}"/>
     </apex:outputPanel>
     
-    <body style="background-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/bg.png')}'); width:100%; height:100%">
+    <body style="background-image:url('{!URLFOR($Resource.ContactAppRsrcs, 'images/bg.png')}'); width:100%; position:absolute; top:0; bottom: 0;">
         <apex:insert name="body"/>
         <c:PasscodeManager />
     </body>
